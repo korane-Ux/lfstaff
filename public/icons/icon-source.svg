@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#F5EEE0"/>
+
+  <!-- lid -->
+  <ellipse cx="256" cy="204" rx="92" ry="17" fill="none" stroke="#2B2118" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="256" cy="177" r="11" fill="#2B2118"/>
+
+  <!-- handles -->
+  <path d="M 150 268 C 120 268 120 322 150 322" fill="none" stroke="#2B2118" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 362 268 C 392 268 392 322 362 322" fill="none" stroke="#2B2118" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- body -->
+  <rect x="160" y="222" width="192" height="166" rx="24" fill="#F5EEE0" stroke="#2B2118" stroke-width="16"/>
+
+  <!-- rim accents -->
+  <line x1="176" y1="248" x2="336" y2="248" stroke="#2B2118" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <line x1="176" y1="362" x2="336" y2="362" stroke="#2B2118" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- mudcloth diamond band -->
+  <rect x="209" y="294" width="22" height="22" rx="2" fill="none" stroke="#2B2118" stroke-width="6" transform="rotate(45 220 305)"/>
+  <rect x="242" y="291" width="28" height="28" rx="2" fill="#B23A1C" transform="rotate(45 256 305)"/>
+  <rect x="281" y="294" width="22" height="22" rx="2" fill="none" stroke="#2B2118" stroke-width="6" transform="rotate(45 292 305)"/>
+</svg>
