@@ -29,6 +29,8 @@ export type TransactionSens = "entree" | "sortie";
 
 export type MoyenPaiement = "cash" | "om" | "momo";
 
+export type StatutRetrait = "en_attente" | "payee";
+
 export type Database = {
   public: {
     Tables: {
@@ -338,8 +340,45 @@ export type Database = {
         };
         Relationships: [];
       };
+      demandes_retrait: {
+        Row: {
+          id: string;
+          livreur_id: string;
+          montant: number;
+          statut: StatutRetrait;
+          created_at: string;
+          traitee_le: string | null;
+        };
+        Insert: {
+          id?: string;
+          livreur_id?: string;
+          montant: number;
+          statut?: StatutRetrait;
+          created_at?: string;
+          traitee_le?: string | null;
+        };
+        Update: {
+          id?: string;
+          livreur_id?: string;
+          montant?: number;
+          statut?: StatutRetrait;
+          created_at?: string;
+          traitee_le?: string | null;
+        };
+        Relationships: [];
+      };
     };
-    Views: Record<string, never>;
+    Views: {
+      v_solde_livreur: {
+        Row: {
+          livreur_id: string;
+          commissions_dues: number;
+          cash_en_main: number;
+          net_a_remettre: number;
+        };
+        Relationships: [];
+      };
+    };
     Functions: {
       fn_confirmer_livraison: {
         Args: { p_commande_id: string; p_code: string };
