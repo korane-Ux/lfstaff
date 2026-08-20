@@ -39,11 +39,7 @@ export default async function RetraitsPage() {
               </p>
               <p className="text-xs text-encre/60">{formatFcfa(demande.montant)}</p>
             </div>
-            <MarquerPayeAction
-              demandeId={demande.id}
-              livreurId={demande.livreur_id}
-              montant={demande.montant}
-            />
+            <MarquerPayeAction demandeId={demande.id} />
           </div>
         ))}
       </div>

@@ -25,41 +25,17 @@ export function ValiderLivraisonAction({
     setError(null);
 
     const supabase = createClient();
-
-    const { error: updateError } = await supabase
-      .from("commandes")
-      .update({ etat: "livree_validee", commission_montant: commissionMontant })
-      .eq("id", commandeId);
-
-    if (updateError) {
-      setLoading(false);
-      setError("Impossible de valider cette livraison.");
-      return;
-    }
-
-    const { error: txError } = await supabase.from("transactions").insert([
-      {
-        type: "solde_client",
-        commande_id: commandeId,
-        user_id: livreurId,
-        montant: soldeMontant,
-        sens: "entree",
-        moyen: "cash",
-      },
-      {
-        type: "commission_livreur",
-        commande_id: commandeId,
-        user_id: livreurId,
-        montant: commissionMontant,
-        sens: "sortie",
-        moyen: "cash",
-      },
-    ]);
+    const { error: rpcError } = await supabase.rpc("fn_valider_livraison", {
+      p_commande_id: commandeId,
+      p_livreur_id: livreurId,
+      p_solde_montant: soldeMontant,
+      p_commission_montant: commissionMontant,
+    });
 
     setLoading(false);
 
-    if (txError) {
-      setError("La livraison est validée mais les transactions n'ont pas pu être enregistrées.");
+    if (rpcError) {
+      setError("Impossible de valider cette livraison.");
       return;
     }
 

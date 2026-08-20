@@ -391,6 +391,49 @@ export type Database = {
         Args: { p_commande_id: string; p_code: string };
         Returns: boolean;
       };
+      fn_valider_commande: {
+        Args: { p_commande_id: string; p_acompte_montant: number; p_moyen: MoyenPaiement };
+        Returns: void;
+      };
+      fn_envoyer_avance: {
+        Args: {
+          p_commande_id: string;
+          p_fournisseur_id: string;
+          p_montant: number;
+          p_moyen: MoyenPaiement;
+        };
+        Returns: void;
+      };
+      fn_expedier_commande: {
+        Args: {
+          p_commande_id: string;
+          p_agence: string;
+          p_n_bordereau: string | null;
+          p_ville_depart: string | null;
+          p_ville_arrivee: string | null;
+          p_date_arrivee_prevue: string | null;
+          p_frais_transport: number | null;
+          p_photo_bordereau: string | null;
+        };
+        Returns: void;
+      };
+      fn_receptionner_commande: {
+        Args: { p_commande_id: string };
+        Returns: void;
+      };
+      fn_valider_livraison: {
+        Args: {
+          p_commande_id: string;
+          p_livreur_id: string;
+          p_solde_montant: number;
+          p_commission_montant: number;
+        };
+        Returns: void;
+      };
+      fn_marquer_retrait_paye: {
+        Args: { p_demande_id: string };
+        Returns: void;
+      };
     };
     Enums: {
       app_role: AppRole;

@@ -46,34 +46,21 @@ export function PretAction({
     setError(null);
 
     const supabase = createClient();
-
-    const { error: expError } = await supabase.from("expeditions").insert({
-      commande_id: commandeId,
-      agence,
-      n_bordereau: nBordereau || null,
-      ville_depart: villeDepart || null,
-      ville_arrivee: villeArrivee || null,
-      date_depart: new Date().toISOString().slice(0, 10),
-      date_arrivee_prevue: dateArriveePrevue || null,
-      frais_transport: fraisTransport ? Number(fraisTransport) : null,
-      photo_bordereau: photoBordereau,
+    const { error: rpcError } = await supabase.rpc("fn_expedier_commande", {
+      p_commande_id: commandeId,
+      p_agence: agence,
+      p_n_bordereau: nBordereau || null,
+      p_ville_depart: villeDepart || null,
+      p_ville_arrivee: villeArrivee || null,
+      p_date_arrivee_prevue: dateArriveePrevue || null,
+      p_frais_transport: fraisTransport ? Number(fraisTransport) : null,
+      p_photo_bordereau: photoBordereau,
     });
-
-    if (expError) {
-      setLoading(false);
-      setError("Impossible d'enregistrer l'expédition.");
-      return;
-    }
-
-    const { error: updateError } = await supabase
-      .from("commandes")
-      .update({ etat: "expediee" })
-      .eq("id", commandeId);
 
     setLoading(false);
 
-    if (updateError) {
-      setError("L'expédition est enregistrée mais le statut n'a pas pu être mis à jour.");
+    if (rpcError) {
+      setError("Impossible d'enregistrer l'expédition.");
       return;
     }
 

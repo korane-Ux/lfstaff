@@ -48,38 +48,18 @@ export function EnvoyerAvanceAction({
     setLoading(true);
     setError(null);
 
-    const montantNum = Number(montant) || 0;
     const supabase = createClient();
-
-    const { error: updateError } = await supabase
-      .from("commandes")
-      .update({
-        fournisseur_id: fournisseurId,
-        avance_montant: montantNum,
-        avance_payee: true,
-        etat: "en_creation",
-      })
-      .eq("id", commandeId);
-
-    if (updateError) {
-      setLoading(false);
-      setError("Impossible d'envoyer l'avance.");
-      return;
-    }
-
-    const { error: txError } = await supabase.from("transactions").insert({
-      type: "avance_fournisseur",
-      commande_id: commandeId,
-      user_id: fournisseurId,
-      montant: montantNum,
-      sens: "sortie",
-      moyen,
+    const { error: rpcError } = await supabase.rpc("fn_envoyer_avance", {
+      p_commande_id: commandeId,
+      p_fournisseur_id: fournisseurId,
+      p_montant: Number(montant) || 0,
+      p_moyen: moyen,
     });
 
     setLoading(false);
 
-    if (txError) {
-      setError("L'avance est envoyée mais la transaction n'a pas pu être enregistrée.");
+    if (rpcError) {
+      setError("Impossible d'envoyer l'avance.");
       return;
     }
 

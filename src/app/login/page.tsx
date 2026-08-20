@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { onboardingDejaVu } from "@/components/onboarding/onboarding-flow";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.replace("/");
+    router.replace(onboardingDejaVu() ? "/" : "/bienvenue");
     router.refresh();
   }
 

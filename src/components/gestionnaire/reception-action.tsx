@@ -14,24 +14,17 @@ export function ReceptionAction({ commandeId }: { commandeId: string }) {
     setError(null);
 
     const supabase = createClient();
+    const { error: rpcError } = await supabase.rpc("fn_receptionner_commande", {
+      p_commande_id: commandeId,
+    });
 
-    const { error: updateError } = await supabase
-      .from("commandes")
-      .update({ etat: "recue" })
-      .eq("id", commandeId);
+    setLoading(false);
 
-    if (updateError) {
-      setLoading(false);
+    if (rpcError) {
       setError("Impossible de marquer cette commande comme reçue.");
       return;
     }
 
-    await supabase
-      .from("expeditions")
-      .update({ date_arrivee_reelle: new Date().toISOString().slice(0, 10) })
-      .eq("commande_id", commandeId);
-
-    setLoading(false);
     router.refresh();
   }
 

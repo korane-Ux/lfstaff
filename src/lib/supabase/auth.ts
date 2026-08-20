@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { AppRole } from "@/lib/supabase/types";
+import { roleHome } from "@/lib/role-home";
+
+export { roleHome };
 
 export async function getCurrentProfile() {
   const supabase = await createClient();
@@ -19,12 +22,6 @@ export async function getCurrentProfile() {
   if (!profile) redirect("/login");
 
   return profile;
-}
-
-export function roleHome(role: AppRole) {
-  if (role === "fournisseur") return "/fournisseur";
-  if (role === "livreur") return "/livreur";
-  return "/gestionnaire";
 }
 
 export async function requireRole(allowed: AppRole[]) {

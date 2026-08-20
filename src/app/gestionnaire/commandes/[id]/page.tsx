@@ -135,11 +135,7 @@ export default async function CommandeDetailPage({
       </div>
 
       {commande.etat === "nouvelle" && (
-        <ValiderAction
-          commandeId={commande.id}
-          prixTotal={commande.prix_total}
-          acompteSuggere={commande.acompte_montant}
-        />
+        <ValiderAction commandeId={commande.id} acompteSuggere={commande.acompte_montant} />
       )}
 
       {commande.etat === "validee" && (

@@ -16,11 +16,9 @@ const MOYEN_LABELS: Record<MoyenPaiement, string> = {
 
 export function ValiderAction({
   commandeId,
-  prixTotal,
   acompteSuggere,
 }: {
   commandeId: string;
-  prixTotal: number;
   acompteSuggere: number;
 }) {
   const router = useRouter();
@@ -34,37 +32,17 @@ export function ValiderAction({
     setLoading(true);
     setError(null);
 
-    const montantNum = Number(montant) || 0;
     const supabase = createClient();
-
-    const { error: updateError } = await supabase
-      .from("commandes")
-      .update({
-        acompte_montant: montantNum,
-        acompte_paye: true,
-        solde_montant: prixTotal - montantNum,
-        etat: "validee",
-      })
-      .eq("id", commandeId);
-
-    if (updateError) {
-      setLoading(false);
-      setError("Impossible de valider cette commande.");
-      return;
-    }
-
-    const { error: txError } = await supabase.from("transactions").insert({
-      type: "acompte_client",
-      commande_id: commandeId,
-      montant: montantNum,
-      sens: "entree",
-      moyen,
+    const { error: rpcError } = await supabase.rpc("fn_valider_commande", {
+      p_commande_id: commandeId,
+      p_acompte_montant: Number(montant) || 0,
+      p_moyen: moyen,
     });
 
     setLoading(false);
 
-    if (txError) {
-      setError("L'acompte est encaissé mais la transaction n'a pas pu être enregistrée.");
+    if (rpcError) {
+      setError("Impossible de valider cette commande.");
       return;
     }
 
