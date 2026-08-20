@@ -44,6 +44,12 @@ export default async function GestionnaireLayout({
           Retraits
         </Link>
         <Link
+          href="/gestionnaire/remises"
+          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+        >
+          Remises
+        </Link>
+        <Link
           href="/gestionnaire/reglages"
           className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
