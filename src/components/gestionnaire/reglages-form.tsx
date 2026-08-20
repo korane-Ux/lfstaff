@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -112,14 +113,16 @@ export function ReglagesForm({
         <p className="text-sm text-encre">Villes actives</p>
         <div className="flex flex-wrap gap-2">
           {villes.map((v) => (
-            <button
+            <Button
               key={v}
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => retirerVille(v)}
-              className="flex items-center gap-1.5 rounded-full bg-creme px-3 py-1.5 text-sm text-encre"
+              className="flex items-center gap-1.5"
             >
               {v} <span className="text-encre/50">×</span>
-            </button>
+            </Button>
           ))}
         </div>
         <div className="flex gap-2">
@@ -129,26 +132,18 @@ export function ReglagesForm({
             placeholder="Ajouter une ville"
             className={`flex-1 ${inputClass}`}
           />
-          <button
-            type="button"
-            onClick={ajouterVille}
-            className="rounded-xl bg-creme px-4 py-3 text-sm font-medium text-encre"
-          >
+          <Button type="button" variant="ghost" onClick={ajouterVille}>
             Ajouter
-          </button>
+          </Button>
         </div>
       </div>
 
       {error && <p className="text-sm text-litige">{error}</p>}
       {succes && <p className="text-sm text-vert">Réglages enregistrés.</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : "Enregistrer"}
-      </button>
+      </Button>
     </form>
   );
 }

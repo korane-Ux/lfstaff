@@ -4,6 +4,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
+import { Button } from "@/components/ui/button";
 
 type Fournisseur = { id: string; nom: string };
 
@@ -99,28 +100,24 @@ export function EnvoyerAvanceAction({
 
       <div className="flex gap-2">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (
-          <button
+          <Button
             key={m}
             type="button"
+            size="sm"
+            variant={moyen === m ? "primary" : "ghost"}
             onClick={() => setMoyen(m)}
-            className={`flex-1 rounded-xl px-3 py-2 text-sm font-medium ${
-              moyen === m ? "bg-braise text-creme" : "bg-creme text-encre/70"
-            }`}
+            className="flex-1"
           >
             {MOYEN_LABELS[m]}
-          </button>
+          </Button>
         ))}
       </div>
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Envoi..." : "Envoyer l'avance"}
-      </button>
+      </Button>
     </form>
   );
 }

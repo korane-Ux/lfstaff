@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { LinkButton } from "@/components/ui/link-button";
 
 export default async function ClientsPage() {
   const supabase = await createClient();
@@ -12,12 +12,7 @@ export default async function ClientsPage() {
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl text-encre">Clients</h1>
-        <Link
-          href="/gestionnaire/clients/nouveau"
-          className="rounded-full bg-braise px-4 py-2 text-sm font-medium text-creme"
-        >
-          + Nouveau
-        </Link>
+        <LinkButton href="/gestionnaire/clients/nouveau">+ Nouveau</LinkButton>
       </div>
 
       {!clients?.length && (

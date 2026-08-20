@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function LitigeAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -59,20 +60,18 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
     <div className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Résoudre le litige</p>
       <div className="flex gap-2">
-        <button
-          onClick={renvoyerAuFournisseur}
-          disabled={loading !== null}
-          className="flex-1 rounded-xl bg-braise px-4 py-3 text-sm font-medium text-creme disabled:opacity-60"
-        >
+        <Button onClick={renvoyerAuFournisseur} disabled={loading !== null} size="sm" className="flex-1">
           {loading === "renvoyer" ? "..." : "Renvoyer au fournisseur"}
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="danger"
           onClick={annuler}
           disabled={loading !== null}
-          className="flex-1 rounded-xl bg-litige px-4 py-3 text-sm font-medium text-creme disabled:opacity-60"
+          size="sm"
+          className="flex-1"
         >
           {loading === "annuler" ? "..." : "Annuler la commande"}
-        </button>
+        </Button>
       </div>
       {error && <p className="text-xs text-litige">{error}</p>}
     </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
+import { Button } from "@/components/ui/button";
 
 export function ValiderLivraisonAction({
   commandeId,
@@ -51,13 +52,9 @@ export function ValiderLivraisonAction({
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        className="rounded-xl bg-vert px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button variant="success" onClick={handleClick} disabled={loading}>
         {loading ? "Validation..." : "Valider et créditer la commission"}
-      </button>
+      </Button>
     </div>
   );
 }

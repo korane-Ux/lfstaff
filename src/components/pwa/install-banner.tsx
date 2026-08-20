@@ -89,7 +89,7 @@ export function InstallBanner() {
       <div className="flex shrink-0 items-center gap-3">
         <button
           onClick={installer}
-          className="rounded-full bg-braise px-3 py-1.5 text-xs font-medium text-creme"
+          className="rounded-none bg-braise px-3 py-1.5 text-xs font-medium text-creme"
         >
           Installer
         </button>

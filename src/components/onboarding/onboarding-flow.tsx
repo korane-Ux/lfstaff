@@ -54,7 +54,7 @@ export function OnboardingFlow({ role }: { role: AppRole }) {
         </div>
         <button
           onClick={() => (dernier ? terminer() : setIndex(index + 1))}
-          className="w-full rounded-xl bg-braise px-4 py-4 text-lg font-medium text-creme"
+          className="w-full rounded-none bg-braise px-4 py-4 text-lg font-medium text-creme"
         >
           {dernier ? "Commencer" : "Suivant"}
         </button>

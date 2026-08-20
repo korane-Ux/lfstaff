@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -30,12 +31,9 @@ export function RecevoirCashAction({
 
   if (!ouvert) {
     return (
-      <button
-        onClick={() => setOuvert(true)}
-        className="rounded-full bg-vert px-4 py-2 text-sm font-medium text-creme"
-      >
+      <Button variant="success" size="sm" onClick={() => setOuvert(true)}>
         Recevoir
-      </button>
+      </Button>
     );
   }
 
@@ -75,26 +73,22 @@ export function RecevoirCashAction({
       />
       <div className="flex gap-1">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (
-          <button
+          <Button
             key={m}
             type="button"
+            size="sm"
+            variant={moyen === m ? "primary" : "secondary"}
             onClick={() => setMoyen(m)}
-            className={`flex-1 rounded-lg px-2 py-1.5 text-xs font-medium ${
-              moyen === m ? "bg-braise text-creme" : "bg-surface text-encre/70"
-            }`}
+            className="flex-1"
           >
             {MOYEN_LABELS[m]}
-          </button>
+          </Button>
         ))}
       </div>
       {error && <p className="text-xs text-litige">{error}</p>}
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-lg bg-vert px-3 py-2 text-sm font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" variant="success" size="sm" disabled={loading}>
         {loading ? "..." : "Confirmer"}
-      </button>
+      </Button>
     </form>
   );
 }

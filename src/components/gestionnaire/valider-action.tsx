@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -67,28 +68,24 @@ export function ValiderAction({
 
       <div className="flex gap-2">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (
-          <button
+          <Button
             key={m}
             type="button"
+            size="sm"
+            variant={moyen === m ? "primary" : "ghost"}
             onClick={() => setMoyen(m)}
-            className={`flex-1 rounded-xl px-3 py-2 text-sm font-medium ${
-              moyen === m ? "bg-braise text-creme" : "bg-creme text-encre/70"
-            }`}
+            className="flex-1"
           >
             {MOYEN_LABELS[m]}
-          </button>
+          </Button>
         ))}
       </div>
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Validation..." : "Valider la commande"}
-      </button>
+      </Button>
     </form>
   );
 }

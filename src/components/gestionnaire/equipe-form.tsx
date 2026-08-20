@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { AppRole } from "@/lib/supabase/types";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -59,12 +60,7 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         <p className="text-xs text-encre/50">
           Ce mot de passe ne sera plus affiché — communique-le maintenant.
         </p>
-        <button
-          onClick={() => router.push("/gestionnaire/equipe")}
-          className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme"
-        >
-          Terminé
-        </button>
+        <Button onClick={() => router.push("/gestionnaire/equipe")}>Terminé</Button>
       </div>
     );
   }
@@ -101,16 +97,15 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         <p className="text-sm text-encre">Rôle</p>
         <div className="flex gap-2">
           {ROLES.map((r) => (
-            <button
+            <Button
               key={r.value}
               type="button"
+              variant={role === r.value ? "primary" : "ghost"}
               onClick={() => setRole(r.value)}
-              className={`flex-1 rounded-xl px-3 py-3 text-sm font-medium ${
-                role === r.value ? "bg-braise text-creme" : "bg-creme text-encre/70"
-              }`}
+              className="flex-1"
             >
               {r.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -130,13 +125,9 @@ export function EquipeForm({ villes }: { villes: string[] }) {
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Création..." : "Créer le compte"}
-      </button>
+      </Button>
     </form>
   );
 }

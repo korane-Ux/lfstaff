@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { onboardingDejaVu } from "@/components/onboarding/onboarding-flow";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -71,13 +72,9 @@ export default function LoginPage() {
 
         {error && <p className="text-sm text-litige">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme transition-opacity disabled:opacity-60"
-        >
+        <Button type="submit" disabled={loading} className="w-full">
           {loading ? "Connexion..." : "Se connecter"}
-        </button>
+        </Button>
       </form>
     </main>
   );

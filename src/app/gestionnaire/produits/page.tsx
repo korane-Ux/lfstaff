@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
 import { formatSpecsMarmite } from "@/lib/produit-specs";
+import { LinkButton } from "@/components/ui/link-button";
 
 export default async function ProduitsPage() {
   const supabase = await createClient();
@@ -15,12 +16,7 @@ export default async function ProduitsPage() {
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl text-encre">Produits</h1>
-        <Link
-          href="/gestionnaire/produits/nouveau"
-          className="rounded-full bg-braise px-4 py-2 text-sm font-medium text-creme"
-        >
-          + Nouveau
-        </Link>
+        <LinkButton href="/gestionnaire/produits/nouveau">+ Nouveau</LinkButton>
       </div>
 
       {!produits?.length && (
@@ -29,30 +25,39 @@ export default async function ProduitsPage() {
         </p>
       )}
 
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {produits?.map((produit) => (
-          <div
+          <Link
             key={produit.id}
-            className="flex items-center gap-3 rounded-2xl bg-surface p-4"
+            href={`/gestionnaire/produits/${produit.id}`}
+            className="flex flex-col overflow-hidden rounded-2xl bg-surface"
           >
-            {produit.photo_url ? (
-              <Image
-                src={produit.photo_url}
-                alt=""
-                width={48}
-                height={48}
-                className="h-12 w-12 shrink-0 rounded-xl object-cover"
-              />
-            ) : (
-              <div className="h-12 w-12 shrink-0 rounded-xl bg-creme" />
-            )}
-            <div className="flex-1">
-              <p className="text-sm font-medium text-encre">{produit.nom}</p>
-              <p className="text-xs text-encre/60">{formatSpecsMarmite(produit)}</p>
-              {!produit.actif && <p className="text-xs text-encre/40">Inactif</p>}
+            <div className="relative aspect-square w-full bg-creme">
+              {produit.photo_url ? (
+                <Image
+                  src={produit.photo_url}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xs text-encre/30">
+                  Pas de photo
+                </div>
+              )}
+              {!produit.actif && (
+                <span className="absolute left-2 top-2 rounded-none bg-encre/70 px-2 py-0.5 text-[10px] font-medium text-creme">
+                  Inactif
+                </span>
+              )}
             </div>
-            <p className="text-sm text-encre/80">{formatFcfa(produit.prix_final)}</p>
-          </div>
+            <div className="flex flex-col gap-0.5 p-3">
+              <p className="truncate text-sm font-medium text-encre">{produit.nom}</p>
+              <p className="truncate text-xs text-encre/60">{formatSpecsMarmite(produit)}</p>
+              <p className="mt-1 text-sm font-medium text-braise">{formatFcfa(produit.prix_final)}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </main>

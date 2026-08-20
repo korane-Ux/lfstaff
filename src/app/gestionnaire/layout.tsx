@@ -15,57 +15,57 @@ export default async function GestionnaireLayout({
       <nav className="flex gap-2 overflow-x-auto border-b border-encre/10 px-4 py-2 text-sm">
         <Link
           href="/gestionnaire"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Tableau de bord
         </Link>
         <Link
           href="/gestionnaire/produits"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Produits
         </Link>
         <Link
           href="/gestionnaire/clients"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Clients
         </Link>
         <Link
           href="/gestionnaire/bilans"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Bilans
         </Link>
         <Link
           href="/gestionnaire/retraits"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Retraits
         </Link>
         <Link
           href="/gestionnaire/remises"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Remises
         </Link>
         <Link
           href="/gestionnaire/reglages"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Réglages
         </Link>
         {profile.role === "super_admin" && (
           <Link
             href="/gestionnaire/equipe"
-            className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+            className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
           >
             Équipe
           </Link>
         )}
         <Link
           href="/gestionnaire/commandes/nouvelle"
-          className="shrink-0 rounded-full bg-braise px-3 py-1.5 font-medium text-creme"
+          className="shrink-0 rounded-none bg-braise px-3 py-1.5 font-medium text-creme"
         >
           + Nouvelle commande
         </Link>

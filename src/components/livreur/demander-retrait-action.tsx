@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
+import { Button } from "@/components/ui/button";
 
 export function DemanderRetraitAction({ montant }: { montant: number }) {
   const router = useRouter();
@@ -40,13 +41,9 @@ export function DemanderRetraitAction({ montant }: { montant: number }) {
   return (
     <div className="flex flex-col gap-2">
       {error && <p className="text-sm text-litige">{error}</p>}
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-4 text-lg font-medium text-creme disabled:opacity-60"
-      >
+      <Button size="lg" onClick={handleClick} disabled={loading} className="w-full">
         {loading ? "Envoi..." : `Demander mon paiement (${formatFcfa(montant)})`}
-      </button>
+      </Button>
     </div>
   );
 }

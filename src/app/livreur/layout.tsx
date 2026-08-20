@@ -9,12 +9,12 @@ export default async function LivreurLayout({ children }: { children: React.Reac
     <div className="flex min-h-dvh flex-col bg-creme">
       <RoleHeader nom={profile.nom} role={profile.role} />
       <nav className="flex gap-2 overflow-x-auto border-b border-encre/10 px-4 py-2 text-sm">
-        <Link href="/livreur" className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface">
+        <Link href="/livreur" className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface">
           À livrer
         </Link>
         <Link
           href="/livreur/portefeuille"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Portefeuille
         </Link>

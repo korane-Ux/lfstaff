@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function ReceptionAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -31,13 +32,9 @@ export function ReceptionAction({ commandeId }: { commandeId: string }) {
   return (
     <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
       {error && <p className="text-sm text-litige">{error}</p>}
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button onClick={handleClick} disabled={loading}>
         {loading ? "Enregistrement..." : "Colis reçu"}
-      </button>
+      </Button>
     </div>
   );
 }

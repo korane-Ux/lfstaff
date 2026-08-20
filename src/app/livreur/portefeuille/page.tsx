@@ -60,7 +60,7 @@ export default async function PortefeuillePage() {
 
       <a
         href={`/releve/${profile.id}`}
-        className="rounded-full bg-surface px-4 py-2 text-center text-sm font-medium text-encre/80"
+        className="rounded-none bg-surface px-4 py-2 text-center text-sm font-medium text-encre/80"
       >
         Télécharger mon relevé
       </a>

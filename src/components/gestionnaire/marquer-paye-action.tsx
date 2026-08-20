@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function MarquerPayeAction({ demandeId }: { demandeId: string }) {
   const router = useRouter();
@@ -31,13 +32,9 @@ export function MarquerPayeAction({ demandeId }: { demandeId: string }) {
   return (
     <div className="flex flex-col gap-1">
       {error && <p className="text-xs text-litige">{error}</p>}
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        className="rounded-full bg-vert px-4 py-2 text-sm font-medium text-creme disabled:opacity-60"
-      >
+      <Button variant="success" size="sm" onClick={handleClick} disabled={loading}>
         {loading ? "..." : "Marquer payé"}
-      </button>
+      </Button>
     </div>
   );
 }

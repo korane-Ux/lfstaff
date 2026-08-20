@@ -11,13 +11,13 @@ export default async function FournisseurLayout({ children }: { children: React.
       <nav className="flex gap-2 overflow-x-auto border-b border-encre/10 px-4 py-2 text-sm">
         <Link
           href="/fournisseur"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           À fondre
         </Link>
         <Link
           href="/fournisseur/portefeuille"
-          className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
           Portefeuille
         </Link>

@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function LivrerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -49,13 +50,9 @@ export function LivrerAction({ commandeId }: { commandeId: string }) {
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading || code.length !== 4}
-        className="rounded-xl bg-braise px-4 py-4 text-lg font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" size="lg" disabled={loading || code.length !== 4}>
         {loading ? "Vérification..." : "Livrer"}
-      </button>
+      </Button>
     </form>
   );
 }

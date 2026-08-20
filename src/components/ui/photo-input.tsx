@@ -36,7 +36,7 @@ export function PhotoInput({
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="flex items-center justify-center gap-3 rounded-xl bg-creme px-4 py-3 text-sm font-medium text-encre">
+      <label className="flex items-center justify-center gap-3 rounded-none bg-creme px-4 py-3 text-sm font-medium text-encre">
         {preview && (
           <Image
             src={preview}

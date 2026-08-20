@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 type Livreur = { id: string; nom: string };
 
@@ -70,18 +71,12 @@ export function ControleQualiteAction({
       <div className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
         <p className="text-sm font-medium text-encre">Contrôle qualité</p>
         <div className="flex gap-2">
-          <button
-            onClick={() => setChoix("conforme")}
-            className="flex-1 rounded-xl bg-vert px-4 py-3 text-sm font-medium text-creme"
-          >
+          <Button variant="success" onClick={() => setChoix("conforme")} className="flex-1">
             Conforme
-          </button>
-          <button
-            onClick={() => setChoix("non_conforme")}
-            className="flex-1 rounded-xl bg-litige px-4 py-3 text-sm font-medium text-creme"
-          >
+          </Button>
+          <Button variant="danger" onClick={() => setChoix("non_conforme")} className="flex-1">
             Non conforme
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -113,13 +108,9 @@ export function ControleQualiteAction({
 
         {error && <p className="text-sm text-litige">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-        >
+        <Button type="submit" disabled={loading}>
           {loading ? "Envoi..." : "Assigner et passer en livraison"}
-        </button>
+        </Button>
       </form>
     );
   }
@@ -139,13 +130,9 @@ export function ControleQualiteAction({
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-litige px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" variant="danger" disabled={loading}>
         {loading ? "Envoi..." : "Passer en litige"}
-      </button>
+      </Button>
     </form>
   );
 }

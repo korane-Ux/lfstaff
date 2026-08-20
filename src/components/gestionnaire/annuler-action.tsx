@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function AnnulerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -56,20 +57,12 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
       />
       {error && <p className="text-xs text-litige">{error}</p>}
       <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setOuvert(false)}
-          className="flex-1 rounded-xl bg-creme px-4 py-2 text-sm font-medium text-encre/70"
-        >
+        <Button type="button" variant="ghost" size="sm" onClick={() => setOuvert(false)} className="flex-1">
           Retour
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="flex-1 rounded-xl bg-litige px-4 py-2 text-sm font-medium text-creme disabled:opacity-60"
-        >
+        </Button>
+        <Button type="submit" variant="danger" size="sm" disabled={loading} className="flex-1">
           {loading ? "..." : "Confirmer l'annulation"}
-        </button>
+        </Button>
       </div>
     </form>
   );

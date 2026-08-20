@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
 import { calculerBilanPeriode } from "@/lib/bilans";
 import { PERIODE_LABELS, PERIODE_ORDER, type PeriodeKey } from "@/lib/periode";
+import { LinkButton } from "@/components/ui/link-button";
 
 function estPeriodeKey(value: string | undefined): value is PeriodeKey {
   return value === "jour" || value === "semaine" || value === "mois";
@@ -44,7 +44,7 @@ export default async function BilansPage({
         <h1 className="font-display text-2xl text-encre">Bilans</h1>
         <a
           href={`/gestionnaire/bilans/rapport?periode=${periode}`}
-          className="rounded-full bg-braise px-4 py-2 text-sm font-medium text-creme"
+          className="rounded-none bg-braise px-4 py-2 text-sm font-medium text-creme"
         >
           Télécharger le PDF
         </a>
@@ -52,15 +52,13 @@ export default async function BilansPage({
 
       <div className="flex gap-2">
         {PERIODE_ORDER.map((cle) => (
-          <Link
+          <LinkButton
             key={cle}
             href={`/gestionnaire/bilans?periode=${cle}`}
-            className={`rounded-full px-4 py-2 text-sm font-medium ${
-              cle === periode ? "bg-braise text-creme" : "bg-surface text-encre/70"
-            }`}
+            variant={cle === periode ? "primary" : "secondary"}
           >
             {PERIODE_LABELS[cle]}
-          </Link>
+          </LinkButton>
         ))}
       </div>
 

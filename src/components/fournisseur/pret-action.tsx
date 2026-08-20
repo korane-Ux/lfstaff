@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PhotoInput } from "@/components/ui/photo-input";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -31,12 +32,9 @@ export function PretAction({
 
   if (!pret) {
     return (
-      <button
-        onClick={() => setPret(true)}
-        className="rounded-xl bg-braise px-4 py-4 text-lg font-medium text-creme"
-      >
+      <Button size="lg" onClick={() => setPret(true)}>
         C&apos;est prêt
-      </button>
+      </Button>
     );
   }
 
@@ -141,13 +139,9 @@ export function PretAction({
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Envoi..." : "Confirmer l'expédition"}
-      </button>
+      </Button>
     </form>
   );
 }

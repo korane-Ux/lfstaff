@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { AppRole } from "@/lib/supabase/types";
+import { Button } from "@/components/ui/button";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -97,24 +98,22 @@ export function MembreForm({
       <div className="flex flex-col gap-2">
         <p className="text-sm text-encre">Statut</p>
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
+            variant={actif ? "success" : "ghost"}
             onClick={() => setActif(true)}
-            className={`flex-1 rounded-xl px-4 py-3 text-sm font-medium ${
-              actif ? "bg-vert text-creme" : "bg-creme text-encre/70"
-            }`}
+            className="flex-1"
           >
             Actif
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={!actif ? "danger" : "ghost"}
             onClick={() => setActif(false)}
-            className={`flex-1 rounded-xl px-4 py-3 text-sm font-medium ${
-              !actif ? "bg-litige text-creme" : "bg-creme text-encre/70"
-            }`}
+            className="flex-1"
           >
             Désactivé
-          </button>
+          </Button>
         </div>
         {!actif && (
           <p className="text-xs text-encre/50">
@@ -125,13 +124,9 @@ export function MembreForm({
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : "Enregistrer"}
-      </button>
+      </Button>
     </form>
   );
 }

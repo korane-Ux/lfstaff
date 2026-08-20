@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PhotoInput } from "@/components/ui/photo-input";
+import { Button } from "@/components/ui/button";
 
 type Client = { id: string; nom: string };
 type Produit = { id: string; nom: string; prix_final: number | null };
@@ -199,13 +200,9 @@ export function CommandeForm({
 
       {error && <p className="text-sm text-litige">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
-      >
+      <Button type="submit" disabled={loading}>
         {loading ? "Création..." : "Créer la commande"}
-      </button>
+      </Button>
     </form>
   );
 }
