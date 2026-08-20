@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -8,6 +8,39 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const CLE_MASQUEE = "lfstaff-install-masque";
+
+// Store module-level (pas de useState+effet) : Chrome peut déclencher
+// beforeinstallprompt avant même que ce composant existe. Le script inline
+// dans <head> (voir layout.tsx) l'attrape en tout premier et le pose sur
+// window ; on le relit ici au chargement du module, puis on écoute la
+// suite normalement. Ça évite de perdre l'événement (il ne se redéclenche
+// jamais) sans faire de setState synchrone dans un effet.
+let promptEvent: BeforeInstallPromptEvent | null = null;
+const listeners = new Set<() => void>();
+
+if (typeof window !== "undefined") {
+  const w = window as Window & { __lfstaffInstallPrompt?: BeforeInstallPromptEvent };
+  if (w.__lfstaffInstallPrompt) promptEvent = w.__lfstaffInstallPrompt;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    promptEvent = e as BeforeInstallPromptEvent;
+    listeners.forEach((listener) => listener());
+  });
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function getSnapshot() {
+  return promptEvent;
+}
+
+function getServerSnapshot() {
+  return null;
+}
 
 function souscrireJamais() {
   return () => {};
@@ -33,17 +66,8 @@ function estDejaInstallee() {
 
 export function InstallBanner() {
   const monte = useMonte();
-  const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const promptEventActuel = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [masqueeManuel, setMasqueeManuel] = useState(false);
-
-  useEffect(() => {
-    function handler(e: Event) {
-      e.preventDefault();
-      setPromptEvent(e as BeforeInstallPromptEvent);
-    }
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
 
   if (
     !monte ||
@@ -60,9 +84,9 @@ export function InstallBanner() {
   }
 
   async function installer() {
-    if (!promptEvent) return;
-    await promptEvent.prompt();
-    const { outcome } = await promptEvent.userChoice;
+    if (!promptEventActuel) return;
+    await promptEventActuel.prompt();
+    const { outcome } = await promptEventActuel.userChoice;
     if (outcome === "accepted") {
       setMasqueeManuel(true);
     } else {
@@ -81,7 +105,7 @@ export function InstallBanner() {
     );
   }
 
-  if (!promptEvent) return null;
+  if (!promptEventActuel) return null;
 
   return (
     <div className="flex items-center justify-between gap-3 bg-laiton px-4 py-3 text-sm text-encre">

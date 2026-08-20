@@ -47,6 +47,19 @@ const THEME_INIT_SCRIPT = `
 })();
 `;
 
+// Chrome peut déclencher beforeinstallprompt avant que React/l'effet de
+// InstallBanner soit prêt à l'écouter — l'événement est alors perdu pour
+// de bon (il ne se redéclenche pas). On l'attrape ici, le plus tôt possible,
+// et InstallBanner va le relire sur window au montage.
+const INSTALL_PROMPT_CAPTURE_SCRIPT = `
+(function () {
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    window.__lfstaffInstallPrompt = e;
+  });
+})();
+`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -55,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: INSTALL_PROMPT_CAPTURE_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col">
         <OfflineBanner />
