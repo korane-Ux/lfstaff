@@ -33,22 +33,24 @@ export default async function EquipePage() {
 
       <div className="flex flex-col gap-2">
         {users?.map((u) => (
-          <div key={u.id} className="flex items-center justify-between rounded-2xl bg-surface p-4">
-            <div>
-              <p className="text-sm font-medium text-encre">{u.nom}</p>
-              <p className="text-xs text-encre/60">
-                {[u.telephone, u.ville].filter(Boolean).join(" · ")}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-encre/80">{ROLE_LABELS[u.role]}</p>
-              {!u.actif && <p className="text-xs text-litige">Inactif</p>}
-              {(u.role === "fournisseur" || u.role === "livreur") && (
-                <a href={`/releve/${u.id}`} className="text-xs text-braise underline">
-                  Relevé
-                </a>
-              )}
-            </div>
+          <div key={u.id} className="flex items-center justify-between gap-2 rounded-2xl bg-surface p-4">
+            <Link href={`/gestionnaire/equipe/${u.id}`} className="flex flex-1 items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-encre">{u.nom}</p>
+                <p className="text-xs text-encre/60">
+                  {[u.telephone, u.ville].filter(Boolean).join(" · ")}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-encre/80">{ROLE_LABELS[u.role]}</p>
+                {!u.actif && <p className="text-xs text-litige">Inactif</p>}
+              </div>
+            </Link>
+            {(u.role === "fournisseur" || u.role === "livreur") && (
+              <a href={`/releve/${u.id}`} className="shrink-0 text-xs text-braise underline">
+                Relevé
+              </a>
+            )}
           </div>
         ))}
       </div>
