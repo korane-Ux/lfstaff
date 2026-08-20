@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
-import { RoleHeader } from "@/components/layout/role-header";
 import { formatFcfa } from "@/lib/etats";
 
 export default async function FournisseurPage() {
@@ -22,33 +21,30 @@ export default async function FournisseurPage() {
   const produitNom = new Map((produits ?? []).map((p) => [p.id, p.nom]));
 
   return (
-    <div className="flex min-h-dvh flex-col bg-creme">
-      <RoleHeader nom={profile.nom} role={profile.role} />
-      <main className="flex flex-1 flex-col gap-3 px-4 py-4">
-        <h1 className="font-display text-2xl text-encre">À fondre</h1>
+    <main className="flex flex-1 flex-col gap-3 px-4 py-4">
+      <h1 className="font-display text-2xl text-encre">À fondre</h1>
 
-        {!commandes?.length && (
-          <p className="mt-8 text-center text-sm text-encre/60">Rien à fondre pour l&apos;instant.</p>
-        )}
+      {!commandes?.length && (
+        <p className="mt-8 text-center text-sm text-encre/60">Rien à fondre pour l&apos;instant.</p>
+      )}
 
-        <div className="flex flex-col gap-2">
-          {commandes?.map((commande) => (
-            <Link
-              key={commande.id}
-              href={`/fournisseur/commandes/${commande.id}`}
-              className="flex items-center justify-between rounded-2xl bg-surface p-4"
-            >
-              <div>
-                <p className="text-sm font-medium text-encre">
-                  {produitNom.get(commande.produit_id) ?? "Produit"}
-                </p>
-                <p className="text-xs text-encre/60">Quantité : {commande.quantite}</p>
-              </div>
-              <p className="text-sm text-encre/80">{formatFcfa(commande.prix_total)}</p>
-            </Link>
-          ))}
-        </div>
-      </main>
-    </div>
+      <div className="flex flex-col gap-2">
+        {commandes?.map((commande) => (
+          <Link
+            key={commande.id}
+            href={`/fournisseur/commandes/${commande.id}`}
+            className="flex items-center justify-between rounded-2xl bg-surface p-4"
+          >
+            <div>
+              <p className="text-sm font-medium text-encre">
+                {produitNom.get(commande.produit_id) ?? "Produit"}
+              </p>
+              <p className="text-xs text-encre/60">Quantité : {commande.quantite}</p>
+            </div>
+            <p className="text-sm text-encre/80">{formatFcfa(commande.prix_total)}</p>
+          </Link>
+        ))}
+      </div>
+    </main>
   );
 }

@@ -43,6 +43,11 @@ export default async function EquipePage() {
             <div className="text-right">
               <p className="text-sm text-encre/80">{ROLE_LABELS[u.role]}</p>
               {!u.actif && <p className="text-xs text-litige">Inactif</p>}
+              {(u.role === "fournisseur" || u.role === "livreur") && (
+                <a href={`/releve/${u.id}`} className="text-xs text-braise underline">
+                  Relevé
+                </a>
+              )}
             </div>
           </div>
         ))}
