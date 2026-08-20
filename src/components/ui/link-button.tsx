@@ -5,7 +5,7 @@ type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "default";
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary: "bg-braise text-creme",
+  primary: "bg-braise text-accent-fg",
   secondary: "bg-surface text-encre/80",
   ghost: "bg-creme text-encre/70",
 };

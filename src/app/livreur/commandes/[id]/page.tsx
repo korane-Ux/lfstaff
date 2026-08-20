@@ -48,7 +48,7 @@ export default async function LivreurCommandeDetailPage({
       {commande.etat === "en_livraison" && !commande.solde_paye ? (
         <LivrerAction commandeId={commande.id} />
       ) : (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           Déjà livrée.
         </p>
       )}

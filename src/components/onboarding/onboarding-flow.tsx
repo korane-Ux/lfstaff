@@ -32,7 +32,7 @@ export function OnboardingFlow({ role }: { role: AppRole }) {
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-between gap-8 bg-creme px-6 py-10">
-      <button onClick={terminer} className="self-end text-sm text-encre/50">
+      <button onClick={terminer} className="self-end text-sm text-encre/65">
         Passer
       </button>
 
@@ -54,7 +54,7 @@ export function OnboardingFlow({ role }: { role: AppRole }) {
         </div>
         <button
           onClick={() => (dernier ? terminer() : setIndex(index + 1))}
-          className="w-full rounded-none bg-braise px-4 py-4 text-lg font-medium text-creme"
+          className="w-full rounded-none bg-braise px-4 py-4 text-lg font-medium text-accent-fg"
         >
           {dernier ? "Commencer" : "Suivant"}
         </button>

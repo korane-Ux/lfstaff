@@ -16,7 +16,7 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
     return (
       <button
         onClick={() => setOuvert(true)}
-        className="self-start text-xs text-encre/40 underline underline-offset-2"
+        className="self-start text-xs text-encre/65 underline underline-offset-2"
       >
         Annuler la commande
       </button>

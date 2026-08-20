@@ -30,18 +30,18 @@ export default async function FournisseurPage() {
       {!!commandes?.length && (
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">Pièces à créer</p>
+            <p className="text-xs text-encre/65">Pièces à créer</p>
             <p className="font-display text-xl text-encre">{commandes.length}</p>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">Valeur totale</p>
+            <p className="text-xs text-encre/65">Valeur totale</p>
             <p className="font-display text-xl text-encre">{formatFcfa(valeurTotale)}</p>
           </div>
         </div>
       )}
 
       {!commandes?.length && (
-        <p className="mt-8 text-center text-sm text-encre/60">Rien à fondre pour l&apos;instant.</p>
+        <p className="mt-8 text-center text-sm text-encre/65">Rien à fondre pour l&apos;instant.</p>
       )}
 
       <div className="flex flex-col gap-2">
@@ -60,7 +60,7 @@ export default async function FournisseurPage() {
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium text-encre">{produit?.nom ?? "Produit"}</p>
-              <p className="text-xs text-encre/60">Quantité : {commande.quantite}</p>
+              <p className="text-xs text-encre/65">Quantité : {commande.quantite}</p>
             </div>
             <p className="text-sm text-encre/80">{formatFcfa(commande.prix_total)}</p>
           </Link>

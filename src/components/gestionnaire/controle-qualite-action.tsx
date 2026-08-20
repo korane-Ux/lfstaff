@@ -83,7 +83,7 @@ export function ControleQualiteAction({
   if (choix === "conforme") {
     if (!livreurs.length) {
       return (
-        <p className="rounded-2xl bg-surface p-4 text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-sm text-encre/65">
           Aucun livreur enregistré — demande au super-admin d&apos;en créer un.
         </p>
       );
@@ -101,7 +101,7 @@ export function ControleQualiteAction({
           ))}
         </SelectField>
 
-        {error && <p className="text-sm text-litige">{error}</p>}
+        {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
         <Button type="submit" disabled={loading}>
           {loading ? "Envoi..." : "Assigner et passer en livraison"}
@@ -123,7 +123,7 @@ export function ControleQualiteAction({
         placeholder="Ce qui ne va pas avec le colis..."
       />
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" variant="danger" disabled={loading}>
         {loading ? "Envoi..." : "Passer en litige"}

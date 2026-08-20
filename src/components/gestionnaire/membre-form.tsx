@@ -81,7 +81,7 @@ export function MembreForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
-      <p className="text-sm text-encre/60">{ROLE_LABELS[role]}</p>
+      <p className="text-sm text-encre/65">{ROLE_LABELS[role]}</p>
 
       <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
@@ -102,7 +102,7 @@ export function MembreForm({
         </SelectField>
       )}
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : "Enregistrer"}
@@ -112,7 +112,7 @@ export function MembreForm({
         <p className="text-sm font-medium text-encre">Zone sensible</p>
         {actif ? (
           <>
-            <p className="text-xs text-encre/60">
+            <p className="text-xs text-encre/65">
               Un compte désactivé ne peut plus être choisi pour de nouvelles commandes.
             </p>
             <ConfirmDangerDialog
@@ -129,7 +129,7 @@ export function MembreForm({
           </>
         ) : (
           <>
-            <p className="text-xs text-encre/60">Ce compte est désactivé.</p>
+            <p className="text-xs text-encre/65">Ce compte est désactivé.</p>
             <Button type="button" variant="success" size="sm" onClick={handleReactiver} className="self-start">
               Réactiver ce compte
             </Button>

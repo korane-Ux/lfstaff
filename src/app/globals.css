@@ -15,8 +15,16 @@
   --color-ocre: #be8a3c; /* Ocre de terre — Expédiée */
   --color-ocre-fonce: #8f6526; /* Reçue */
   --color-braise: #b23a1c; /* Braise — En livraison */
-  --color-vert: #3f7d52; /* Livrée & validée */
+  --color-vert: #39714a; /* Livrée & validée — assombri de 3F7D52 : le texte
+    clair dessus ne passait qu'à 3.97:1, sous le seuil AA 4.5:1 */
   --color-litige: #7a2436; /* Litige */
+
+  /* Texte clair fixe pour les surfaces d'accent (boutons pleins braise/
+     vert/litige, bandeaux) : ces fonds ne changent pas avec le thème, donc
+     leur texte ne doit jamais suivre le flip encre/creme — sinon le texte
+     passe presque noir sur fond braise en mode sombre et devient illisible
+     (contraste ~2:1, repéré en calculant les ratios WCAG réels). */
+  --color-accent-fg: #efe6d6;
 }
 
 /* Mode nocturne : les tokens neutres s'inversent (encre devient l'encre
@@ -52,6 +60,7 @@
   --color-braise: var(--color-braise);
   --color-vert: var(--color-vert);
   --color-litige: var(--color-litige);
+  --color-accent-fg: var(--color-accent-fg);
 
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-inter);

@@ -46,11 +46,11 @@ export function ValiderLivraisonAction({
   return (
     <div className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Livraison confirmée par le client</p>
-      <p className="text-xs text-encre/60">
+      <p className="text-xs text-encre/65">
         Solde encaissé : {formatFcfa(soldeMontant)} · Commission livreur : {formatFcfa(commissionMontant)}
       </p>
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button variant="success" onClick={handleClick} disabled={loading}>
         {loading ? "Validation..." : "Valider et créditer la commission"}

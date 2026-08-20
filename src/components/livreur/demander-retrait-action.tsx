@@ -40,7 +40,7 @@ export function DemanderRetraitAction({ montant }: { montant: number }) {
 
   return (
     <div className="flex flex-col gap-2">
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
       <Button size="lg" onClick={handleClick} disabled={loading} className="w-full">
         {loading ? "Envoi..." : `Demander mon paiement (${formatFcfa(montant)})`}
       </Button>

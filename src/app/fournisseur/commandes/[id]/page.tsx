@@ -71,7 +71,7 @@ export default async function FournisseurCommandeDetailPage({
           villeLivraison={commande.ville_livraison}
         />
       ) : (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">Déjà expédiée.</p>
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">Déjà expédiée.</p>
       )}
     </main>
   );

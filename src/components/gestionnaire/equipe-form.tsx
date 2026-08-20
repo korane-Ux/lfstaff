@@ -50,12 +50,12 @@ export function EquipeForm({ villes }: { villes: string[] }) {
       <div className="flex flex-col gap-3 rounded-3xl bg-surface p-5">
         <p className="text-sm font-medium text-encre">Compte créé — transmets ces identifiants :</p>
         <div className="flex flex-col gap-1 rounded-xl bg-creme p-4">
-          <p className="text-xs text-encre/60">Email</p>
+          <p className="text-xs text-encre/65">Email</p>
           <p className="text-base font-medium text-encre">{cree.email}</p>
-          <p className="mt-2 text-xs text-encre/60">Mot de passe temporaire</p>
+          <p className="mt-2 text-xs text-encre/65">Mot de passe temporaire</p>
           <p className="font-display text-lg text-braise">{cree.motDePasse}</p>
         </div>
-        <p className="text-xs text-encre/50">
+        <p className="text-xs text-encre/65">
           Ce mot de passe ne sera plus affiché — communique-le maintenant.
         </p>
         <Button onClick={() => router.push("/gestionnaire/equipe")}>Terminé</Button>
@@ -109,7 +109,7 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         </SelectField>
       )}
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Création..." : "Créer le compte"}

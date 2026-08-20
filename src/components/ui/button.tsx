@@ -4,11 +4,11 @@ type Variant = "primary" | "secondary" | "ghost" | "success" | "danger";
 type Size = "sm" | "default" | "lg";
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary: "bg-braise text-creme",
+  primary: "bg-braise text-accent-fg",
   secondary: "bg-surface text-encre/80",
   ghost: "bg-creme text-encre/70",
-  success: "bg-vert text-creme",
-  danger: "bg-litige text-creme",
+  success: "bg-vert text-accent-fg",
+  danger: "bg-litige text-accent-fg",
 };
 
 const SIZE_CLASSES: Record<Size, string> = {

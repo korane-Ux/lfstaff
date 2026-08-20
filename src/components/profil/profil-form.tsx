@@ -80,7 +80,7 @@ export function ProfilForm({
         </SelectField>
       )}
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
       {saved && <p className="text-sm text-vert">Modifications enregistrées.</p>}
 
       <Button type="submit" disabled={loading}>

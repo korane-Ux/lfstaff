@@ -17,7 +17,7 @@ function LabelRow({ label, hint }: LabelProps) {
   return (
     <span className={labelRowClass}>
       <span className="font-medium text-encre/80">{label}</span>
-      {hint && <span className="text-xs font-normal text-encre/45">{hint}</span>}
+      {hint && <span className="text-xs font-normal text-encre/65">{hint}</span>}
     </span>
   );
 }

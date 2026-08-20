@@ -74,7 +74,7 @@ export function InstallBanner() {
     return (
       <div className="flex items-center justify-between gap-3 bg-laiton px-4 py-3 text-sm text-encre">
         <p>Installe LFstaff : bouton Partager puis &laquo; Sur l&apos;écran d&apos;accueil &raquo;.</p>
-        <button onClick={fermer} className="shrink-0 text-lg leading-none text-encre/60">
+        <button onClick={fermer} className="shrink-0 text-lg leading-none text-encre/65">
           ×
         </button>
       </div>
@@ -89,11 +89,11 @@ export function InstallBanner() {
       <div className="flex shrink-0 items-center gap-3">
         <button
           onClick={installer}
-          className="rounded-none bg-braise px-3 py-1.5 text-xs font-medium text-creme"
+          className="rounded-none bg-braise px-3 py-1.5 text-xs font-medium text-accent-fg"
         >
           Installer
         </button>
-        <button onClick={fermer} className="text-lg leading-none text-encre/60">
+        <button onClick={fermer} className="text-lg leading-none text-encre/65">
           ×
         </button>
       </div>

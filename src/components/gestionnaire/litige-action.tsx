@@ -73,7 +73,7 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
           {loading === "annuler" ? "..." : "Annuler la commande"}
         </Button>
       </div>
-      {error && <p className="text-xs text-litige">{error}</p>}
+      {error && <p role="alert" className="text-xs text-litige">{error}</p>}
     </div>
   );
 }

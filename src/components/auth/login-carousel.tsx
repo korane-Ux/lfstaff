@@ -44,8 +44,10 @@ export function LoginCarousel() {
             className="object-cover"
             priority={i === 0}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-encre/80 via-encre/10 to-transparent" />
-          <p className="absolute bottom-5 left-5 right-5 font-display text-lg text-creme">
+          {/* Dégradé fixe (pas from-encre) : la légende doit rester lisible sur
+              la photo dans les deux thèmes, indépendamment du flip encre/creme. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+          <p className="absolute bottom-5 left-5 right-5 font-display text-lg text-accent-fg">
             {slide.legende}
           </p>
         </div>

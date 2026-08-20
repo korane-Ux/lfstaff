@@ -22,7 +22,7 @@ export default async function RemisesPage() {
       <h1 className="font-display text-2xl text-encre">Remises à recevoir</h1>
 
       {!soldes?.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucun livreur ne doit remettre de cash pour l&apos;instant.
         </p>
       )}
@@ -37,7 +37,7 @@ export default async function RemisesPage() {
               <p className="text-sm font-medium text-encre">
                 {nomLivreur.get(s.livreur_id) ?? "Livreur"}
               </p>
-              <p className="text-xs text-encre/60">{formatFcfa(s.net_a_remettre)}</p>
+              <p className="text-xs text-encre/65">{formatFcfa(s.net_a_remettre)}</p>
             </div>
             <RecevoirCashAction livreurId={s.livreur_id} montantSuggere={s.net_a_remettre} />
           </div>

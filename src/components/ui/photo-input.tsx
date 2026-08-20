@@ -56,7 +56,7 @@ export function PhotoInput({
           className="hidden"
         />
       </label>
-      {error && <p className="text-xs text-litige">{error}</p>}
+      {error && <p role="alert" className="text-xs text-litige">{error}</p>}
     </div>
   );
 }

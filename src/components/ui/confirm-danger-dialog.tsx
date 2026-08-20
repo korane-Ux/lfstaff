@@ -62,7 +62,7 @@ export function ConfirmDangerDialog({
           >
             <p className="text-base font-medium text-encre">{title}</p>
             <p className="text-sm text-encre/70">{description}</p>
-            <p className="text-xs text-encre/50">
+            <p className="text-xs text-encre/65">
               Tape <span className="font-mono font-medium text-litige">{PHRASE}</span> pour confirmer.
             </p>
             <input
@@ -74,7 +74,7 @@ export function ConfirmDangerDialog({
               spellCheck={false}
               className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
             />
-            {error && <p className="text-xs text-litige">{error}</p>}
+            {error && <p role="alert" className="text-xs text-litige">{error}</p>}
             <div className="flex gap-2">
               <Button type="button" variant="ghost" size="sm" className="flex-1" onClick={fermer} disabled={loading}>
                 Annuler

@@ -105,7 +105,7 @@ export function CommandeForm({
 
   if (!clients.length) {
     return (
-      <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+      <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
         Il faut d&apos;abord un client.{" "}
         <Link href="/gestionnaire/clients/nouveau" className="underline">
           En créer un
@@ -117,7 +117,7 @@ export function CommandeForm({
 
   if (!produits.length) {
     return (
-      <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+      <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
         Il faut d&apos;abord un produit au catalogue.{" "}
         <Link href="/gestionnaire/produits/nouveau" className="underline">
           En créer un
@@ -178,7 +178,7 @@ export function CommandeForm({
                     className="object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-xs text-encre/30">
+                  <div className="flex h-full w-full items-center justify-center text-xs text-encre/65">
                     Pas de photo
                   </div>
                 )}
@@ -237,7 +237,7 @@ export function CommandeForm({
 
         <PhotoInput dossier="commandes" onUploaded={setPhotoRef} />
 
-        {error && <p className="text-sm text-litige">{error}</p>}
+        {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
         <Button type="submit" disabled={loading || !lignesPanier.length}>
           {loading ? "Création..." : "Créer la commande"}

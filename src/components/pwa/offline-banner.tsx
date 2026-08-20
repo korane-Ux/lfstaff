@@ -25,7 +25,7 @@ export function OfflineBanner() {
   if (enLigne) return null;
 
   return (
-    <div className="sticky top-0 z-50 bg-litige px-4 py-2 text-center text-sm font-medium text-creme">
+    <div className="sticky top-0 z-50 bg-litige px-4 py-2 text-center text-sm font-medium text-accent-fg">
       Pas de connexion — tes actions ne s&apos;enregistreront pas tant qu&apos;elle n&apos;est pas revenue.
     </div>
   );

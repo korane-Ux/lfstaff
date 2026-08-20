@@ -33,7 +33,7 @@ export default async function EquipePage() {
             <Link href={`/gestionnaire/equipe/${u.id}`} className="flex flex-1 items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-encre">{u.nom}</p>
-                <p className="text-xs text-encre/60">
+                <p className="text-xs text-encre/65">
                   {[u.telephone, u.ville].filter(Boolean).join(" · ")}
                 </p>
               </div>

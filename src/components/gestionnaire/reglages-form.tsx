@@ -113,7 +113,7 @@ export function ReglagesForm({
               onClick={() => retirerVille(v)}
               className="flex items-center gap-1.5"
             >
-              {v} <span className="text-encre/50">×</span>
+              {v} <span className="text-encre/65">×</span>
             </Button>
           ))}
         </div>
@@ -130,7 +130,7 @@ export function ReglagesForm({
         </div>
       </div>
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
       {succes && <p className="text-sm text-vert">Réglages enregistrés.</p>}
 
       <Button type="submit" disabled={loading}>

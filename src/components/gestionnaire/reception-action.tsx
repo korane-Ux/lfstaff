@@ -31,7 +31,7 @@ export function ReceptionAction({ commandeId }: { commandeId: string }) {
 
   return (
     <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
       <Button onClick={handleClick} disabled={loading}>
         {loading ? "Enregistrement..." : "Colis reçu"}
       </Button>

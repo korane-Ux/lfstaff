@@ -83,7 +83,7 @@ export function RecevoirCashAction({
           </Button>
         ))}
       </div>
-      {error && <p className="text-xs text-litige">{error}</p>}
+      {error && <p role="alert" className="text-xs text-litige">{error}</p>}
       <Button type="submit" variant="success" size="sm" disabled={loading}>
         {loading ? "..." : "Confirmer"}
       </Button>

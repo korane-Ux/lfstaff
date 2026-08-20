@@ -43,17 +43,17 @@ export default async function PortefeuillePage() {
       </div>
 
       {demandeEnCours ? (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           Demande de {formatFcfa(demandeEnCours.montant)} en attente de traitement.
         </p>
       ) : netARemettre < 0 ? (
         <DemanderRetraitAction montant={Math.abs(netARemettre)} />
       ) : netARemettre > 0 ? (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           Remets ce montant à la gestionnaire en personne.
         </p>
       ) : (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           Rien à demander pour l&apos;instant.
         </p>
       )}

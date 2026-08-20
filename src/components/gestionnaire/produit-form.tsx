@@ -268,7 +268,7 @@ export function ProduitForm({
         </>
       )}
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : produit ? "Enregistrer" : "Créer le produit"}
@@ -277,7 +277,7 @@ export function ProduitForm({
       {produit && (
         <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
           <p className="text-sm font-medium text-encre">Zone sensible</p>
-          <p className="text-xs text-encre/60">
+          <p className="text-xs text-encre/65">
             La suppression est définitive et retire aussi toutes les photos de ce produit.
           </p>
           <ConfirmDangerDialog

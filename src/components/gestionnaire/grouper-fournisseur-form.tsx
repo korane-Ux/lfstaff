@@ -89,7 +89,7 @@ export function GrouperFournisseurForm({
 
   if (!fournisseurs.length) {
     return (
-      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/60">
+      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/65">
         Aucun fournisseur enregistré — demande au super-admin d&apos;en créer un.
       </p>
     );
@@ -129,8 +129,8 @@ export function GrouperFournisseurForm({
               <button
                 type="button"
                 onClick={() => toggle(ligne.id)}
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-none border ${
-                  coche ? "border-braise bg-braise text-creme" : "border-encre/25 bg-creme"
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-none border ${
+                  coche ? "border-braise bg-braise text-accent-fg" : "border-encre/25 bg-creme"
                 }`}
                 aria-label={coche ? "Retirer de la sélection" : "Ajouter à la sélection"}
               >
@@ -143,7 +143,7 @@ export function GrouperFournisseurForm({
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-encre">{ligne.produitNom}</p>
-                <p className="text-xs text-encre/60">{ligne.clientNom}</p>
+                <p className="text-xs text-encre/65">{ligne.clientNom}</p>
               </div>
               {coche ? (
                 <input
@@ -154,7 +154,7 @@ export function GrouperFournisseurForm({
                   className="w-24 rounded-xl border border-encre/15 bg-creme px-2 py-1.5 text-right text-sm text-encre outline-none focus:border-braise"
                 />
               ) : (
-                <p className="text-xs text-encre/50">{formatFcfa(ligne.prixTotal)}</p>
+                <p className="text-xs text-encre/65">{formatFcfa(ligne.prixTotal)}</p>
               )}
             </div>
           );
@@ -190,7 +190,7 @@ export function GrouperFournisseurForm({
           Total avance : {formatFcfa(total)}
         </p>
 
-        {error && <p className="text-sm text-litige">{error}</p>}
+        {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
         <Button onClick={handleSubmit} disabled={loading || selection.size === 0}>
           {loading ? "Envoi..." : "Envoyer la grande commande"}

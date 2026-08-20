@@ -47,7 +47,7 @@ export default async function ProfilPage() {
   return (
     <div className="flex min-h-dvh flex-col bg-creme">
       <header className="flex items-center justify-between px-4 py-3">
-        <Link href={roleHome(profile.role)} className="text-sm text-encre/60 underline underline-offset-2">
+        <Link href={roleHome(profile.role)} className="text-sm text-encre/65 underline underline-offset-2">
           ← Retour
         </Link>
         <SignOutButton />
@@ -72,7 +72,7 @@ export default async function ProfilPage() {
         <div className="flex flex-col gap-2 rounded-3xl bg-surface p-5">
           <p className="text-sm font-medium text-encre">Activité récente</p>
 
-          {!historique?.length && <p className="text-xs text-encre/50">Aucune action pour l&apos;instant.</p>}
+          {!historique?.length && <p className="text-xs text-encre/65">Aucune action pour l&apos;instant.</p>}
 
           <div className="flex flex-col gap-2">
             {historique?.map((entree) => {
@@ -88,7 +88,7 @@ export default async function ProfilPage() {
                       {commande ? produitNom.get(commande.produit_id) ?? "Produit" : "Commande"}
                       {commande && ` · ${clientNom.get(commande.client_id) ?? "Client"}`}
                     </p>
-                    <p className="text-xs text-encre/50">
+                    <p className="text-xs text-encre/65">
                       {new Date(entree.horodatage).toLocaleString("fr-FR", {
                         day: "2-digit",
                         month: "2-digit",

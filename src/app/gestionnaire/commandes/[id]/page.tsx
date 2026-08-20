@@ -59,7 +59,7 @@ export default async function CommandeDetailPage({
 
       <div className="flex flex-col gap-1 rounded-2xl bg-surface p-4">
         <p className="text-sm font-medium text-encre">{client?.nom}</p>
-        <p className="text-xs text-encre/60">
+        <p className="text-xs text-encre/65">
           {[client?.telephone, client?.ville].filter(Boolean).join(" · ")}
         </p>
         <p className="mt-2 text-sm text-encre/80">
@@ -151,7 +151,7 @@ export default async function CommandeDetailPage({
       )}
 
       {commande.etat === "en_creation" && (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           En attente du fournisseur.
         </p>
       )}
@@ -186,7 +186,7 @@ export default async function CommandeDetailPage({
       )}
 
       {commande.etat === "en_livraison" && !commande.solde_paye && (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           En attente que le livreur confirme la remise.
         </p>
       )}
@@ -203,7 +203,7 @@ export default async function CommandeDetailPage({
       {commande.etat === "litige" && <LitigeAction commandeId={commande.id} />}
 
       {(commande.etat === "livree_validee" || commande.etat === "annulee") && (
-        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/65">
           Aucune action disponible pour cet état.
         </p>
       )}

@@ -70,7 +70,7 @@ export function ProduitGalerie({ produitId, images }: { produitId: string; image
                 type="button"
                 onClick={() => handleSupprimer(image)}
                 aria-label="Retirer cette photo"
-                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-none bg-encre/70 text-xs font-medium text-creme"
+                className="absolute right-1 top-1 flex h-8 w-8 items-center justify-center rounded-none bg-encre/70 text-xs font-medium text-creme"
               >
                 ✕
               </button>
@@ -83,7 +83,7 @@ export function ProduitGalerie({ produitId, images }: { produitId: string; image
         <span>{loading ? "Envoi..." : "Ajouter des photos"}</span>
         <input type="file" accept="image/*" multiple onChange={handleAjout} disabled={loading} className="hidden" />
       </label>
-      {error && <p className="text-xs text-litige">{error}</p>}
+      {error && <p role="alert" className="text-xs text-litige">{error}</p>}
     </div>
   );
 }

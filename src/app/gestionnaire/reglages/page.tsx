@@ -28,7 +28,7 @@ export default async function ReglagesPage() {
           <p>Avance fournisseur suggérée : {reglages?.pct_avance_fournisseur}%</p>
           <p>Acompte client suggéré : {reglages?.pct_acompte_client}%</p>
           <p>Villes actives : {(reglages?.villes_actives ?? []).join(", ")}</p>
-          <p className="mt-2 text-xs text-encre/50">Seul un super-admin peut modifier ces réglages.</p>
+          <p className="mt-2 text-xs text-encre/65">Seul un super-admin peut modifier ces réglages.</p>
         </div>
       )}
     </main>

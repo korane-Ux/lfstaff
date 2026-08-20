@@ -38,12 +38,12 @@ export default async function GrouperFournisseurPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <h1 className="font-display text-2xl text-encre">Grande commande — fournisseur</h1>
-      <p className="text-sm text-encre/60">
+      <p className="text-sm text-encre/65">
         Regroupe plusieurs commandes validées et envoie l&apos;avance fournisseur en une seule fois.
       </p>
 
       {!lignes.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucune commande validée en attente d&apos;avance pour l&apos;instant.
         </p>
       )}

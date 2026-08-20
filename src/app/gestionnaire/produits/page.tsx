@@ -20,7 +20,7 @@ export default async function ProduitsPage() {
       </div>
 
       {!produits?.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucun produit pour l&apos;instant.
         </p>
       )}
@@ -42,7 +42,7 @@ export default async function ProduitsPage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-xs text-encre/30">
+                <div className="flex h-full w-full items-center justify-center text-xs text-encre/65">
                   Pas de photo
                 </div>
               )}
@@ -54,7 +54,7 @@ export default async function ProduitsPage() {
             </div>
             <div className="flex flex-col gap-0.5 p-3">
               <p className="truncate text-sm font-medium text-encre">{produit.nom}</p>
-              <p className="truncate text-xs text-encre/60">{formatSpecsMarmite(produit)}</p>
+              <p className="truncate text-xs text-encre/65">{formatSpecsMarmite(produit)}</p>
               <p className="mt-1 text-sm font-medium text-braise">{formatFcfa(produit.prix_final)}</p>
             </div>
           </Link>

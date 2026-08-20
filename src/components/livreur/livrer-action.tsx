@@ -48,7 +48,7 @@ export function LivrerAction({ commandeId }: { commandeId: string }) {
         className="rounded-xl border border-encre/15 bg-creme px-4 py-4 text-center text-2xl tracking-[0.5em] text-encre outline-none focus:border-braise"
       />
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" size="lg" disabled={loading || code.length !== 4}>
         {loading ? "Vérification..." : "Livrer"}

@@ -65,7 +65,7 @@ export default async function GestionnaireLayout({
         )}
         <Link
           href="/gestionnaire/commandes/nouvelle"
-          className="shrink-0 rounded-none bg-braise px-3 py-1.5 font-medium text-creme"
+          className="shrink-0 rounded-none bg-braise px-3 py-1.5 font-medium text-accent-fg"
         >
           + Nouvelle commande
         </Link>

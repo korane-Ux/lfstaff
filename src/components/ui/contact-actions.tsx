@@ -13,7 +13,7 @@ export function ContactActions({
   message: string;
 }) {
   if (!telephone) {
-    return <p className="text-xs text-encre/50">Pas de numéro enregistré pour {nom}.</p>;
+    return <p className="text-xs text-encre/65">Pas de numéro enregistré pour {nom}.</p>;
   }
 
   return (
@@ -22,11 +22,11 @@ export function ContactActions({
         href={lienWhatsapp(telephone, message)}
         target="_blank"
         rel="noreferrer"
-        className="flex-1 rounded-none bg-vert px-3 py-2 text-center text-xs font-medium text-creme"
+        className="flex-1 rounded-none bg-vert px-3 py-2 text-center text-xs font-medium text-accent-fg"
       >
         WhatsApp
       </a>
-      <a href={lienAppel(telephone)} className="flex-1 rounded-none bg-braise px-3 py-2 text-center text-xs font-medium text-creme">
+      <a href={lienAppel(telephone)} className="flex-1 rounded-none bg-braise px-3 py-2 text-center text-xs font-medium text-accent-fg">
         Appeler
       </a>
       <a

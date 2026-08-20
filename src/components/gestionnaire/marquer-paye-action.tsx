@@ -31,7 +31,7 @@ export function MarquerPayeAction({ demandeId }: { demandeId: string }) {
 
   return (
     <div className="flex flex-col gap-1">
-      {error && <p className="text-xs text-litige">{error}</p>}
+      {error && <p role="alert" className="text-xs text-litige">{error}</p>}
       <Button variant="success" size="sm" onClick={handleClick} disabled={loading}>
         {loading ? "..." : "Marquer payé"}
       </Button>

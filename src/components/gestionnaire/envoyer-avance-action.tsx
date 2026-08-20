@@ -36,7 +36,7 @@ export function EnvoyerAvanceAction({
 
   if (!fournisseurs.length) {
     return (
-      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/60">
+      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/65">
         Aucun fournisseur enregistré — demande au super-admin d&apos;en créer un.
       </p>
     );
@@ -102,7 +102,7 @@ export function EnvoyerAvanceAction({
         ))}
       </div>
 
-      {error && <p className="text-sm text-litige">{error}</p>}
+      {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Envoi..." : "Envoyer l'avance"}

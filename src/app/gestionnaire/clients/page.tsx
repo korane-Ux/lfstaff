@@ -17,7 +17,7 @@ export default async function ClientsPage() {
       </div>
 
       {!clients?.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucun client pour l&apos;instant.
         </p>
       )}
@@ -30,7 +30,7 @@ export default async function ClientsPage() {
             className="block rounded-2xl bg-surface p-4"
           >
             <p className="text-sm font-medium text-encre">{client.nom}</p>
-            <p className="text-xs text-encre/60">
+            <p className="text-xs text-encre/65">
               {[client.telephone, client.ville].filter(Boolean).join(" · ") || "—"}
             </p>
           </Link>

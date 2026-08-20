@@ -39,16 +39,16 @@ export default async function GestionnaireDashboard() {
       {!!commandes?.length && (
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">En cours</p>
+            <p className="text-xs text-encre/65">En cours</p>
             <p className="font-display text-xl text-encre">{enCours.length}</p>
-            <p className="text-[11px] text-encre/50">{formatFcfa(valeurEnCours)}</p>
+            <p className="text-[11px] text-encre/65">{formatFcfa(valeurEnCours)}</p>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">En litige</p>
+            <p className="text-xs text-encre/65">En litige</p>
             <p className="font-display text-xl text-litige">{enLitige.length}</p>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">Livrées</p>
+            <p className="text-xs text-encre/65">Livrées</p>
             <p className="font-display text-xl text-vert">{livrees.length}</p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default async function GestionnaireDashboard() {
       )}
 
       {!commandes?.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucune commande pour l&apos;instant.{" "}
           <Link href="/gestionnaire/commandes/nouvelle" className="underline">
             Créer la première
@@ -90,11 +90,11 @@ export default async function GestionnaireDashboard() {
               <div className="flex items-center gap-2">
                 <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${ETAT_META[etat].color}`} />
                 <p className="text-sm font-medium text-encre">{ETAT_META[etat].label}</p>
-                <span className="ml-auto text-xs text-encre/50">{items.length}</span>
+                <span className="ml-auto text-xs text-encre/65">{items.length}</span>
               </div>
 
               <div className="flex flex-col gap-2">
-                {items.length === 0 && <p className="text-xs text-encre/40">—</p>}
+                {items.length === 0 && <p className="text-xs text-encre/65">—</p>}
                 {items.map((commande) => (
                   <Link
                     key={commande.id}
@@ -104,7 +104,7 @@ export default async function GestionnaireDashboard() {
                     <p className="text-sm font-medium text-encre">
                       {clientNom.get(commande.client_id) ?? "Client"}
                     </p>
-                    <p className="text-xs text-encre/60">
+                    <p className="text-xs text-encre/65">
                       {produitNom.get(commande.produit_id) ?? "Produit"}
                     </p>
                     <p className="mt-1 text-xs text-encre/80">{formatFcfa(commande.prix_total)}</p>

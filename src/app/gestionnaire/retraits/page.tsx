@@ -22,7 +22,7 @@ export default async function RetraitsPage() {
       <h1 className="font-display text-2xl text-encre">Retraits à traiter</h1>
 
       {!demandes?.length && (
-        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucune demande en attente.
         </p>
       )}
@@ -37,7 +37,7 @@ export default async function RetraitsPage() {
               <p className="text-sm font-medium text-encre">
                 {nomLivreur.get(demande.livreur_id) ?? "Livreur"}
               </p>
-              <p className="text-xs text-encre/60">{formatFcfa(demande.montant)}</p>
+              <p className="text-xs text-encre/65">{formatFcfa(demande.montant)}</p>
             </div>
             <MarquerPayeAction demandeId={demande.id} />
           </div>

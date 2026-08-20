@@ -67,7 +67,7 @@ export function GrouperLivreurForm({
 
   if (!livreurs.length) {
     return (
-      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/60">
+      <p className="rounded-2xl bg-surface p-4 text-sm text-encre/65">
         Aucun livreur enregistré — demande au super-admin d&apos;en créer un.
       </p>
     );
@@ -86,8 +86,8 @@ export function GrouperLivreurForm({
               className="flex items-center gap-3 rounded-2xl bg-surface p-3 text-left"
             >
               <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-none border ${
-                  coche ? "border-braise bg-braise text-creme" : "border-encre/25 bg-creme"
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-none border ${
+                  coche ? "border-braise bg-braise text-accent-fg" : "border-encre/25 bg-creme"
                 }`}
               >
                 {coche && "✓"}
@@ -99,12 +99,12 @@ export function GrouperLivreurForm({
               </span>
               <span className="flex-1">
                 <span className="block text-sm font-medium text-encre">{ligne.produitNom}</span>
-                <span className="block text-xs text-encre/60">
+                <span className="block text-xs text-encre/65">
                   {ligne.clientNom}
                   {ligne.villeLivraison ? ` · ${ligne.villeLivraison}` : ""}
                 </span>
               </span>
-              <span className="text-xs text-encre/50">{formatFcfa(ligne.soldeMontant)}</span>
+              <span className="text-xs text-encre/65">{formatFcfa(ligne.soldeMontant)}</span>
             </button>
           );
         })}
@@ -124,7 +124,7 @@ export function GrouperLivreurForm({
           Solde total à encaisser : {formatFcfa(total)}
         </p>
 
-        {error && <p className="text-sm text-litige">{error}</p>}
+        {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
         <Button onClick={handleSubmit} disabled={loading || selection.size === 0}>
           {loading ? "Envoi..." : "Assigner et passer en livraison"}

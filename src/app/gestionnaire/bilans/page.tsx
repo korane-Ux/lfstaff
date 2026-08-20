@@ -44,7 +44,7 @@ export default async function BilansPage({
         <h1 className="font-display text-2xl text-encre">Bilans</h1>
         <a
           href={`/gestionnaire/bilans/rapport?periode=${periode}`}
-          className="rounded-none bg-braise px-4 py-2 text-sm font-medium text-creme"
+          className="rounded-none bg-braise px-4 py-2 text-sm font-medium text-accent-fg"
         >
           Télécharger le PDF
         </a>

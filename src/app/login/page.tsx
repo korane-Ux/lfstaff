@@ -46,7 +46,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center gap-2 md:items-start">
           <Image src="/icons/icon-192.png" alt="LFstaff" width={56} height={56} priority />
           <h1 className="font-display text-3xl text-encre">LFstaff</h1>
-          <p className="text-sm text-encre/60 md:text-left">Connecte-toi pour continuer.</p>
+          <p className="text-sm text-encre/65 md:text-left">Connecte-toi pour continuer.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4 rounded-3xl bg-surface p-6 shadow-sm">
@@ -74,7 +74,7 @@ export default function LoginPage() {
             />
           </label>
 
-          {error && <p className="text-sm text-litige">{error}</p>}
+          {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
           <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Connexion..." : "Se connecter"}

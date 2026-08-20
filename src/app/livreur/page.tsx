@@ -30,18 +30,18 @@ export default async function LivreurPage() {
       {!!aLivrer.length && (
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">Livraisons</p>
+            <p className="text-xs text-encre/65">Livraisons</p>
             <p className="font-display text-xl text-encre">{aLivrer.length}</p>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
-            <p className="text-xs text-encre/60">Solde à encaisser</p>
+            <p className="text-xs text-encre/65">Solde à encaisser</p>
             <p className="font-display text-xl text-encre">{formatFcfa(soldeALivrer)}</p>
           </div>
         </div>
       )}
 
       {!aLivrer.length && (
-        <p className="mt-8 text-center text-sm text-encre/60">Aucune livraison pour l&apos;instant.</p>
+        <p className="mt-8 text-center text-sm text-encre/65">Aucune livraison pour l&apos;instant.</p>
       )}
 
       <div className="flex flex-col gap-2">
@@ -55,7 +55,7 @@ export default async function LivreurPage() {
             >
               <div>
                 <p className="text-sm font-medium text-encre">{client?.nom ?? "Client"}</p>
-                <p className="text-xs text-encre/60">
+                <p className="text-xs text-encre/65">
                   {[client?.adresse, client?.ville].filter(Boolean).join(" · ")}
                 </p>
               </div>
