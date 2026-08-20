@@ -26,8 +26,8 @@ export function PhotoInput({
     try {
       const url = await uploaderPhoto(file, dossier);
       onUploaded(url);
-    } catch {
-      setError("Impossible d'envoyer la photo.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Impossible d'envoyer la photo.");
       setPreview(null);
     } finally {
       setLoading(false);
