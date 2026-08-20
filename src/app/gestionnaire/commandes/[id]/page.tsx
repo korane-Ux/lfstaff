@@ -3,6 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { ETAT_META, formatFcfa } from "@/lib/etats";
 import { ValiderAction } from "@/components/gestionnaire/valider-action";
 import { EnvoyerAvanceAction } from "@/components/gestionnaire/envoyer-avance-action";
+import { ReceptionAction } from "@/components/gestionnaire/reception-action";
+import { ControleQualiteAction } from "@/components/gestionnaire/controle-qualite-action";
+import { ValiderLivraisonAction } from "@/components/gestionnaire/valider-livraison-action";
 
 export default async function CommandeDetailPage({
   params,
@@ -15,7 +18,7 @@ export default async function CommandeDetailPage({
   const { data: commande } = await supabase.from("commandes").select("*").eq("id", id).single();
   if (!commande) notFound();
 
-  const [{ data: client }, { data: produit }, { data: reglages }, { data: fournisseurs }] =
+  const [{ data: client }, { data: produit }, { data: reglages }, { data: fournisseurs }, { data: livreurs }] =
     await Promise.all([
       supabase
         .from("clients")
@@ -23,9 +26,14 @@ export default async function CommandeDetailPage({
         .eq("id", commande.client_id)
         .single(),
       supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),
-      supabase.from("reglages").select("pct_avance_fournisseur").single(),
+      supabase.from("reglages").select("pct_avance_fournisseur, taux_commission_livreur").single(),
       supabase.from("users").select("id, nom").eq("role", "fournisseur").eq("actif", true),
+      supabase.from("users").select("id, nom").eq("role", "livreur").eq("actif", true),
     ]);
+
+  const commissionSuggeree = Math.round(
+    (commande.prix_total * (reglages?.taux_commission_livreur ?? 10)) / 100,
+  );
 
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
@@ -52,10 +60,22 @@ export default async function CommandeDetailPage({
             Avance fournisseur : {formatFcfa(commande.avance_montant)}
           </p>
         )}
+        {commande.etat === "en_livraison" && commande.code_livraison && (
+          <p className="mt-2 text-sm font-medium text-encre">
+            Code à communiquer au client : <span className="text-braise">{commande.code_livraison}</span>
+          </p>
+        )}
+        {commande.etat === "litige" && commande.motif_annulation && (
+          <p className="mt-2 text-sm text-litige">Motif : {commande.motif_annulation}</p>
+        )}
       </div>
 
       {commande.etat === "nouvelle" && (
-        <ValiderAction commandeId={commande.id} acompteSuggere={commande.acompte_montant} />
+        <ValiderAction
+          commandeId={commande.id}
+          prixTotal={commande.prix_total}
+          acompteSuggere={commande.acompte_montant}
+        />
       )}
 
       {commande.etat === "validee" && (
@@ -67,13 +87,36 @@ export default async function CommandeDetailPage({
         />
       )}
 
-      {commande.etat !== "nouvelle" && commande.etat !== "validee" && (
+      {commande.etat === "en_creation" && (
         <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
-          {commande.etat === "en_creation" && "En attente du fournisseur."}
-          {commande.etat === "expediee" && "En transit vers la ville de livraison."}
-          {commande.etat !== "en_creation" &&
-            commande.etat !== "expediee" &&
-            "Aucune action disponible pour cet état pour l'instant."}
+          En attente du fournisseur.
+        </p>
+      )}
+
+      {commande.etat === "expediee" && <ReceptionAction commandeId={commande.id} />}
+
+      {commande.etat === "recue" && (
+        <ControleQualiteAction commandeId={commande.id} livreurs={livreurs ?? []} />
+      )}
+
+      {commande.etat === "en_livraison" && !commande.solde_paye && (
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+          En attente que le livreur confirme la remise.
+        </p>
+      )}
+
+      {commande.etat === "en_livraison" && commande.solde_paye && commande.livreur_id && (
+        <ValiderLivraisonAction
+          commandeId={commande.id}
+          livreurId={commande.livreur_id}
+          soldeMontant={commande.solde_montant}
+          commissionMontant={commissionSuggeree}
+        />
+      )}
+
+      {(commande.etat === "livree_validee" || commande.etat === "litige" || commande.etat === "annulee") && (
+        <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
+          Aucune action disponible pour cet état.
         </p>
       )}
     </main>

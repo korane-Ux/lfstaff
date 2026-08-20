@@ -16,9 +16,11 @@ const MOYEN_LABELS: Record<MoyenPaiement, string> = {
 
 export function ValiderAction({
   commandeId,
+  prixTotal,
   acompteSuggere,
 }: {
   commandeId: string;
+  prixTotal: number;
   acompteSuggere: number;
 }) {
   const router = useRouter();
@@ -37,7 +39,12 @@ export function ValiderAction({
 
     const { error: updateError } = await supabase
       .from("commandes")
-      .update({ acompte_montant: montantNum, acompte_paye: true, etat: "validee" })
+      .update({
+        acompte_montant: montantNum,
+        acompte_paye: true,
+        solde_montant: prixTotal - montantNum,
+        etat: "validee",
+      })
       .eq("id", commandeId);
 
     if (updateError) {

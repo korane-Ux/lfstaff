@@ -340,7 +340,12 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      fn_confirmer_livraison: {
+        Args: { p_commande_id: string; p_code: string };
+        Returns: boolean;
+      };
+    };
     Enums: {
       app_role: AppRole;
       etat_commande: AppEtat;
