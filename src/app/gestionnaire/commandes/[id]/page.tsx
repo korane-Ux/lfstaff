@@ -7,6 +7,8 @@ import { EnvoyerAvanceAction } from "@/components/gestionnaire/envoyer-avance-ac
 import { ReceptionAction } from "@/components/gestionnaire/reception-action";
 import { ControleQualiteAction } from "@/components/gestionnaire/controle-qualite-action";
 import { ValiderLivraisonAction } from "@/components/gestionnaire/valider-livraison-action";
+import { LitigeAction } from "@/components/gestionnaire/litige-action";
+import { AnnulerAction } from "@/components/gestionnaire/annuler-action";
 
 export default async function CommandeDetailPage({
   params,
@@ -75,7 +77,7 @@ export default async function CommandeDetailPage({
             Code à communiquer au client : <span className="text-braise">{commande.code_livraison}</span>
           </p>
         )}
-        {commande.etat === "litige" && commande.motif_annulation && (
+        {(commande.etat === "litige" || commande.etat === "annulee") && commande.motif_annulation && (
           <p className="mt-2 text-sm text-litige">Motif : {commande.motif_annulation}</p>
         )}
 
@@ -176,10 +178,16 @@ export default async function CommandeDetailPage({
         />
       )}
 
-      {(commande.etat === "livree_validee" || commande.etat === "litige" || commande.etat === "annulee") && (
+      {commande.etat === "litige" && <LitigeAction commandeId={commande.id} />}
+
+      {(commande.etat === "livree_validee" || commande.etat === "annulee") && (
         <p className="rounded-2xl bg-surface p-4 text-center text-sm text-encre/60">
           Aucune action disponible pour cet état.
         </p>
+      )}
+
+      {commande.etat !== "livree_validee" && commande.etat !== "annulee" && commande.etat !== "litige" && (
+        <AnnulerAction commandeId={commande.id} />
       )}
     </main>
   );
