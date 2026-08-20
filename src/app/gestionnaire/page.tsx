@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ETAT_ORDER, ETAT_META, formatFcfa } from "@/lib/etats";
 import type { AppEtat } from "@/lib/supabase/types";
+import { LinkButton } from "@/components/ui/link-button";
 
 export default async function GestionnaireDashboard() {
   const supabase = await createClient();
@@ -28,6 +29,8 @@ export default async function GestionnaireDashboard() {
   const valeurEnCours = enCours.reduce((total, c) => total + c.prix_total, 0);
   const enLitige = parEtat.get("litige") ?? [];
   const livrees = parEtat.get("livree_validee") ?? [];
+  const enAttenteAvance = parEtat.get("validee") ?? [];
+  const enAttenteLivreur = parEtat.get("recue") ?? [];
 
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
@@ -48,6 +51,21 @@ export default async function GestionnaireDashboard() {
             <p className="text-xs text-encre/60">Livrées</p>
             <p className="font-display text-xl text-vert">{livrees.length}</p>
           </div>
+        </div>
+      )}
+
+      {(enAttenteAvance.length >= 2 || enAttenteLivreur.length >= 2) && (
+        <div className="flex flex-wrap gap-2">
+          {enAttenteAvance.length >= 2 && (
+            <LinkButton href="/gestionnaire/commandes/grouper-fournisseur" variant="secondary" size="sm">
+              Grande commande → fournisseur ({enAttenteAvance.length})
+            </LinkButton>
+          )}
+          {enAttenteLivreur.length >= 2 && (
+            <LinkButton href="/gestionnaire/commandes/grouper-livreur" variant="secondary" size="sm">
+              Grande commande → livreur ({enAttenteLivreur.length})
+            </LinkButton>
+          )}
         </div>
       )}
 

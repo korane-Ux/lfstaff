@@ -2,6 +2,7 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { formatFcfa } from "@/lib/etats";
 import type { Releve } from "@/lib/releve";
 import { pdfStyles as s } from "./pdf-styles";
+import { PdfHeader, PdfFooter } from "./pdf-brand";
 
 const TYPE_LABELS: Record<string, string> = {
   avance_fournisseur: "Avance reçue",
@@ -17,13 +18,10 @@ export function RelevePdf({ profil, transactions }: Releve) {
   return (
     <Document>
       <Page size="A4" style={s.page}>
-        <View style={s.header}>
-          <View>
-            <Text style={s.title}>Le Foyer</Text>
-            <Text style={s.subtitle}>Relevé de compte — {profil?.nom ?? "—"}</Text>
-          </View>
-          <Text style={s.meta}>{new Date().toLocaleDateString("fr-FR")}</Text>
-        </View>
+        <PdfHeader
+          subtitle={`Relevé de compte — ${profil?.nom ?? "—"}`}
+          metaLines={[new Date().toLocaleDateString("fr-FR")]}
+        />
 
         <View style={s.section}>
           {transactions.map((t, i) => (
@@ -36,6 +34,8 @@ export function RelevePdf({ profil, transactions }: Releve) {
           ))}
           {transactions.length === 0 && <Text style={s.label}>Aucune transaction pour l&apos;instant.</Text>}
         </View>
+
+        <PdfFooter />
       </Page>
     </Document>
   );

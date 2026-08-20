@@ -1,22 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  /* Neutres */
-  --color-encre: #2b2118;
-  --color-creme: #f5eee0;
-  --color-surface: #fbf6ec;
+  /* Neutres — palette officielle (charte fournie) */
+  --color-encre: #1a1714; /* Noir de fonte */
+  --color-creme: #efe6d6; /* Crème */
+  --color-surface: #f7f1e6;
   --color-gris: #a69c8d;
   --color-annule: #6b645a;
 
   /* États de commande (voir lfstaff-systeme.md §2) */
-  --color-laiton: #c2a24e; /* Validée */
+  --color-laiton: #c2a24e; /* Laiton — Validée */
   --color-laiton-fonce: #96773a; /* Avance envoyée */
-  --color-creation: #e07b2d; /* En création */
-  --color-ocre: #be8a3c; /* Expédiée */
+  --color-creation: #e07b2d; /* Métal en flamme — En création */
+  --color-ocre: #be8a3c; /* Ocre de terre — Expédiée */
   --color-ocre-fonce: #8f6526; /* Reçue */
-  --color-braise: #b23a1c; /* En livraison */
+  --color-braise: #b23a1c; /* Braise — En livraison */
   --color-vert: #3f7d52; /* Livrée & validée */
   --color-litige: #7a2436; /* Litige */
+}
+
+/* Mode nocturne : les tokens neutres s'inversent (encre devient l'encre
+   claire, creme/surface deviennent des fonds sombres) ; les couleurs
+   d'état ne changent pas, elles restent lisibles sur fond clair ou sombre.
+   Deux voies d'activation : la préférence système (aucun choix explicite),
+   ou un choix explicite mémorisé via [data-theme] (voir theme-toggle.tsx). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-encre: #efe6d6;
+    --color-creme: #1a1714;
+    --color-surface: #241f19;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-encre: #efe6d6;
+  --color-creme: #1a1714;
+  --color-surface: #241f19;
 }
 
 @theme inline {

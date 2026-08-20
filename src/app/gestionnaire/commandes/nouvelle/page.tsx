@@ -6,7 +6,11 @@ export default async function NouvelleCommandePage() {
 
   const [{ data: clients }, { data: produits }, { data: reglages }] = await Promise.all([
     supabase.from("clients").select("id, nom").order("nom"),
-    supabase.from("produits").select("id, nom, prix_final").eq("actif", true).order("nom"),
+    supabase
+      .from("produits")
+      .select("id, nom, prix_final, photo_url, categorie")
+      .eq("actif", true)
+      .order("nom"),
     supabase.from("reglages").select("pct_acompte_client, villes_actives").single(),
   ]);
 

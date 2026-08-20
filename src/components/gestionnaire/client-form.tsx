@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, SelectField, TextareaField } from "@/components/ui/field";
 
 type ClientExistant = {
   id: string;
@@ -77,53 +75,30 @@ export function ClientForm({ villes, client }: { villes: string[]; client?: Clie
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Nom
-        <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Téléphone
-        <input
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
-          type="tel"
-          className={inputClass}
-        />
-      </label>
+      <TextField label="Téléphone" value={telephone} onChange={(e) => setTelephone(e.target.value)} type="tel" />
 
       {villes.length > 0 && (
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Ville
-          <select value={ville} onChange={(e) => setVille(e.target.value)} className={inputClass}>
-            {villes.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField label="Ville" value={ville} onChange={(e) => setVille(e.target.value)}>
+          {villes.map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </SelectField>
       )}
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Quartier
-        <input value={quartier} onChange={(e) => setQuartier(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Quartier" value={quartier} onChange={(e) => setQuartier(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Adresse
-        <input value={adresse} onChange={(e) => setAdresse(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Notes (optionnel)
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={2}
-          className={inputClass}
-        />
-      </label>
+      <TextareaField
+        label="Notes (optionnel)"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        rows={2}
+      />
 
       {error && <p className="text-sm text-litige">{error}</p>}
 

@@ -5,11 +5,9 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
+import { TextField, SelectField } from "@/components/ui/field";
 
 type Fournisseur = { id: string; nom: string };
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -71,32 +69,23 @@ export function EnvoyerAvanceAction({
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Envoyer l&apos;avance au fournisseur</p>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Fournisseur
-        <select
-          value={fournisseurId}
-          onChange={(e) => setFournisseurId(e.target.value)}
-          className={inputClass}
-        >
-          {fournisseurs.map((f) => (
-            <option key={f.id} value={f.id}>
-              {f.nom}
-            </option>
-          ))}
-        </select>
-      </label>
+      <SelectField label="Fournisseur" value={fournisseurId} onChange={(e) => setFournisseurId(e.target.value)}>
+        {fournisseurs.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.nom}
+          </option>
+        ))}
+      </SelectField>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Montant de l&apos;avance (FCFA) — suggéré {suggestion.toLocaleString("fr-FR")}
-        <input
-          type="number"
-          min={0}
-          required
-          value={montant}
-          onChange={(e) => setMontant(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Montant de l'avance"
+        hint={`FCFA — suggéré ${suggestion.toLocaleString("fr-FR")}`}
+        type="number"
+        min={0}
+        required
+        value={montant}
+        onChange={(e) => setMontant(e.target.value)}
+      />
 
       <div className="flex gap-2">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (

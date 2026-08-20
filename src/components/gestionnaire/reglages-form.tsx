@@ -4,9 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, controlClass } from "@/components/ui/field";
 
 export function ReglagesForm({
   tauxCommissionLivreur,
@@ -70,47 +68,41 @@ export function ReglagesForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Commission du livreur (%)
-        <input
-          type="number"
-          min={0}
-          max={100}
-          step={0.5}
-          value={taux}
-          onChange={(e) => setTaux(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Commission du livreur"
+        hint="%"
+        type="number"
+        min={0}
+        max={100}
+        step={0.5}
+        value={taux}
+        onChange={(e) => setTaux(e.target.value)}
+      />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Avance fournisseur suggérée (%)
-        <input
-          type="number"
-          min={0}
-          max={100}
-          step={0.5}
-          value={pctAvance}
-          onChange={(e) => setPctAvance(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Avance fournisseur suggérée"
+        hint="%"
+        type="number"
+        min={0}
+        max={100}
+        step={0.5}
+        value={pctAvance}
+        onChange={(e) => setPctAvance(e.target.value)}
+      />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Acompte client suggéré (%)
-        <input
-          type="number"
-          min={0}
-          max={100}
-          step={0.5}
-          value={pctAcompte}
-          onChange={(e) => setPctAcompte(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Acompte client suggéré"
+        hint="%"
+        type="number"
+        min={0}
+        max={100}
+        step={0.5}
+        value={pctAcompte}
+        onChange={(e) => setPctAcompte(e.target.value)}
+      />
 
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-encre">Villes actives</p>
+        <p className="text-sm font-medium text-encre/80">Villes actives</p>
         <div className="flex flex-wrap gap-2">
           {villes.map((v) => (
             <Button
@@ -130,7 +122,7 @@ export function ReglagesForm({
             value={nouvelleVille}
             onChange={(e) => setNouvelleVille(e.target.value)}
             placeholder="Ajouter une ville"
-            className={`flex-1 ${inputClass}`}
+            className={`flex-1 ${controlClass}`}
           />
           <Button type="button" variant="ghost" onClick={ajouterVille}>
             Ajouter

@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField } from "@/components/ui/field";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -54,17 +52,15 @@ export function ValiderAction({
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Encaisser l&apos;acompte</p>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Montant reçu (FCFA)
-        <input
-          type="number"
-          min={0}
-          required
-          value={montant}
-          onChange={(e) => setMontant(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Montant reçu"
+        hint="FCFA"
+        type="number"
+        min={0}
+        required
+        value={montant}
+        onChange={(e) => setMontant(e.target.value)}
+      />
 
       <div className="flex gap-2">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (

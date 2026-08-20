@@ -105,6 +105,7 @@ export type Database = {
           id: string;
           nom: string;
           photo_url: string | null;
+          categorie: string | null;
           caracteristiques: string | null;
           contenance_litres: number | null;
           diametre_cm: number | null;
@@ -123,6 +124,7 @@ export type Database = {
           id?: string;
           nom: string;
           photo_url?: string | null;
+          categorie?: string | null;
           caracteristiques?: string | null;
           contenance_litres?: number | null;
           diametre_cm?: number | null;
@@ -141,6 +143,7 @@ export type Database = {
           id?: string;
           nom?: string;
           photo_url?: string | null;
+          categorie?: string | null;
           caracteristiques?: string | null;
           contenance_litres?: number | null;
           diametre_cm?: number | null;
@@ -179,6 +182,8 @@ export type Database = {
           code_livraison: string | null;
           etat: AppEtat;
           motif_annulation: string | null;
+          lot_fournisseur_id: string | null;
+          lot_livreur_id: string | null;
           cree_le: string;
           updated_at: string;
         };
@@ -203,6 +208,8 @@ export type Database = {
           code_livraison?: string | null;
           etat?: AppEtat;
           motif_annulation?: string | null;
+          lot_fournisseur_id?: string | null;
+          lot_livreur_id?: string | null;
           cree_le?: string;
           updated_at?: string;
         };
@@ -227,6 +234,8 @@ export type Database = {
           code_livraison?: string | null;
           etat?: AppEtat;
           motif_annulation?: string | null;
+          lot_fournisseur_id?: string | null;
+          lot_livreur_id?: string | null;
           cree_le?: string;
           updated_at?: string;
         };
@@ -391,6 +400,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      lots: {
+        Row: {
+          id: string;
+          type: "fournisseur" | "livreur";
+          destinataire_id: string;
+          cree_par: string | null;
+          cree_le: string;
+        };
+        Insert: {
+          id?: string;
+          type: "fournisseur" | "livreur";
+          destinataire_id: string;
+          cree_par?: string | null;
+          cree_le?: string;
+        };
+        Update: {
+          id?: string;
+          type?: "fournisseur" | "livreur";
+          destinataire_id?: string;
+          cree_par?: string | null;
+          cree_le?: string;
+        };
+        Relationships: [];
+      };
       demandes_retrait: {
         Row: {
           id: string;
@@ -484,6 +517,18 @@ export type Database = {
       fn_marquer_retrait_paye: {
         Args: { p_demande_id: string };
         Returns: void;
+      };
+      fn_envoyer_avance_groupee: {
+        Args: {
+          p_fournisseur_id: string;
+          p_moyen: MoyenPaiement;
+          p_lignes: { commande_id: string; montant: number }[];
+        };
+        Returns: string;
+      };
+      fn_assigner_livreur_groupe: {
+        Args: { p_livreur_id: string; p_commande_ids: string[] };
+        Returns: string;
       };
     };
     Enums: {

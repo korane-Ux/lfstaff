@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
+import { TextareaField } from "@/components/ui/field";
 
 export function AnnulerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -35,14 +36,13 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
 
   return (
     <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
-      <p className="text-sm font-medium text-encre">Annuler la commande</p>
-      <textarea
+      <TextareaField
+        label="Annuler la commande"
         required
         value={motif}
         onChange={(e) => setMotif(e.target.value)}
         rows={2}
         placeholder="Motif de l'annulation..."
-        className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
       />
       <div className="flex gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={() => setOuvert(false)} className="flex-1">

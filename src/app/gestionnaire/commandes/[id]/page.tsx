@@ -9,6 +9,7 @@ import { ControleQualiteAction } from "@/components/gestionnaire/controle-qualit
 import { ValiderLivraisonAction } from "@/components/gestionnaire/valider-livraison-action";
 import { LitigeAction } from "@/components/gestionnaire/litige-action";
 import { AnnulerAction } from "@/components/gestionnaire/annuler-action";
+import { ContactActions } from "@/components/ui/contact-actions";
 
 export default async function CommandeDetailPage({
   params,
@@ -33,7 +34,7 @@ export default async function CommandeDetailPage({
     supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),
     supabase.from("reglages").select("pct_avance_fournisseur, taux_commission_livreur").single(),
     supabase.from("users").select("id, nom").eq("role", "fournisseur").eq("actif", true),
-    supabase.from("users").select("id, nom").eq("role", "livreur").eq("actif", true),
+    supabase.from("users").select("id, nom, telephone").eq("role", "livreur").eq("actif", true),
     supabase
       .from("expeditions")
       .select("photo_bordereau")
@@ -46,6 +47,8 @@ export default async function CommandeDetailPage({
   const commissionSuggeree = Math.round(
     (commande.prix_total * (reglages?.taux_commission_livreur ?? 10)) / 100,
   );
+
+  const livreurAssigne = (livreurs ?? []).find((l) => l.id === commande.livreur_id);
 
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
@@ -157,6 +160,29 @@ export default async function CommandeDetailPage({
 
       {commande.etat === "recue" && (
         <ControleQualiteAction commandeId={commande.id} livreurs={livreurs ?? []} />
+      )}
+
+      {commande.etat === "en_livraison" && (
+        <div className="flex flex-col gap-3">
+          {livreurAssigne && (
+            <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
+              <p className="text-sm font-medium text-encre">Prévenir {livreurAssigne.nom} (livreur)</p>
+              <ContactActions
+                telephone={livreurAssigne.telephone}
+                nom={livreurAssigne.nom}
+                message={`Bonjour ${livreurAssigne.nom}, un colis pour ${client?.nom ?? "un client"} (${produit?.nom ?? ""}) t'attend, la marchandise est en route.`}
+              />
+            </div>
+          )}
+          <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
+            <p className="text-sm font-medium text-encre">Prévenir {client?.nom ?? "le client"}</p>
+            <ContactActions
+              telephone={client?.telephone ?? null}
+              nom={client?.nom ?? "le client"}
+              message={`Bonjour ${client?.nom ?? ""}, votre commande "${produit?.nom ?? ""}" du Foyer est en route${commande.code_livraison ? `. Votre code de livraison : ${commande.code_livraison}` : ""}.`}
+            />
+          </div>
+        </div>
       )}
 
       {commande.etat === "en_livraison" && !commande.solde_paye && (

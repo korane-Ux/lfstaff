@@ -8,14 +8,13 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { ProduitGalerie } from "@/components/gestionnaire/produit-galerie";
 import { supprimerPhoto } from "@/lib/supabase/storage";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, TextareaField } from "@/components/ui/field";
 
 type ProduitExistant = {
   id: string;
   nom: string;
   photo_url: string | null;
+  categorie: string | null;
   contenance_litres: number | null;
   diametre_cm: number | null;
   hauteur_cm: number | null;
@@ -38,6 +37,7 @@ export function ProduitForm({
   const router = useRouter();
   const [photoUrl, setPhotoUrl] = useState<string | null>(produit?.photo_url ?? null);
   const [nom, setNom] = useState(produit?.nom ?? "");
+  const [categorie, setCategorie] = useState(produit?.categorie ?? "");
   const [contenance, setContenance] = useState(String(produit?.contenance_litres ?? ""));
   const [diametre, setDiametre] = useState(String(produit?.diametre_cm ?? ""));
   const [hauteur, setHauteur] = useState(String(produit?.hauteur_cm ?? ""));
@@ -62,6 +62,7 @@ export function ProduitForm({
     const payload = {
       nom,
       photo_url: photoUrl,
+      categorie: categorie || null,
       contenance_litres: contenance ? Number(contenance) : null,
       diametre_cm: diametre ? Number(diametre) : null,
       hauteur_cm: hauteur ? Number(hauteur) : null,
@@ -120,75 +121,69 @@ export function ProduitForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Nom
-        <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
+
+      <TextField
+        label="Catégorie"
+        hint="optionnel"
+        value={categorie}
+        onChange={(e) => setCategorie(e.target.value)}
+        placeholder="Marmites, couvercles, accessoires..."
+      />
 
       <PhotoInput dossier="produits" onUploaded={setPhotoUrl} />
 
       {produit && <ProduitGalerie produitId={produit.id} images={images} />}
 
-      <p className="text-sm text-encre">Mesures de la marmite</p>
+      <p className="text-sm font-medium text-encre/80">Mesures de la marmite</p>
 
       <div className="grid grid-cols-2 gap-3">
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Contenance (L)
-          <input
-            type="number"
-            min={0}
-            step={0.5}
-            value={contenance}
-            onChange={(e) => setContenance(e.target.value)}
-            className={inputClass}
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Diamètre (cm)
-          <input
-            type="number"
-            min={0}
-            step={0.5}
-            value={diametre}
-            onChange={(e) => setDiametre(e.target.value)}
-            className={inputClass}
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Hauteur (cm)
-          <input
-            type="number"
-            min={0}
-            step={0.5}
-            value={hauteur}
-            onChange={(e) => setHauteur(e.target.value)}
-            className={inputClass}
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Poids (kg)
-          <input
-            type="number"
-            min={0}
-            step={0.1}
-            value={poids}
-            onChange={(e) => setPoids(e.target.value)}
-            className={inputClass}
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Nombre d&apos;anses
-          <input
-            type="number"
-            min={0}
-            value={nbAnses}
-            onChange={(e) => setNbAnses(e.target.value)}
-            className={inputClass}
-          />
-        </label>
+        <TextField
+          label="Contenance"
+          hint="L"
+          type="number"
+          min={0}
+          step={0.5}
+          value={contenance}
+          onChange={(e) => setContenance(e.target.value)}
+        />
+        <TextField
+          label="Diamètre"
+          hint="cm"
+          type="number"
+          min={0}
+          step={0.5}
+          value={diametre}
+          onChange={(e) => setDiametre(e.target.value)}
+        />
+        <TextField
+          label="Hauteur"
+          hint="cm"
+          type="number"
+          min={0}
+          step={0.5}
+          value={hauteur}
+          onChange={(e) => setHauteur(e.target.value)}
+        />
+        <TextField
+          label="Poids"
+          hint="kg"
+          type="number"
+          min={0}
+          step={0.1}
+          value={poids}
+          onChange={(e) => setPoids(e.target.value)}
+        />
+        <TextField
+          label="Nombre d'anses"
+          type="number"
+          min={0}
+          value={nbAnses}
+          onChange={(e) => setNbAnses(e.target.value)}
+        />
 
-        <div className="flex flex-col gap-1 text-sm text-encre">
-          Couvercle
+        <div className="flex flex-col gap-1.5 text-sm text-encre">
+          <span className="font-medium text-encre/80">Couvercle</span>
           <div className="flex gap-2">
             <Button
               type="button"
@@ -210,19 +205,16 @@ export function ProduitForm({
         </div>
       </div>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Précisions (optionnel)
-        <textarea
-          value={precisions}
-          onChange={(e) => setPrecisions(e.target.value)}
-          rows={2}
-          placeholder="Gravure, coloris, finition..."
-          className={inputClass}
-        />
-      </label>
+      <TextareaField
+        label="Précisions (optionnel)"
+        value={precisions}
+        onChange={(e) => setPrecisions(e.target.value)}
+        rows={2}
+        placeholder="Gravure, coloris, finition..."
+      />
 
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-encre">Prix</p>
+        <p className="text-sm font-medium text-encre/80">Prix</p>
         <div className="flex gap-2">
           <Button
             type="button"
@@ -244,41 +236,35 @@ export function ProduitForm({
       </div>
 
       {modePrix === "manuel" ? (
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Prix (FCFA)
-          <input
+        <TextField
+          label="Prix"
+          hint="FCFA"
+          required
+          type="number"
+          min={0}
+          value={prixManuel}
+          onChange={(e) => setPrixManuel(e.target.value)}
+        />
+      ) : (
+        <>
+          <TextField
+            label="Coût matière"
+            hint="FCFA"
             required
             type="number"
             min={0}
-            value={prixManuel}
-            onChange={(e) => setPrixManuel(e.target.value)}
-            className={inputClass}
+            value={coutMatiere}
+            onChange={(e) => setCoutMatiere(e.target.value)}
           />
-        </label>
-      ) : (
-        <>
-          <label className="flex flex-col gap-1 text-sm text-encre">
-            Coût matière (FCFA)
-            <input
-              required
-              type="number"
-              min={0}
-              value={coutMatiere}
-              onChange={(e) => setCoutMatiere(e.target.value)}
-              className={inputClass}
-            />
-          </label>
-          <label className="flex flex-col gap-1 text-sm text-encre">
-            Marge (%)
-            <input
-              required
-              type="number"
-              min={0}
-              value={margePct}
-              onChange={(e) => setMargePct(e.target.value)}
-              className={inputClass}
-            />
-          </label>
+          <TextField
+            label="Marge"
+            hint="%"
+            required
+            type="number"
+            min={0}
+            value={margePct}
+            onChange={(e) => setMargePct(e.target.value)}
+          />
         </>
       )}
 

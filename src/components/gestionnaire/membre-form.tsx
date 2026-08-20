@@ -6,9 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { AppRole } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, SelectField } from "@/components/ui/field";
 
 const ROLE_LABELS: Record<AppRole, string> = {
   super_admin: "Super-admin",
@@ -85,32 +83,23 @@ export function MembreForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
       <p className="text-sm text-encre/60">{ROLE_LABELS[role]}</p>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Nom
-        <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Téléphone
-        <input
-          type="tel"
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Téléphone"
+        type="tel"
+        value={telephone}
+        onChange={(e) => setTelephone(e.target.value)}
+      />
 
       {villes.length > 0 && (
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Ville
-          <select value={ville} onChange={(e) => setVille(e.target.value)} className={inputClass}>
-            {villes.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField label="Ville" value={ville} onChange={(e) => setVille(e.target.value)}>
+          {villes.map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </SelectField>
       )}
 
       {error && <p className="text-sm text-litige">{error}</p>}

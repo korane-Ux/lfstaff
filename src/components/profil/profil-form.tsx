@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { PhotoInput } from "@/components/ui/photo-input";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, SelectField } from "@/components/ui/field";
 
 export function ProfilForm({
   userId,
@@ -62,33 +60,24 @@ export function ProfilForm({
 
       <PhotoInput dossier="avatars" onUploaded={setAvatarUrl} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Nom
-        <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Téléphone
-        <input
-          type="tel"
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Téléphone"
+        type="tel"
+        value={telephone}
+        onChange={(e) => setTelephone(e.target.value)}
+      />
 
       {villes.length > 0 && (
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Ville
-          <select value={ville} onChange={(e) => setVille(e.target.value)} className={inputClass}>
-            <option value="">—</option>
-            {villes.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField label="Ville" value={ville} onChange={(e) => setVille(e.target.value)}>
+          <option value="">—</option>
+          {villes.map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </SelectField>
       )}
 
       {error && <p className="text-sm text-litige">{error}</p>}

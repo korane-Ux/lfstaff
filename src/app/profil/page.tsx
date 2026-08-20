@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ETAT_META } from "@/lib/etats";
 import { ProfilForm } from "@/components/profil/profil-form";
 import { MotDePasseForm } from "@/components/profil/mot-de-passe-form";
+import { ThemeToggle } from "@/components/profil/theme-toggle";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const COMMANDE_HREF: Record<string, (id: string) => string> = {
@@ -65,6 +66,8 @@ export default async function ProfilPage() {
         />
 
         <MotDePasseForm />
+
+        <ThemeToggle />
 
         <div className="flex flex-col gap-2 rounded-3xl bg-surface p-5">
           <p className="text-sm font-medium text-encre">Activité récente</p>

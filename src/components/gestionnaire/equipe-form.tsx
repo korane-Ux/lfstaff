@@ -4,9 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { AppRole } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, SelectField } from "@/components/ui/field";
 
 const ROLES: { value: AppRole; label: string }[] = [
   { value: "gestionnaire", label: "Gestionnaire" },
@@ -67,34 +65,25 @@ export function EquipeForm({ villes }: { villes: string[] }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Nom
-        <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Email
-        <input
-          required
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Email"
+        required
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Téléphone
-        <input
-          type="tel"
-          value={telephone}
-          onChange={(e) => setTelephone(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Téléphone"
+        type="tel"
+        value={telephone}
+        onChange={(e) => setTelephone(e.target.value)}
+      />
 
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-encre">Rôle</p>
+        <p className="text-sm font-medium text-encre/80">Rôle</p>
         <div className="flex gap-2">
           {ROLES.map((r) => (
             <Button
@@ -111,16 +100,13 @@ export function EquipeForm({ villes }: { villes: string[] }) {
       </div>
 
       {villes.length > 0 && (
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Ville
-          <select value={ville} onChange={(e) => setVille(e.target.value)} className={inputClass}>
-            {villes.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField label="Ville" value={ville} onChange={(e) => setVille(e.target.value)}>
+          {villes.map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </SelectField>
       )}
 
       {error && <p className="text-sm text-litige">{error}</p>}

@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { controlClass } from "@/components/ui/field";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -69,7 +67,7 @@ export function RecevoirCashAction({
         required
         value={montant}
         onChange={(e) => setMontant(e.target.value)}
-        className={inputClass}
+        className={controlClass}
       />
       <div className="flex gap-1">
         {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (

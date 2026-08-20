@@ -4,11 +4,9 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { SelectField, TextareaField } from "@/components/ui/field";
 
 type Livreur = { id: string; nom: string };
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
 
 export function ControleQualiteAction({
   commandeId,
@@ -95,16 +93,13 @@ export function ControleQualiteAction({
       <form onSubmit={handleConforme} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
         <p className="text-sm font-medium text-encre">Assigner un livreur</p>
 
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Livreur
-          <select value={livreurId} onChange={(e) => setLivreurId(e.target.value)} className={inputClass}>
-            {livreurs.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.nom}
-              </option>
-            ))}
-          </select>
-        </label>
+        <SelectField label="Livreur" value={livreurId} onChange={(e) => setLivreurId(e.target.value)}>
+          {livreurs.map((l) => (
+            <option key={l.id} value={l.id}>
+              {l.nom}
+            </option>
+          ))}
+        </SelectField>
 
         {error && <p className="text-sm text-litige">{error}</p>}
 
@@ -119,13 +114,13 @@ export function ControleQualiteAction({
     <form onSubmit={handleNonConforme} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Motif du litige</p>
 
-      <textarea
+      <TextareaField
+        label="Détails"
         required
         value={motif}
         onChange={(e) => setMotif(e.target.value)}
         rows={3}
         placeholder="Ce qui ne va pas avec le colis..."
-        className={inputClass}
       />
 
       {error && <p className="text-sm text-litige">{error}</p>}

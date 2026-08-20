@@ -14,7 +14,7 @@ export default async function ProduitDetailPage({
     supabase
       .from("produits")
       .select(
-        "id, nom, photo_url, contenance_litres, diametre_cm, hauteur_cm, poids_kg, nb_anses, couvercle_inclus, caracteristiques, cout_matiere, marge_pct, prix_manuel",
+        "id, nom, photo_url, categorie, contenance_litres, diametre_cm, hauteur_cm, poids_kg, nb_anses, couvercle_inclus, caracteristiques, cout_matiere, marge_pct, prix_manuel",
       )
       .eq("id", id)
       .single(),

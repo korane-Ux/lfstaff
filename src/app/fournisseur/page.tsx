@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -16,9 +17,9 @@ export default async function FournisseurPage() {
 
   const produitIds = [...new Set((commandes ?? []).map((c) => c.produit_id))];
   const { data: produits } = produitIds.length
-    ? await supabase.from("produits").select("id, nom").in("id", produitIds)
+    ? await supabase.from("produits").select("id, nom, photo_url").in("id", produitIds)
     : { data: [] };
-  const produitNom = new Map((produits ?? []).map((p) => [p.id, p.nom]));
+  const produitParId = new Map((produits ?? []).map((p) => [p.id, p]));
 
   const valeurTotale = (commandes ?? []).reduce((total, c) => total + c.prix_total, 0);
 
@@ -44,21 +45,27 @@ export default async function FournisseurPage() {
       )}
 
       <div className="flex flex-col gap-2">
-        {commandes?.map((commande) => (
+        {commandes?.map((commande) => {
+          const produit = produitParId.get(commande.produit_id);
+          return (
           <Link
             key={commande.id}
             href={`/fournisseur/commandes/${commande.id}`}
-            className="flex items-center justify-between rounded-2xl bg-surface p-4"
+            className="flex items-center gap-3 rounded-2xl bg-surface p-4"
           >
-            <div>
-              <p className="text-sm font-medium text-encre">
-                {produitNom.get(commande.produit_id) ?? "Produit"}
-              </p>
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-creme">
+              {produit?.photo_url && (
+                <Image src={produit.photo_url} alt="" fill sizes="56px" className="object-cover" />
+              )}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-encre">{produit?.nom ?? "Produit"}</p>
               <p className="text-xs text-encre/60">Quantité : {commande.quantite}</p>
             </div>
             <p className="text-sm text-encre/80">{formatFcfa(commande.prix_total)}</p>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </main>
   );

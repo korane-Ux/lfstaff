@@ -35,12 +35,27 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
+// Appliqué avant l'hydratation pour éviter un flash du mauvais thème au
+// chargement : lit la préférence mémorisée (voir theme-toggle.tsx) et pose
+// l'attribut data-theme sur <html> avant le premier rendu visible.
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var t = localStorage.getItem("lfstaff-theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
       className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <OfflineBanner />
         <InstallBanner />

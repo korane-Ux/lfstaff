@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
-
-const inputClass =
-  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+import { TextField, SelectField } from "@/components/ui/field";
 
 export function PretAction({
   commandeId,
@@ -70,72 +68,60 @@ export function PretAction({
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Expédition</p>
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Agence de transport
-        <input required value={agence} onChange={(e) => setAgence(e.target.value)} className={inputClass} />
-      </label>
+      <TextField
+        label="Agence de transport"
+        required
+        value={agence}
+        onChange={(e) => setAgence(e.target.value)}
+      />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        N° de bordereau
-        <input value={nBordereau} onChange={(e) => setNBordereau(e.target.value)} className={inputClass} />
-      </label>
+      <TextField label="N° de bordereau" value={nBordereau} onChange={(e) => setNBordereau(e.target.value)} />
 
       {villes.length > 0 && (
         <>
-          <label className="flex flex-col gap-1 text-sm text-encre">
-            Ville de départ
-            <select
-              value={villeDepart}
-              onChange={(e) => setVilleDepart(e.target.value)}
-              className={inputClass}
-            >
-              {villes.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col gap-1 text-sm text-encre">
-            Ville d&apos;arrivée
-            <select
-              value={villeArrivee}
-              onChange={(e) => setVilleArrivee(e.target.value)}
-              className={inputClass}
-            >
-              {villes.map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </label>
+          <SelectField
+            label="Ville de départ"
+            value={villeDepart}
+            onChange={(e) => setVilleDepart(e.target.value)}
+          >
+            {villes.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </SelectField>
+          <SelectField
+            label="Ville d'arrivée"
+            value={villeArrivee}
+            onChange={(e) => setVilleArrivee(e.target.value)}
+          >
+            {villes.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </SelectField>
         </>
       )}
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Frais de transport (FCFA)
-        <input
-          type="number"
-          min={0}
-          value={fraisTransport}
-          onChange={(e) => setFraisTransport(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Frais de transport"
+        hint="FCFA"
+        type="number"
+        min={0}
+        value={fraisTransport}
+        onChange={(e) => setFraisTransport(e.target.value)}
+      />
 
       <PhotoInput dossier="expeditions" onUploaded={setPhotoBordereau} />
 
-      <label className="flex flex-col gap-1 text-sm text-encre">
-        Date d&apos;arrivée prévue
-        <input
-          type="date"
-          required
-          value={dateArriveePrevue}
-          onChange={(e) => setDateArriveePrevue(e.target.value)}
-          className={inputClass}
-        />
-      </label>
+      <TextField
+        label="Date d'arrivée prévue"
+        type="date"
+        required
+        value={dateArriveePrevue}
+        onChange={(e) => setDateArriveePrevue(e.target.value)}
+      />
 
       {error && <p className="text-sm text-litige">{error}</p>}
 

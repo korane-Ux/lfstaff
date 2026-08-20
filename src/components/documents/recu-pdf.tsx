@@ -2,6 +2,7 @@ import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { formatFcfa } from "@/lib/etats";
 import { numeroCourt, type CommandePourDocument } from "@/lib/commande-document";
 import { pdfStyles as s } from "./pdf-styles";
+import { PdfHeader, PdfFooter } from "./pdf-brand";
 
 function Ligne({ label, valeur }: { label: string; valeur: string }) {
   return (
@@ -25,16 +26,10 @@ export function RecuPdf({
   return (
     <Document>
       <Page size="A4" style={s.page}>
-        <View style={s.header}>
-          <View>
-            <Text style={s.title}>Le Foyer</Text>
-            <Text style={s.subtitle}>Reçu de paiement — {libelle.toLowerCase()}</Text>
-          </View>
-          <View>
-            <Text style={s.meta}>Commande N° {numeroCourt(commande.id)}</Text>
-            <Text style={s.meta}>{date}</Text>
-          </View>
-        </View>
+        <PdfHeader
+          subtitle={`Reçu de paiement — ${libelle.toLowerCase()}`}
+          metaLines={[`Commande N° ${numeroCourt(commande.id)}`, date]}
+        />
 
         <View style={s.section}>
           <Ligne label="Reçu de" valeur={client?.nom ?? "—"} />
@@ -46,7 +41,7 @@ export function RecuPdf({
           <Text style={s.totalValue}>{formatFcfa(montant)}</Text>
         </View>
 
-        <Text style={s.footer}>Le Foyer — marmites en métal coulé, sur commande.</Text>
+        <PdfFooter />
       </Page>
     </Document>
   );
