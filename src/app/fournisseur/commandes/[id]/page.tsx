@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
+import { formatSpecsMarmite } from "@/lib/produit-specs";
 import { PretAction } from "@/components/fournisseur/pret-action";
 
 export default async function FournisseurCommandeDetailPage({
@@ -23,7 +24,9 @@ export default async function FournisseurCommandeDetailPage({
 
   const { data: produit } = await supabase
     .from("produits")
-    .select("nom, caracteristiques")
+    .select(
+      "nom, caracteristiques, contenance_litres, diametre_cm, hauteur_cm, poids_kg, nb_anses, couvercle_inclus",
+    )
     .eq("id", commande.produit_id)
     .single();
 
@@ -35,6 +38,13 @@ export default async function FournisseurCommandeDetailPage({
 
       <div className="flex flex-col gap-1 rounded-2xl bg-surface p-4">
         <p className="text-sm text-encre/80">Quantité : {commande.quantite}</p>
+        {produit && <p className="text-sm text-encre/80">{formatSpecsMarmite(produit)}</p>}
+        {produit && (
+          <p className="text-sm text-encre/80">
+            {produit.nb_anses} anse{produit.nb_anses > 1 ? "s" : ""} ·{" "}
+            {produit.couvercle_inclus ? "couvercle inclus" : "sans couvercle"}
+          </p>
+        )}
         {produit?.caracteristiques && (
           <p className="text-sm text-encre/80">{produit.caracteristiques}</p>
         )}

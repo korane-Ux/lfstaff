@@ -101,6 +101,12 @@ export type Database = {
           nom: string;
           photo_url: string | null;
           caracteristiques: string | null;
+          contenance_litres: number | null;
+          diametre_cm: number | null;
+          hauteur_cm: number | null;
+          poids_kg: number | null;
+          nb_anses: number;
+          couvercle_inclus: boolean;
           cout_matiere: number | null;
           marge_pct: number | null;
           prix_manuel: number | null;
@@ -113,6 +119,12 @@ export type Database = {
           nom: string;
           photo_url?: string | null;
           caracteristiques?: string | null;
+          contenance_litres?: number | null;
+          diametre_cm?: number | null;
+          hauteur_cm?: number | null;
+          poids_kg?: number | null;
+          nb_anses?: number;
+          couvercle_inclus?: boolean;
           cout_matiere?: number | null;
           marge_pct?: number | null;
           prix_manuel?: number | null;
@@ -125,6 +137,12 @@ export type Database = {
           nom?: string;
           photo_url?: string | null;
           caracteristiques?: string | null;
+          contenance_litres?: number | null;
+          diametre_cm?: number | null;
+          hauteur_cm?: number | null;
+          poids_kg?: number | null;
+          nb_anses?: number;
+          couvercle_inclus?: boolean;
           cout_matiere?: number | null;
           marge_pct?: number | null;
           prix_manuel?: number | null;

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
+import { formatSpecsMarmite } from "@/lib/produit-specs";
 
 export default async function ProduitsPage() {
   const supabase = await createClient();
   const { data: produits } = await supabase
     .from("produits")
-    .select("id, nom, prix_final, actif")
+    .select("id, nom, prix_final, actif, contenance_litres, diametre_cm, hauteur_cm, poids_kg")
     .order("nom");
 
   return (
@@ -35,6 +36,7 @@ export default async function ProduitsPage() {
           >
             <div>
               <p className="text-sm font-medium text-encre">{produit.nom}</p>
+              <p className="text-xs text-encre/60">{formatSpecsMarmite(produit)}</p>
               {!produit.actif && <p className="text-xs text-encre/40">Inactif</p>}
             </div>
             <p className="text-sm text-encre/80">{formatFcfa(produit.prix_final)}</p>

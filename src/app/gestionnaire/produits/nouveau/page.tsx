@@ -7,7 +7,13 @@ import { createClient } from "@/lib/supabase/client";
 export default function NouveauProduitPage() {
   const router = useRouter();
   const [nom, setNom] = useState("");
-  const [caracteristiques, setCaracteristiques] = useState("");
+  const [contenance, setContenance] = useState("");
+  const [diametre, setDiametre] = useState("");
+  const [hauteur, setHauteur] = useState("");
+  const [poids, setPoids] = useState("");
+  const [nbAnses, setNbAnses] = useState("2");
+  const [couvercleInclus, setCouvercleInclus] = useState(true);
+  const [precisions, setPrecisions] = useState("");
   const [modePrix, setModePrix] = useState<"manuel" | "auto">("manuel");
   const [coutMatiere, setCoutMatiere] = useState("");
   const [margePct, setMargePct] = useState("");
@@ -23,7 +29,13 @@ export default function NouveauProduitPage() {
     const supabase = createClient();
     const { error: insertError } = await supabase.from("produits").insert({
       nom,
-      caracteristiques: caracteristiques || null,
+      contenance_litres: contenance ? Number(contenance) : null,
+      diametre_cm: diametre ? Number(diametre) : null,
+      hauteur_cm: hauteur ? Number(hauteur) : null,
+      poids_kg: poids ? Number(poids) : null,
+      nb_anses: nbAnses ? Number(nbAnses) : 2,
+      couvercle_inclus: couvercleInclus,
+      caracteristiques: precisions || null,
       cout_matiere: modePrix === "auto" && coutMatiere ? Number(coutMatiere) : null,
       marge_pct: modePrix === "auto" && margePct ? Number(margePct) : null,
       prix_manuel: modePrix === "manuel" && prixManuel ? Number(prixManuel) : null,
@@ -53,12 +65,96 @@ export default function NouveauProduitPage() {
           <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
         </label>
 
+        <p className="text-sm text-encre">Mesures de la marmite</p>
+
+        <div className="grid grid-cols-2 gap-3">
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Contenance (L)
+            <input
+              type="number"
+              min={0}
+              step={0.5}
+              value={contenance}
+              onChange={(e) => setContenance(e.target.value)}
+              className={inputClass}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Diamètre (cm)
+            <input
+              type="number"
+              min={0}
+              step={0.5}
+              value={diametre}
+              onChange={(e) => setDiametre(e.target.value)}
+              className={inputClass}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Hauteur (cm)
+            <input
+              type="number"
+              min={0}
+              step={0.5}
+              value={hauteur}
+              onChange={(e) => setHauteur(e.target.value)}
+              className={inputClass}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Poids (kg)
+            <input
+              type="number"
+              min={0}
+              step={0.1}
+              value={poids}
+              onChange={(e) => setPoids(e.target.value)}
+              className={inputClass}
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Nombre d&apos;anses
+            <input
+              type="number"
+              min={0}
+              value={nbAnses}
+              onChange={(e) => setNbAnses(e.target.value)}
+              className={inputClass}
+            />
+          </label>
+
+          <div className="flex flex-col gap-1 text-sm text-encre">
+            Couvercle
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setCouvercleInclus(true)}
+                className={`flex-1 rounded-xl px-3 py-3 text-sm font-medium ${
+                  couvercleInclus ? "bg-braise text-creme" : "bg-creme text-encre/70"
+                }`}
+              >
+                Inclus
+              </button>
+              <button
+                type="button"
+                onClick={() => setCouvercleInclus(false)}
+                className={`flex-1 rounded-xl px-3 py-3 text-sm font-medium ${
+                  !couvercleInclus ? "bg-braise text-creme" : "bg-creme text-encre/70"
+                }`}
+              >
+                Sans
+              </button>
+            </div>
+          </div>
+        </div>
+
         <label className="flex flex-col gap-1 text-sm text-encre">
-          Caractéristiques
+          Précisions (optionnel)
           <textarea
-            value={caracteristiques}
-            onChange={(e) => setCaracteristiques(e.target.value)}
-            rows={3}
+            value={precisions}
+            onChange={(e) => setPrecisions(e.target.value)}
+            rows={2}
+            placeholder="Gravure, coloris, finition..."
             className={inputClass}
           />
         </label>
