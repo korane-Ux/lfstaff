@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ETAT_META, formatFcfa } from "@/lib/etats";
@@ -18,18 +19,27 @@ export default async function CommandeDetailPage({
   const { data: commande } = await supabase.from("commandes").select("*").eq("id", id).single();
   if (!commande) notFound();
 
-  const [{ data: client }, { data: produit }, { data: reglages }, { data: fournisseurs }, { data: livreurs }] =
-    await Promise.all([
-      supabase
-        .from("clients")
-        .select("nom, telephone, ville")
-        .eq("id", commande.client_id)
-        .single(),
-      supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),
-      supabase.from("reglages").select("pct_avance_fournisseur, taux_commission_livreur").single(),
-      supabase.from("users").select("id, nom").eq("role", "fournisseur").eq("actif", true),
-      supabase.from("users").select("id, nom").eq("role", "livreur").eq("actif", true),
-    ]);
+  const [
+    { data: client },
+    { data: produit },
+    { data: reglages },
+    { data: fournisseurs },
+    { data: livreurs },
+    { data: expedition },
+  ] = await Promise.all([
+    supabase.from("clients").select("nom, telephone, ville").eq("id", commande.client_id).single(),
+    supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),
+    supabase.from("reglages").select("pct_avance_fournisseur, taux_commission_livreur").single(),
+    supabase.from("users").select("id, nom").eq("role", "fournisseur").eq("actif", true),
+    supabase.from("users").select("id, nom").eq("role", "livreur").eq("actif", true),
+    supabase
+      .from("expeditions")
+      .select("photo_bordereau")
+      .eq("commande_id", commande.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   const commissionSuggeree = Math.round(
     (commande.prix_total * (reglages?.taux_commission_livreur ?? 10)) / 100,
@@ -67,6 +77,33 @@ export default async function CommandeDetailPage({
         )}
         {commande.etat === "litige" && commande.motif_annulation && (
           <p className="mt-2 text-sm text-litige">Motif : {commande.motif_annulation}</p>
+        )}
+
+        {(commande.photo_ref || expedition?.photo_bordereau) && (
+          <div className="mt-2 flex gap-2">
+            {commande.photo_ref && (
+              <a href={commande.photo_ref} target="_blank" rel="noreferrer">
+                <Image
+                  src={commande.photo_ref}
+                  alt="Référence"
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-xl object-cover"
+                />
+              </a>
+            )}
+            {expedition?.photo_bordereau && (
+              <a href={expedition.photo_bordereau} target="_blank" rel="noreferrer">
+                <Image
+                  src={expedition.photo_bordereau}
+                  alt="Bordereau"
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-xl object-cover"
+                />
+              </a>
+            )}
+          </div>
         )}
       </div>
 

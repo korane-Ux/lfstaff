@@ -3,9 +3,11 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PhotoInput } from "@/components/ui/photo-input";
 
 export default function NouveauProduitPage() {
   const router = useRouter();
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [nom, setNom] = useState("");
   const [contenance, setContenance] = useState("");
   const [diametre, setDiametre] = useState("");
@@ -29,6 +31,7 @@ export default function NouveauProduitPage() {
     const supabase = createClient();
     const { error: insertError } = await supabase.from("produits").insert({
       nom,
+      photo_url: photoUrl,
       contenance_litres: contenance ? Number(contenance) : null,
       diametre_cm: diametre ? Number(diametre) : null,
       hauteur_cm: hauteur ? Number(hauteur) : null,
@@ -64,6 +67,8 @@ export default function NouveauProduitPage() {
           Nom
           <input required value={nom} onChange={(e) => setNom(e.target.value)} className={inputClass} />
         </label>
+
+        <PhotoInput dossier="produits" onUploaded={setPhotoUrl} />
 
         <p className="text-sm text-encre">Mesures de la marmite</p>
 

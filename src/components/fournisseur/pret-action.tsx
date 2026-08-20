@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PhotoInput } from "@/components/ui/photo-input";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -24,6 +25,7 @@ export function PretAction({
   const [villeArrivee, setVilleArrivee] = useState(villeLivraison ?? villes[0] ?? "");
   const [dateArriveePrevue, setDateArriveePrevue] = useState("");
   const [fraisTransport, setFraisTransport] = useState("");
+  const [photoBordereau, setPhotoBordereau] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +56,7 @@ export function PretAction({
       date_depart: new Date().toISOString().slice(0, 10),
       date_arrivee_prevue: dateArriveePrevue || null,
       frais_transport: fraisTransport ? Number(fraisTransport) : null,
+      photo_bordereau: photoBordereau,
     });
 
     if (expError) {
@@ -135,6 +138,8 @@ export function PretAction({
           className={inputClass}
         />
       </label>
+
+      <PhotoInput dossier="expeditions" onUploaded={setPhotoBordereau} />
 
       <label className="flex flex-col gap-1 text-sm text-encre">
         Date d&apos;arrivée prévue

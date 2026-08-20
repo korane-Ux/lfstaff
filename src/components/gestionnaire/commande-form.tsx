@@ -4,6 +4,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PhotoInput } from "@/components/ui/photo-input";
 
 type Client = { id: string; nom: string };
 type Produit = { id: string; nom: string; prix_final: number | null };
@@ -30,6 +31,7 @@ export function CommandeForm({
   const [acompteMontant, setAcompteMontant] = useState("");
   const [villeLivraison, setVilleLivraison] = useState(villes[0] ?? "");
   const [specs, setSpecs] = useState("");
+  const [photoRef, setPhotoRef] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +66,7 @@ export function CommandeForm({
       solde_montant: total - acompte,
       ville_livraison: villeLivraison || null,
       specs: specs || null,
+      photo_ref: photoRef,
     });
 
     setLoading(false);
@@ -191,6 +194,8 @@ export function CommandeForm({
         Précisions (optionnel)
         <textarea value={specs} onChange={(e) => setSpecs(e.target.value)} rows={2} className={inputClass} />
       </label>
+
+      <PhotoInput dossier="commandes" onUploaded={setPhotoRef} />
 
       {error && <p className="text-sm text-litige">{error}</p>}
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -16,7 +17,7 @@ export default async function FournisseurCommandeDetailPage({
 
   const { data: commande } = await supabase
     .from("commandes")
-    .select("id, produit_id, quantite, prix_total, specs, fournisseur_id, etat, ville_livraison")
+    .select("id, produit_id, quantite, prix_total, specs, photo_ref, fournisseur_id, etat, ville_livraison")
     .eq("id", id)
     .single();
 
@@ -50,6 +51,17 @@ export default async function FournisseurCommandeDetailPage({
         )}
         {commande.specs && <p className="text-sm text-encre/80">Précisions : {commande.specs}</p>}
         <p className="text-sm text-encre/80">{formatFcfa(commande.prix_total)}</p>
+        {commande.photo_ref && (
+          <a href={commande.photo_ref} target="_blank" rel="noreferrer" className="mt-1">
+            <Image
+              src={commande.photo_ref}
+              alt="Référence"
+              width={96}
+              height={96}
+              className="h-24 w-24 rounded-xl object-cover"
+            />
+          </a>
+        )}
       </div>
 
       {commande.etat === "en_creation" ? (

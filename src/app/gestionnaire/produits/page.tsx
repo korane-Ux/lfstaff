@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
@@ -7,7 +8,7 @@ export default async function ProduitsPage() {
   const supabase = await createClient();
   const { data: produits } = await supabase
     .from("produits")
-    .select("id, nom, prix_final, actif, contenance_litres, diametre_cm, hauteur_cm, poids_kg")
+    .select("id, nom, prix_final, actif, contenance_litres, diametre_cm, hauteur_cm, poids_kg, photo_url")
     .order("nom");
 
   return (
@@ -32,9 +33,20 @@ export default async function ProduitsPage() {
         {produits?.map((produit) => (
           <div
             key={produit.id}
-            className="flex items-center justify-between rounded-2xl bg-surface p-4"
+            className="flex items-center gap-3 rounded-2xl bg-surface p-4"
           >
-            <div>
+            {produit.photo_url ? (
+              <Image
+                src={produit.photo_url}
+                alt=""
+                width={48}
+                height={48}
+                className="h-12 w-12 shrink-0 rounded-xl object-cover"
+              />
+            ) : (
+              <div className="h-12 w-12 shrink-0 rounded-xl bg-creme" />
+            )}
+            <div className="flex-1">
               <p className="text-sm font-medium text-encre">{produit.nom}</p>
               <p className="text-xs text-encre/60">{formatSpecsMarmite(produit)}</p>
               {!produit.actif && <p className="text-xs text-encre/40">Inactif</p>}
