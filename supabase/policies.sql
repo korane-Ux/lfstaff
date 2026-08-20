@@ -10,12 +10,12 @@
 -- policy sur `users` a besoin d'interroger... `users`. La fonction s'exécute
 -- avec les droits de son propriétaire (qui contourne RLS), pas ceux de
 -- l'appelant.
-create function current_role() returns app_role as $$
+create function current_app_role() returns app_role as $$
   select role from public.users where id = auth.uid();
 $$ language sql stable security definer set search_path = public;
 
 create function is_staff() returns boolean as $$
-  select current_role() in ('super_admin', 'gestionnaire');
+  select current_app_role() in ('super_admin', 'gestionnaire');
 $$ language sql stable security definer set search_path = public;
 
 -- ============================================================
@@ -31,10 +31,10 @@ create policy "chacun voit sa propre fiche" on users
   for select using (id = auth.uid());
 
 create policy "super_admin crée les comptes" on users
-  for insert with check (current_role() = 'super_admin');
+  for insert with check (current_app_role() = 'super_admin');
 
 create policy "super_admin modifie tout" on users
-  for update using (current_role() = 'super_admin');
+  for update using (current_app_role() = 'super_admin');
 
 create policy "chacun modifie sa propre fiche" on users
   for update using (id = auth.uid());
@@ -43,7 +43,7 @@ create policy "chacun modifie sa propre fiche" on users
 -- ("chacun modifie sa propre fiche" ne doit pas permettre de changer son rôle).
 create function fn_prevent_self_role_change() returns trigger as $$
 begin
-  if new.role is distinct from old.role and current_role() is distinct from 'super_admin' then
+  if new.role is distinct from old.role and current_app_role() is distinct from 'super_admin' then
     raise exception 'Seul un super-admin peut changer un rôle.';
   end if;
   return new;
@@ -218,4 +218,4 @@ create policy "staff connecté lit les réglages" on reglages
   for select using (auth.uid() is not null);
 
 create policy "super_admin modifie les réglages" on reglages
-  for update using (current_role() = 'super_admin');
+  for update using (current_app_role() = 'super_admin');
