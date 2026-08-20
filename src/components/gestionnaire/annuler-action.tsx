@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 
 export function AnnulerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
   const [ouvert, setOuvert] = useState(false);
   const [motif, setMotif] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   if (!ouvert) {
     return (
@@ -23,29 +22,19 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
     );
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
-    setError(null);
-
+  async function handleAnnuler() {
     const supabase = createClient();
     const { error: updateError } = await supabase
       .from("commandes")
       .update({ etat: "annulee", motif_annulation: motif })
       .eq("id", commandeId);
 
-    setLoading(false);
-
-    if (updateError) {
-      setError("Impossible d'annuler cette commande.");
-      return;
-    }
-
+    if (updateError) throw updateError;
     router.refresh();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
+    <div className="flex flex-col gap-2 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Annuler la commande</p>
       <textarea
         required
@@ -55,15 +44,29 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
         placeholder="Motif de l'annulation..."
         className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
       />
-      {error && <p className="text-xs text-litige">{error}</p>}
       <div className="flex gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={() => setOuvert(false)} className="flex-1">
           Retour
         </Button>
-        <Button type="submit" variant="danger" size="sm" disabled={loading} className="flex-1">
-          {loading ? "..." : "Confirmer l'annulation"}
-        </Button>
+        <ConfirmDangerDialog
+          title="Annuler cette commande ?"
+          description="Cette action est irréversible et clôture définitivement la commande."
+          confirmLabel="Confirmer l'annulation"
+          onConfirm={handleAnnuler}
+          trigger={(open) => (
+            <Button
+              type="button"
+              variant="danger"
+              size="sm"
+              className="flex-1"
+              disabled={!motif.trim()}
+              onClick={open}
+            >
+              Confirmer l&apos;annulation
+            </Button>
+          )}
+        />
       </div>
-    </form>
+    </div>
   );
 }

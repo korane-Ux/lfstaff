@@ -42,6 +42,7 @@ export type Database = {
           role: AppRole;
           ville: string | null;
           actif: boolean;
+          avatar_url: string | null;
           created_at: string;
         };
         Insert: {
@@ -51,6 +52,7 @@ export type Database = {
           role: AppRole;
           ville?: string | null;
           actif?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
         };
         Update: {
@@ -60,6 +62,7 @@ export type Database = {
           role?: AppRole;
           ville?: string | null;
           actif?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
         };
         Relationships: [];
@@ -337,6 +340,54 @@ export type Database = {
           pct_avance_fournisseur?: number;
           pct_acompte_client?: number;
           villes_actives?: string[];
+        };
+        Relationships: [];
+      };
+      produit_images: {
+        Row: {
+          id: string;
+          produit_id: string;
+          url: string;
+          position: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          produit_id: string;
+          url: string;
+          position?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          produit_id?: string;
+          url?: string;
+          position?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      historique_etats: {
+        Row: {
+          id: string;
+          commande_id: string;
+          etat: AppEtat;
+          user_id: string | null;
+          horodatage: string;
+        };
+        Insert: {
+          id?: string;
+          commande_id: string;
+          etat: AppEtat;
+          user_id?: string | null;
+          horodatage?: string;
+        };
+        Update: {
+          id?: string;
+          commande_id?: string;
+          etat?: AppEtat;
+          user_id?: string | null;
+          horodatage?: string;
         };
         Relationships: [];
       };

@@ -20,9 +20,24 @@ export default async function FournisseurPage() {
     : { data: [] };
   const produitNom = new Map((produits ?? []).map((p) => [p.id, p.nom]));
 
+  const valeurTotale = (commandes ?? []).reduce((total, c) => total + c.prix_total, 0);
+
   return (
     <main className="flex flex-1 flex-col gap-3 px-4 py-4">
       <h1 className="font-display text-2xl text-encre">À fondre</h1>
+
+      {!!commandes?.length && (
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
+            <p className="text-xs text-encre/60">Pièces à créer</p>
+            <p className="font-display text-xl text-encre">{commandes.length}</p>
+          </div>
+          <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
+            <p className="text-xs text-encre/60">Valeur totale</p>
+            <p className="font-display text-xl text-encre">{formatFcfa(valeurTotale)}</p>
+          </div>
+        </div>
+      )}
 
       {!commandes?.length && (
         <p className="mt-8 text-center text-sm text-encre/60">Rien à fondre pour l&apos;instant.</p>

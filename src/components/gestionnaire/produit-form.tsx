@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
+import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
+import { ProduitGalerie } from "@/components/gestionnaire/produit-galerie";
+import { supprimerPhoto } from "@/lib/supabase/storage";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -25,7 +28,13 @@ type ProduitExistant = {
   prix_manuel: number | null;
 };
 
-export function ProduitForm({ produit }: { produit?: ProduitExistant }) {
+export function ProduitForm({
+  produit,
+  images = [],
+}: {
+  produit?: ProduitExistant;
+  images?: { id: string; url: string; position: number }[];
+}) {
   const router = useRouter();
   const [photoUrl, setPhotoUrl] = useState<string | null>(produit?.photo_url ?? null);
   const [nom, setNom] = useState(produit?.nom ?? "");
@@ -81,6 +90,34 @@ export function ProduitForm({ produit }: { produit?: ProduitExistant }) {
     router.refresh();
   }
 
+  async function handleSupprimer() {
+    const supabase = createClient();
+    if (!produit) return;
+
+    const { error: deleteImagesError } = await supabase
+      .from("produit_images")
+      .delete()
+      .eq("produit_id", produit.id);
+    if (deleteImagesError) throw deleteImagesError;
+
+    for (const image of images) {
+      await supprimerPhoto(image.url);
+    }
+    if (produit.photo_url) await supprimerPhoto(produit.photo_url);
+
+    const { error: deleteError } = await supabase.from("produits").delete().eq("id", produit.id);
+    if (deleteError) {
+      throw new Error(
+        deleteError.code === "23503"
+          ? "Ce produit est utilisé par des commandes existantes, impossible de le supprimer."
+          : deleteError.message,
+      );
+    }
+
+    router.replace("/gestionnaire/produits");
+    router.refresh();
+  }
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
       <label className="flex flex-col gap-1 text-sm text-encre">
@@ -89,6 +126,8 @@ export function ProduitForm({ produit }: { produit?: ProduitExistant }) {
       </label>
 
       <PhotoInput dossier="produits" onUploaded={setPhotoUrl} />
+
+      {produit && <ProduitGalerie produitId={produit.id} images={images} />}
 
       <p className="text-sm text-encre">Mesures de la marmite</p>
 
@@ -248,6 +287,26 @@ export function ProduitForm({ produit }: { produit?: ProduitExistant }) {
       <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : produit ? "Enregistrer" : "Créer le produit"}
       </Button>
+
+      {produit && (
+        <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
+          <p className="text-sm font-medium text-encre">Zone sensible</p>
+          <p className="text-xs text-encre/60">
+            La suppression est définitive et retire aussi toutes les photos de ce produit.
+          </p>
+          <ConfirmDangerDialog
+            title="Supprimer ce produit ?"
+            description={`"${produit.nom}" sera supprimé définitivement, avec toutes ses photos.`}
+            confirmLabel="Supprimer"
+            onConfirm={handleSupprimer}
+            trigger={(open) => (
+              <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
+                Supprimer ce produit
+              </Button>
+            )}
+          />
+        </div>
+      )}
     </form>
   );
 }

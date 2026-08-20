@@ -4,17 +4,29 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
 
-export function ClientForm({ villes }: { villes: string[] }) {
+type ClientExistant = {
+  id: string;
+  nom: string;
+  telephone: string | null;
+  ville: string | null;
+  quartier: string | null;
+  adresse: string | null;
+  notes: string | null;
+};
+
+export function ClientForm({ villes, client }: { villes: string[]; client?: ClientExistant }) {
   const router = useRouter();
-  const [nom, setNom] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [ville, setVille] = useState(villes[0] ?? "");
-  const [quartier, setQuartier] = useState("");
-  const [adresse, setAdresse] = useState("");
+  const [nom, setNom] = useState(client?.nom ?? "");
+  const [telephone, setTelephone] = useState(client?.telephone ?? "");
+  const [ville, setVille] = useState(client?.ville ?? villes[0] ?? "");
+  const [quartier, setQuartier] = useState(client?.quartier ?? "");
+  const [adresse, setAdresse] = useState(client?.adresse ?? "");
+  const [notes, setNotes] = useState(client?.notes ?? "");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,22 +35,42 @@ export function ClientForm({ villes }: { villes: string[] }) {
     setLoading(true);
     setError(null);
 
-    const supabase = createClient();
-    const { error: insertError } = await supabase.from("clients").insert({
+    const payload = {
       nom,
       telephone: telephone || null,
       ville: ville || null,
       quartier: quartier || null,
       adresse: adresse || null,
-    });
+      notes: notes || null,
+    };
+
+    const supabase = createClient();
+    const { error: saveError } = client
+      ? await supabase.from("clients").update(payload).eq("id", client.id)
+      : await supabase.from("clients").insert(payload);
 
     setLoading(false);
 
-    if (insertError) {
+    if (saveError) {
       setError("Impossible d'enregistrer ce client.");
       return;
     }
 
+    router.replace("/gestionnaire/clients");
+    router.refresh();
+  }
+
+  async function handleSupprimer() {
+    if (!client) return;
+    const supabase = createClient();
+    const { error: deleteError } = await supabase.from("clients").delete().eq("id", client.id);
+    if (deleteError) {
+      throw new Error(
+        deleteError.code === "23503"
+          ? "Ce client a des commandes existantes, impossible de le supprimer."
+          : deleteError.message,
+      );
+    }
     router.replace("/gestionnaire/clients");
     router.refresh();
   }
@@ -83,11 +115,39 @@ export function ClientForm({ villes }: { villes: string[] }) {
         <input value={adresse} onChange={(e) => setAdresse(e.target.value)} className={inputClass} />
       </label>
 
+      <label className="flex flex-col gap-1 text-sm text-encre">
+        Notes (optionnel)
+        <textarea
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={2}
+          className={inputClass}
+        />
+      </label>
+
       {error && <p className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
-        {loading ? "Enregistrement..." : "Enregistrer"}
+        {loading ? "Enregistrement..." : client ? "Enregistrer" : "Créer le client"}
       </Button>
+
+      {client && (
+        <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
+          <p className="text-sm font-medium text-encre">Zone sensible</p>
+          <p className="text-xs text-encre/60">La suppression de ce client est définitive.</p>
+          <ConfirmDangerDialog
+            title="Supprimer ce client ?"
+            description={`"${client.nom}" sera supprimé définitivement.`}
+            confirmLabel="Supprimer"
+            onConfirm={handleSupprimer}
+            trigger={(open) => (
+              <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
+                Supprimer ce client
+              </Button>
+            )}
+          />
+        </div>
+      )}
     </form>
   );
 }

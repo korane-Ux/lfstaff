@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { onboardingDejaVu } from "@/components/onboarding/onboarding-flow";
 import { Button } from "@/components/ui/button";
+import { LoginCarousel } from "@/components/auth/login-carousel";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,46 +37,50 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-dvh flex-1 flex-col items-center justify-center gap-8 bg-creme px-6">
-      <div className="flex flex-col items-center gap-2">
-        <Image src="/icons/icon-192.png" alt="LFstaff" width={64} height={64} priority />
-        <h1 className="font-display text-3xl text-encre">LFstaff</h1>
+    <main className="flex min-h-dvh flex-1 flex-col gap-6 bg-creme px-6 py-8 md:flex-row md:items-center md:justify-center md:gap-10 md:px-10">
+      <div className="mx-auto w-full max-w-sm md:w-1/2 md:max-w-md md:self-stretch md:py-8">
+        <LoginCarousel />
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-4 rounded-3xl bg-surface p-6 shadow-sm"
-      >
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Email
-          <input
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
-          />
-        </label>
+      <div className="mx-auto flex w-full max-w-sm flex-col gap-8 md:w-1/2 md:max-w-sm">
+        <div className="flex flex-col items-center gap-2 md:items-start">
+          <Image src="/icons/icon-192.png" alt="LFstaff" width={56} height={56} priority />
+          <h1 className="font-display text-3xl text-encre">LFstaff</h1>
+          <p className="text-sm text-encre/60 md:text-left">Connecte-toi pour continuer.</p>
+        </div>
 
-        <label className="flex flex-col gap-1 text-sm text-encre">
-          Mot de passe
-          <input
-            type="password"
-            required
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
-          />
-        </label>
+        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4 rounded-3xl bg-surface p-6 shadow-sm">
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Email
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
+            />
+          </label>
 
-        {error && <p className="text-sm text-litige">{error}</p>}
+          <label className="flex flex-col gap-1 text-sm text-encre">
+            Mot de passe
+            <input
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise"
+            />
+          </label>
 
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Connexion..." : "Se connecter"}
-        </Button>
-      </form>
+          {error && <p className="text-sm text-litige">{error}</p>}
+
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Connexion..." : "Se connecter"}
+          </Button>
+        </form>
+      </div>
     </main>
   );
 }

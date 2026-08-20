@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { AppRole } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
+import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 
 const inputClass =
   "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
@@ -49,7 +50,7 @@ export function MembreForm({
     const supabase = createClient();
     const { error: updateError } = await supabase
       .from("users")
-      .update({ nom, telephone: telephone || null, ville: ville || null, actif })
+      .update({ nom, telephone: telephone || null, ville: ville || null })
       .eq("id", userId);
 
     setLoading(false);
@@ -60,6 +61,23 @@ export function MembreForm({
     }
 
     router.push("/gestionnaire/equipe");
+    router.refresh();
+  }
+
+  async function handleReactiver() {
+    const supabase = createClient();
+    const { error: updateError } = await supabase.from("users").update({ actif: true }).eq("id", userId);
+    if (!updateError) {
+      setActif(true);
+      router.refresh();
+    }
+  }
+
+  async function handleDesactiver() {
+    const supabase = createClient();
+    const { error: updateError } = await supabase.from("users").update({ actif: false }).eq("id", userId);
+    if (updateError) throw updateError;
+    setActif(false);
     router.refresh();
   }
 
@@ -95,38 +113,40 @@ export function MembreForm({
         </label>
       )}
 
-      <div className="flex flex-col gap-2">
-        <p className="text-sm text-encre">Statut</p>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant={actif ? "success" : "ghost"}
-            onClick={() => setActif(true)}
-            className="flex-1"
-          >
-            Actif
-          </Button>
-          <Button
-            type="button"
-            variant={!actif ? "danger" : "ghost"}
-            onClick={() => setActif(false)}
-            className="flex-1"
-          >
-            Désactivé
-          </Button>
-        </div>
-        {!actif && (
-          <p className="text-xs text-encre/50">
-            Un compte désactivé ne peut plus être choisi pour de nouvelles commandes.
-          </p>
-        )}
-      </div>
-
       {error && <p className="text-sm text-litige">{error}</p>}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Enregistrement..." : "Enregistrer"}
       </Button>
+
+      <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
+        <p className="text-sm font-medium text-encre">Zone sensible</p>
+        {actif ? (
+          <>
+            <p className="text-xs text-encre/60">
+              Un compte désactivé ne peut plus être choisi pour de nouvelles commandes.
+            </p>
+            <ConfirmDangerDialog
+              title="Désactiver ce compte ?"
+              description={`${nom} ne pourra plus se connecter ni être assigné à de nouvelles commandes.`}
+              confirmLabel="Désactiver"
+              onConfirm={handleDesactiver}
+              trigger={(open) => (
+                <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
+                  Désactiver ce compte
+                </Button>
+              )}
+            />
+          </>
+        ) : (
+          <>
+            <p className="text-xs text-encre/60">Ce compte est désactivé.</p>
+            <Button type="button" variant="success" size="sm" onClick={handleReactiver} className="self-start">
+              Réactiver ce compte
+            </Button>
+          </>
+        )}
+      </div>
     </form>
   );
 }

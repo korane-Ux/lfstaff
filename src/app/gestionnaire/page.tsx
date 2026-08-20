@@ -24,9 +24,32 @@ export default async function GestionnaireDashboard() {
     parEtat.get(commande.etat)?.push(commande);
   }
 
+  const enCours = (commandes ?? []).filter((c) => c.etat !== "livree_validee" && c.etat !== "annulee");
+  const valeurEnCours = enCours.reduce((total, c) => total + c.prix_total, 0);
+  const enLitige = parEtat.get("litige") ?? [];
+  const livrees = parEtat.get("livree_validee") ?? [];
+
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <h1 className="font-display text-2xl text-encre">Tableau de bord</h1>
+
+      {!!commandes?.length && (
+        <div className="grid grid-cols-3 gap-2">
+          <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
+            <p className="text-xs text-encre/60">En cours</p>
+            <p className="font-display text-xl text-encre">{enCours.length}</p>
+            <p className="text-[11px] text-encre/50">{formatFcfa(valeurEnCours)}</p>
+          </div>
+          <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
+            <p className="text-xs text-encre/60">En litige</p>
+            <p className="font-display text-xl text-litige">{enLitige.length}</p>
+          </div>
+          <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
+            <p className="text-xs text-encre/60">Livrées</p>
+            <p className="font-display text-xl text-vert">{livrees.length}</p>
+          </div>
+        </div>
+      )}
 
       {!commandes?.length && (
         <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/60">

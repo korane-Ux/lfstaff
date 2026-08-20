@@ -17,3 +17,11 @@ export async function uploaderPhoto(file: File, dossier: string): Promise<string
   const { data } = supabase.storage.from("photos").getPublicUrl(chemin);
   return data.publicUrl;
 }
+
+export async function supprimerPhoto(url: string): Promise<void> {
+  const chemin = url.split("/photos/")[1];
+  if (!chemin) return;
+
+  const supabase = createClient();
+  await supabase.storage.from("photos").remove([chemin]);
+}

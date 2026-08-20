@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { LinkButton } from "@/components/ui/link-button";
 
@@ -23,12 +24,16 @@ export default async function ClientsPage() {
 
       <div className="flex flex-col gap-2">
         {clients?.map((client) => (
-          <div key={client.id} className="rounded-2xl bg-surface p-4">
+          <Link
+            key={client.id}
+            href={`/gestionnaire/clients/${client.id}`}
+            className="block rounded-2xl bg-surface p-4"
+          >
             <p className="text-sm font-medium text-encre">{client.nom}</p>
             <p className="text-xs text-encre/60">
               {[client.telephone, client.ville].filter(Boolean).join(" · ") || "—"}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </main>

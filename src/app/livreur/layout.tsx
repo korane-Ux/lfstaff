@@ -7,7 +7,7 @@ export default async function LivreurLayout({ children }: { children: React.Reac
 
   return (
     <div className="flex min-h-dvh flex-col bg-creme">
-      <RoleHeader nom={profile.nom} role={profile.role} />
+      <RoleHeader nom={profile.nom} role={profile.role} avatarUrl={profile.avatar_url} />
       <nav className="flex gap-2 overflow-x-auto border-b border-encre/10 px-4 py-2 text-sm">
         <Link href="/livreur" className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface">
           À livrer

@@ -7,7 +7,7 @@ export default async function FournisseurLayout({ children }: { children: React.
 
   return (
     <div className="flex min-h-dvh flex-col bg-creme">
-      <RoleHeader nom={profile.nom} role={profile.role} />
+      <RoleHeader nom={profile.nom} role={profile.role} avatarUrl={profile.avatar_url} />
       <nav className="flex gap-2 overflow-x-auto border-b border-encre/10 px-4 py-2 text-sm">
         <Link
           href="/fournisseur"

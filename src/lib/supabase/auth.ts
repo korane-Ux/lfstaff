@@ -15,13 +15,13 @@ export async function getCurrentProfile() {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("id, nom, role, ville")
+    .select("id, nom, role, ville, telephone, avatar_url")
     .eq("id", user.id)
     .single();
 
   if (!profile) redirect("/login");
 
-  return profile;
+  return { ...profile, email: user.email ?? null };
 }
 
 export async function requireRole(allowed: AppRole[]) {
