@@ -30,9 +30,11 @@ type ProduitExistant = {
 export function ProduitForm({
   produit,
   images = [],
+  isSuperAdmin = false,
 }: {
   produit?: ProduitExistant;
   images?: { id: string; url: string; position: number }[];
+  isSuperAdmin?: boolean;
 }) {
   const router = useRouter();
   const [photoUrl, setPhotoUrl] = useState<string | null>(produit?.photo_url ?? null);
@@ -277,20 +279,26 @@ export function ProduitForm({
       {produit && (
         <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
           <p className="text-sm font-medium text-encre">Zone sensible</p>
-          <p className="text-xs text-encre/65">
-            La suppression est définitive et retire aussi toutes les photos de ce produit.
-          </p>
-          <ConfirmDangerDialog
-            title="Supprimer ce produit ?"
-            description={`"${produit.nom}" sera supprimé définitivement, avec toutes ses photos.`}
-            confirmLabel="Supprimer"
-            onConfirm={handleSupprimer}
-            trigger={(open) => (
-              <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
-                Supprimer ce produit
-              </Button>
-            )}
-          />
+          {isSuperAdmin ? (
+            <>
+              <p className="text-xs text-encre/65">
+                La suppression est définitive et retire aussi toutes les photos de ce produit.
+              </p>
+              <ConfirmDangerDialog
+                title="Supprimer ce produit ?"
+                description={`"${produit.nom}" sera supprimé définitivement, avec toutes ses photos.`}
+                confirmLabel="Supprimer"
+                onConfirm={handleSupprimer}
+                trigger={(open) => (
+                  <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
+                    Supprimer ce produit
+                  </Button>
+                )}
+              />
+            </>
+          ) : (
+            <p className="text-xs text-encre/65">Seul un super-admin peut supprimer ce produit.</p>
+          )}
         </div>
       )}
     </form>

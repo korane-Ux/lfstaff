@@ -17,7 +17,15 @@ type ClientExistant = {
   notes: string | null;
 };
 
-export function ClientForm({ villes, client }: { villes: string[]; client?: ClientExistant }) {
+export function ClientForm({
+  villes,
+  client,
+  isSuperAdmin = false,
+}: {
+  villes: string[];
+  client?: ClientExistant;
+  isSuperAdmin?: boolean;
+}) {
   const router = useRouter();
   const [nom, setNom] = useState(client?.nom ?? "");
   const [telephone, setTelephone] = useState(client?.telephone ?? "");
@@ -109,18 +117,24 @@ export function ClientForm({ villes, client }: { villes: string[]; client?: Clie
       {client && (
         <div className="mt-2 flex flex-col gap-2 rounded-2xl border border-litige/20 p-4">
           <p className="text-sm font-medium text-encre">Zone sensible</p>
-          <p className="text-xs text-encre/65">La suppression de ce client est définitive.</p>
-          <ConfirmDangerDialog
-            title="Supprimer ce client ?"
-            description={`"${client.nom}" sera supprimé définitivement.`}
-            confirmLabel="Supprimer"
-            onConfirm={handleSupprimer}
-            trigger={(open) => (
-              <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
-                Supprimer ce client
-              </Button>
-            )}
-          />
+          {isSuperAdmin ? (
+            <>
+              <p className="text-xs text-encre/65">La suppression de ce client est définitive.</p>
+              <ConfirmDangerDialog
+                title="Supprimer ce client ?"
+                description={`"${client.nom}" sera supprimé définitivement.`}
+                confirmLabel="Supprimer"
+                onConfirm={handleSupprimer}
+                trigger={(open) => (
+                  <Button type="button" variant="danger" size="sm" onClick={open} className="self-start">
+                    Supprimer ce client
+                  </Button>
+                )}
+              />
+            </>
+          ) : (
+            <p className="text-xs text-encre/65">Seul un super-admin peut supprimer ce client.</p>
+          )}
         </div>
       )}
     </form>

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getCurrentProfile } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ProduitForm } from "@/components/gestionnaire/produit-form";
 
@@ -8,6 +9,7 @@ export default async function ProduitDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const profile = await getCurrentProfile();
   const supabase = await createClient();
 
   const [{ data: produit }, { data: images }] = await Promise.all([
@@ -26,7 +28,7 @@ export default async function ProduitDetailPage({
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <h1 className="font-display text-2xl text-encre">{produit.nom}</h1>
-      <ProduitForm produit={produit} images={images ?? []} />
+      <ProduitForm produit={produit} images={images ?? []} isSuperAdmin={profile.role === "super_admin"} />
     </main>
   );
 }
