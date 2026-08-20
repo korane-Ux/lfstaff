@@ -49,6 +49,14 @@ export default async function GestionnaireLayout({
         >
           Réglages
         </Link>
+        {profile.role === "super_admin" && (
+          <Link
+            href="/gestionnaire/equipe"
+            className="shrink-0 rounded-full px-3 py-1.5 text-encre/80 hover:bg-surface"
+          >
+            Équipe
+          </Link>
+        )}
         <Link
           href="/gestionnaire/commandes/nouvelle"
           className="shrink-0 rounded-full bg-braise px-3 py-1.5 font-medium text-creme"
