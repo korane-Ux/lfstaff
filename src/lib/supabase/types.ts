@@ -16,6 +16,19 @@ export type AppEtat =
   | "litige"
   | "annulee";
 
+export type TransactionType =
+  | "acompte_client"
+  | "solde_client"
+  | "avance_fournisseur"
+  | "commission_livreur"
+  | "retrait_livreur"
+  | "remise_cash"
+  | "frais_transport";
+
+export type TransactionSens = "entree" | "sortie";
+
+export type MoyenPaiement = "cash" | "om" | "momo";
+
 export type Database = {
   public: {
     Tables: {
@@ -196,6 +209,93 @@ export type Database = {
         };
         Relationships: [];
       };
+      expeditions: {
+        Row: {
+          id: string;
+          commande_id: string;
+          agence: string;
+          n_bordereau: string | null;
+          ville_depart: string | null;
+          ville_arrivee: string | null;
+          frais_transport: number | null;
+          date_depart: string | null;
+          date_arrivee_prevue: string | null;
+          date_arrivee_reelle: string | null;
+          photo_bordereau: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          commande_id: string;
+          agence: string;
+          n_bordereau?: string | null;
+          ville_depart?: string | null;
+          ville_arrivee?: string | null;
+          frais_transport?: number | null;
+          date_depart?: string | null;
+          date_arrivee_prevue?: string | null;
+          date_arrivee_reelle?: string | null;
+          photo_bordereau?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          commande_id?: string;
+          agence?: string;
+          n_bordereau?: string | null;
+          ville_depart?: string | null;
+          ville_arrivee?: string | null;
+          frais_transport?: number | null;
+          date_depart?: string | null;
+          date_arrivee_prevue?: string | null;
+          date_arrivee_reelle?: string | null;
+          photo_bordereau?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      transactions: {
+        Row: {
+          id: string;
+          type: TransactionType;
+          commande_id: string | null;
+          user_id: string | null;
+          montant: number;
+          sens: TransactionSens;
+          moyen: MoyenPaiement;
+          cree_par: string | null;
+          date: string;
+          note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          type: TransactionType;
+          commande_id?: string | null;
+          user_id?: string | null;
+          montant: number;
+          sens: TransactionSens;
+          moyen?: MoyenPaiement;
+          cree_par?: string | null;
+          date?: string;
+          note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          type?: TransactionType;
+          commande_id?: string | null;
+          user_id?: string | null;
+          montant?: number;
+          sens?: TransactionSens;
+          moyen?: MoyenPaiement;
+          cree_par?: string | null;
+          date?: string;
+          note?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       reglages: {
         Row: {
           id: boolean;
@@ -226,6 +326,9 @@ export type Database = {
     Enums: {
       app_role: AppRole;
       etat_commande: AppEtat;
+      transaction_type: TransactionType;
+      transaction_sens: TransactionSens;
+      moyen_paiement: MoyenPaiement;
     };
     CompositeTypes: Record<string, never>;
   };

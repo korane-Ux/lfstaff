@@ -1,0 +1,109 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import type { MoyenPaiement } from "@/lib/supabase/types";
+
+const inputClass =
+  "rounded-xl border border-encre/15 bg-creme px-4 py-3 text-base text-encre outline-none focus:border-braise";
+
+const MOYEN_LABELS: Record<MoyenPaiement, string> = {
+  cash: "Cash",
+  om: "Orange Money",
+  momo: "MoMo",
+};
+
+export function ValiderAction({
+  commandeId,
+  acompteSuggere,
+}: {
+  commandeId: string;
+  acompteSuggere: number;
+}) {
+  const router = useRouter();
+  const [montant, setMontant] = useState(String(acompteSuggere));
+  const [moyen, setMoyen] = useState<MoyenPaiement>("cash");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const montantNum = Number(montant) || 0;
+    const supabase = createClient();
+
+    const { error: updateError } = await supabase
+      .from("commandes")
+      .update({ acompte_montant: montantNum, acompte_paye: true, etat: "validee" })
+      .eq("id", commandeId);
+
+    if (updateError) {
+      setLoading(false);
+      setError("Impossible de valider cette commande.");
+      return;
+    }
+
+    const { error: txError } = await supabase.from("transactions").insert({
+      type: "acompte_client",
+      commande_id: commandeId,
+      montant: montantNum,
+      sens: "entree",
+      moyen,
+    });
+
+    setLoading(false);
+
+    if (txError) {
+      setError("L'acompte est encaissé mais la transaction n'a pas pu être enregistrée.");
+      return;
+    }
+
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
+      <p className="text-sm font-medium text-encre">Encaisser l&apos;acompte</p>
+
+      <label className="flex flex-col gap-1 text-sm text-encre">
+        Montant reçu (FCFA)
+        <input
+          type="number"
+          min={0}
+          required
+          value={montant}
+          onChange={(e) => setMontant(e.target.value)}
+          className={inputClass}
+        />
+      </label>
+
+      <div className="flex gap-2">
+        {(Object.keys(MOYEN_LABELS) as MoyenPaiement[]).map((m) => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => setMoyen(m)}
+            className={`flex-1 rounded-xl px-3 py-2 text-sm font-medium ${
+              moyen === m ? "bg-braise text-creme" : "bg-creme text-encre/70"
+            }`}
+          >
+            {MOYEN_LABELS[m]}
+          </button>
+        ))}
+      </div>
+
+      {error && <p className="text-sm text-litige">{error}</p>}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="rounded-xl bg-braise px-4 py-3 text-base font-medium text-creme disabled:opacity-60"
+      >
+        {loading ? "Validation..." : "Valider la commande"}
+      </button>
+    </form>
+  );
+}

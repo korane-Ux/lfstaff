@@ -55,7 +55,11 @@ export default async function GestionnaireDashboard() {
               <div className="flex flex-col gap-2">
                 {items.length === 0 && <p className="text-xs text-encre/40">—</p>}
                 {items.map((commande) => (
-                  <div key={commande.id} className="rounded-xl bg-creme p-3">
+                  <Link
+                    key={commande.id}
+                    href={`/gestionnaire/commandes/${commande.id}`}
+                    className="block rounded-xl bg-creme p-3"
+                  >
                     <p className="text-sm font-medium text-encre">
                       {clientNom.get(commande.client_id) ?? "Client"}
                     </p>
@@ -63,7 +67,7 @@ export default async function GestionnaireDashboard() {
                       {produitNom.get(commande.produit_id) ?? "Produit"}
                     </p>
                     <p className="mt-1 text-xs text-encre/80">{formatFcfa(commande.prix_total)}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
