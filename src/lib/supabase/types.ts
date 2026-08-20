@@ -378,6 +378,13 @@ export type Database = {
         };
         Relationships: [];
       };
+      v_solde_fournisseur: {
+        Row: {
+          fournisseur_id: string;
+          total_recu: number;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       fn_confirmer_livraison: {

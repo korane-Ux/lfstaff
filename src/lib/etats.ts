@@ -26,7 +26,16 @@ export const ETAT_META: Record<AppEtat, { label: string; color: string }> = {
   annulee: { label: "Annulée", color: "bg-annule" },
 };
 
+// Intl.NumberFormat("fr-FR") separe les milliers avec une espace fine
+// insecable (U+202F, parfois U+00A0) : invisible dans les polices PDF de
+// base (Helvetica), donc "450 000" s'affiche "450000". On la remplace par
+// une espace normale partout, ecran et PDF.
+const SEPARATEURS_MILLIERS_INVISIBLES = /[  ]/g;
+
 export function formatFcfa(montant: number | null | undefined) {
   if (montant === null || montant === undefined) return "—";
-  return `${new Intl.NumberFormat("fr-FR").format(montant)} FCFA`;
+  const nombre = new Intl.NumberFormat("fr-FR")
+    .format(montant)
+    .replace(SEPARATEURS_MILLIERS_INVISIBLES, " ");
+  return `${nombre} FCFA`;
 }

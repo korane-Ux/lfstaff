@@ -23,6 +23,7 @@ export function PretAction({
   const [villeDepart, setVilleDepart] = useState(villes[0] ?? "");
   const [villeArrivee, setVilleArrivee] = useState(villeLivraison ?? villes[0] ?? "");
   const [dateArriveePrevue, setDateArriveePrevue] = useState("");
+  const [fraisTransport, setFraisTransport] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +53,7 @@ export function PretAction({
       ville_arrivee: villeArrivee || null,
       date_depart: new Date().toISOString().slice(0, 10),
       date_arrivee_prevue: dateArriveePrevue || null,
+      frais_transport: fraisTransport ? Number(fraisTransport) : null,
     });
 
     if (expError) {
@@ -122,6 +124,17 @@ export function PretAction({
           </label>
         </>
       )}
+
+      <label className="flex flex-col gap-1 text-sm text-encre">
+        Frais de transport (FCFA)
+        <input
+          type="number"
+          min={0}
+          value={fraisTransport}
+          onChange={(e) => setFraisTransport(e.target.value)}
+          className={inputClass}
+        />
+      </label>
 
       <label className="flex flex-col gap-1 text-sm text-encre">
         Date d&apos;arrivée prévue
