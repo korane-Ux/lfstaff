@@ -107,6 +107,31 @@ export default async function CommandeDetailPage({
         )}
       </div>
 
+      <div className="flex flex-wrap gap-2">
+        <a
+          href={`/gestionnaire/commandes/${commande.id}/bon-de-commande`}
+          className="rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-encre/80"
+        >
+          Bon de commande
+        </a>
+        {commande.acompte_paye && (
+          <a
+            href={`/gestionnaire/commandes/${commande.id}/recu?type=acompte`}
+            className="rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-encre/80"
+          >
+            Reçu acompte
+          </a>
+        )}
+        {commande.solde_paye && (
+          <a
+            href={`/gestionnaire/commandes/${commande.id}/recu?type=solde`}
+            className="rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-encre/80"
+          >
+            Reçu solde
+          </a>
+        )}
+      </div>
+
       {commande.etat === "nouvelle" && (
         <ValiderAction
           commandeId={commande.id}
