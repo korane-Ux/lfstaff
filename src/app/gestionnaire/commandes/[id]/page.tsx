@@ -31,7 +31,7 @@ export default async function CommandeDetailPage({
     { data: expedition },
   ] = await Promise.all([
     supabase.from("clients").select("nom, telephone, ville").eq("id", commande.client_id).single(),
-    supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),
+    supabase.from("produits").select("nom, fournisseur_id").eq("id", commande.produit_id).single(),
     supabase.from("reglages").select("pct_avance_fournisseur, taux_commission_livreur").single(),
     supabase.from("users").select("id, nom").eq("role", "fournisseur").eq("actif", true),
     supabase.from("users").select("id, nom, telephone").eq("role", "livreur").eq("actif", true),
@@ -147,6 +147,7 @@ export default async function CommandeDetailPage({
           prixTotal={commande.prix_total}
           pctAvance={reglages?.pct_avance_fournisseur ?? 50}
           fournisseurs={fournisseurs ?? []}
+          fournisseurAssigneId={produit?.fournisseur_id ?? null}
         />
       )}
 

@@ -106,6 +106,7 @@ export type Database = {
           nom: string;
           photo_url: string | null;
           categorie: string | null;
+          fournisseur_id: string | null;
           caracteristiques: string | null;
           contenance_litres: number | null;
           diametre_cm: number | null;
@@ -125,6 +126,7 @@ export type Database = {
           nom: string;
           photo_url?: string | null;
           categorie?: string | null;
+          fournisseur_id?: string | null;
           caracteristiques?: string | null;
           contenance_litres?: number | null;
           diametre_cm?: number | null;
@@ -144,6 +146,7 @@ export type Database = {
           nom?: string;
           photo_url?: string | null;
           categorie?: string | null;
+          fournisseur_id?: string | null;
           caracteristiques?: string | null;
           contenance_litres?: number | null;
           diametre_cm?: number | null;
@@ -421,6 +424,57 @@ export type Database = {
           destinataire_id?: string;
           cree_par?: string | null;
           cree_le?: string;
+        };
+        Relationships: [];
+      };
+      alertes_disponibilite: {
+        Row: {
+          id: string;
+          produit_id: string;
+          message: string | null;
+          cree_par: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          produit_id: string;
+          message?: string | null;
+          cree_par?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          produit_id?: string;
+          message?: string | null;
+          cree_par?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      alerte_reponses: {
+        Row: {
+          id: string;
+          alerte_id: string;
+          fournisseur_id: string;
+          disponible: boolean | null;
+          quantite_disponible: number | null;
+          repondu_le: string | null;
+        };
+        Insert: {
+          id?: string;
+          alerte_id: string;
+          fournisseur_id: string;
+          disponible?: boolean | null;
+          quantite_disponible?: number | null;
+          repondu_le?: string | null;
+        };
+        Update: {
+          id?: string;
+          alerte_id?: string;
+          fournisseur_id?: string;
+          disponible?: boolean | null;
+          quantite_disponible?: number | null;
+          repondu_le?: string | null;
         };
         Relationships: [];
       };

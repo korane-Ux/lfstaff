@@ -27,6 +27,12 @@ export default async function FournisseurLayout({ children }: { children: React.
         >
           Historique
         </Link>
+        <Link
+          href="/fournisseur/disponibilite"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
+        >
+          Disponibilité
+        </Link>
       </nav>
       <div className="flex flex-1 flex-col">{children}</div>
     </div>

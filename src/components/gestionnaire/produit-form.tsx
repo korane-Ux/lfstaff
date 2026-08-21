@@ -7,14 +7,16 @@ import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { ProduitGalerie } from "@/components/gestionnaire/produit-galerie";
+import { AlerteDisponibilite } from "@/components/gestionnaire/alerte-disponibilite";
 import { supprimerPhoto } from "@/lib/supabase/storage";
-import { TextField, TextareaField } from "@/components/ui/field";
+import { TextField, TextareaField, SelectField } from "@/components/ui/field";
 
 type ProduitExistant = {
   id: string;
   nom: string;
   photo_url: string | null;
   categorie: string | null;
+  fournisseur_id: string | null;
   contenance_litres: number | null;
   diametre_cm: number | null;
   hauteur_cm: number | null;
@@ -27,19 +29,36 @@ type ProduitExistant = {
   prix_manuel: number | null;
 };
 
+type AlerteHistorique = {
+  id: string;
+  message: string | null;
+  createdAt: string;
+  reponses: {
+    fournisseurId: string;
+    fournisseurNom: string;
+    disponible: boolean | null;
+    quantiteDisponible: number | null;
+  }[];
+};
+
 export function ProduitForm({
   produit,
   images = [],
   isSuperAdmin = false,
+  fournisseurs = [],
+  historiqueAlertes = [],
 }: {
   produit?: ProduitExistant;
   images?: { id: string; url: string; position: number }[];
   isSuperAdmin?: boolean;
+  fournisseurs?: { id: string; nom: string }[];
+  historiqueAlertes?: AlerteHistorique[];
 }) {
   const router = useRouter();
   const [photoUrl, setPhotoUrl] = useState<string | null>(produit?.photo_url ?? null);
   const [nom, setNom] = useState(produit?.nom ?? "");
   const [categorie, setCategorie] = useState(produit?.categorie ?? "");
+  const [fournisseurId, setFournisseurId] = useState(produit?.fournisseur_id ?? "");
   const [contenance, setContenance] = useState(String(produit?.contenance_litres ?? ""));
   const [diametre, setDiametre] = useState(String(produit?.diametre_cm ?? ""));
   const [hauteur, setHauteur] = useState(String(produit?.hauteur_cm ?? ""));
@@ -65,6 +84,7 @@ export function ProduitForm({
       nom,
       photo_url: photoUrl,
       categorie: categorie || null,
+      fournisseur_id: fournisseurId || null,
       contenance_litres: contenance ? Number(contenance) : null,
       diametre_cm: diametre ? Number(diametre) : null,
       hauteur_cm: hauteur ? Number(hauteur) : null,
@@ -133,9 +153,33 @@ export function ProduitForm({
         placeholder="Marmites, couvercles, accessoires..."
       />
 
+      {fournisseurs.length > 0 && (
+        <SelectField
+          label="Fournisseur assigné"
+          hint="optionnel"
+          value={fournisseurId}
+          onChange={(e) => setFournisseurId(e.target.value)}
+        >
+          <option value="">— À choisir à chaque commande —</option>
+          {fournisseurs.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.nom}
+            </option>
+          ))}
+        </SelectField>
+      )}
+
       <PhotoInput dossier="produits" onUploaded={setPhotoUrl} />
 
       {produit && <ProduitGalerie produitId={produit.id} images={images} />}
+
+      {produit && (
+        <AlerteDisponibilite
+          produitId={produit.id}
+          fournisseurs={fournisseurs}
+          historique={historiqueAlertes}
+        />
+      )}
 
       <p className="text-sm font-medium text-encre/80">Mesures de la marmite</p>
 

@@ -20,15 +20,21 @@ export function EnvoyerAvanceAction({
   prixTotal,
   pctAvance,
   fournisseurs,
+  fournisseurAssigneId = null,
 }: {
   commandeId: string;
   prixTotal: number;
   pctAvance: number;
   fournisseurs: Fournisseur[];
+  fournisseurAssigneId?: string | null;
 }) {
   const router = useRouter();
   const suggestion = useMemo(() => Math.round((prixTotal * pctAvance) / 100), [prixTotal, pctAvance]);
-  const [fournisseurId, setFournisseurId] = useState(fournisseurs[0]?.id ?? "");
+  const fournisseurParDefaut =
+    fournisseurAssigneId && fournisseurs.some((f) => f.id === fournisseurAssigneId)
+      ? fournisseurAssigneId
+      : (fournisseurs[0]?.id ?? "");
+  const [fournisseurId, setFournisseurId] = useState(fournisseurParDefaut);
   const [montant, setMontant] = useState(String(suggestion));
   const [moyen, setMoyen] = useState<MoyenPaiement>("cash");
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +75,12 @@ export function EnvoyerAvanceAction({
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-2xl bg-surface p-4">
       <p className="text-sm font-medium text-encre">Envoyer l&apos;avance au fournisseur</p>
 
-      <SelectField label="Fournisseur" value={fournisseurId} onChange={(e) => setFournisseurId(e.target.value)}>
+      <SelectField
+        label="Fournisseur"
+        hint={fournisseurAssigneId && fournisseurId === fournisseurAssigneId ? "assigné à ce produit" : undefined}
+        value={fournisseurId}
+        onChange={(e) => setFournisseurId(e.target.value)}
+      >
         {fournisseurs.map((f) => (
           <option key={f.id} value={f.id}>
             {f.nom}
