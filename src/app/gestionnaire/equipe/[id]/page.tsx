@@ -14,7 +14,11 @@ export default async function MembreDetailPage({
   const supabase = await createClient();
 
   const [{ data: membre }, { data: reglages }] = await Promise.all([
-    supabase.from("users").select("id, nom, telephone, ville, role, actif").eq("id", id).single(),
+    supabase
+      .from("users")
+      .select("id, nom, telephone, ville, quartier, adresse, role, actif")
+      .eq("id", id)
+      .single(),
     supabase.from("reglages").select("villes_actives").single(),
   ]);
 
@@ -28,6 +32,8 @@ export default async function MembreDetailPage({
         nomInitial={membre.nom}
         telephoneInitial={membre.telephone}
         villeInitial={membre.ville}
+        quartierInitial={membre.quartier}
+        adresseInitial={membre.adresse}
         role={membre.role}
         actifInitial={membre.actif}
         villes={reglages?.villes_actives ?? []}

@@ -51,6 +51,14 @@ export default async function CommandeDetailPage({
 
   const livreurAssigne = (livreurs ?? []).find((l) => l.id === commande.livreur_id);
 
+  const { data: fournisseurAssigne } = commande.fournisseur_id
+    ? await supabase
+        .from("users")
+        .select("nom, telephone, ville, quartier, adresse")
+        .eq("id", commande.fournisseur_id)
+        .single()
+    : { data: null };
+
   const messageClient = smsPourEtat(commande.etat, {
     clientNom: client?.nom ?? "client",
     produitNom: produit?.nom ?? "votre commande",
@@ -82,6 +90,15 @@ export default async function CommandeDetailPage({
         {commande.avance_payee && (
           <p className="text-sm text-encre/80">
             Avance fournisseur : {formatFcfa(commande.avance_montant)}
+          </p>
+        )}
+        {fournisseurAssigne && (
+          <p className="text-xs text-encre/65">
+            Fournisseur : {fournisseurAssigne.nom}
+            {" — "}
+            {[fournisseurAssigne.quartier, fournisseurAssigne.adresse, fournisseurAssigne.ville]
+              .filter(Boolean)
+              .join(", ") || "localisation non renseignée"}
           </p>
         )}
         {commande.etat === "en_livraison" && commande.code_livraison && (

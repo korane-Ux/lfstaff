@@ -13,6 +13,8 @@ export function ProfilForm({
   nomInitial,
   telephoneInitial,
   villeInitial,
+  quartierInitial,
+  adresseInitial,
   avatarUrlInitial,
   villes,
 }: {
@@ -20,6 +22,8 @@ export function ProfilForm({
   nomInitial: string;
   telephoneInitial: string | null;
   villeInitial: string | null;
+  quartierInitial: string | null;
+  adresseInitial: string | null;
   avatarUrlInitial: string | null;
   villes: string[];
 }) {
@@ -28,6 +32,8 @@ export function ProfilForm({
   const [nom, setNom] = useState(nomInitial);
   const [telephone, setTelephone] = useState(telephoneInitial ?? "");
   const [ville, setVille] = useState(villeInitial ?? "");
+  const [quartier, setQuartier] = useState(quartierInitial ?? "");
+  const [adresse, setAdresse] = useState(adresseInitial ?? "");
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,7 +50,14 @@ export function ProfilForm({
     const supabase = createClient();
     const { error: updateError } = await supabase
       .from("users")
-      .update({ nom, telephone: telephone || null, ville: ville || null, avatar_url: avatarUrl })
+      .update({
+        nom,
+        telephone: telephone || null,
+        ville: ville || null,
+        quartier: quartier || null,
+        adresse: adresse || null,
+        avatar_url: avatarUrl,
+      })
       .eq("id", userId);
 
     setLoading(false);
@@ -85,6 +98,15 @@ export function ProfilForm({
           ))}
         </SelectField>
       )}
+
+      <TextField
+        label="Quartier"
+        hint="ex. localisation de la boutique/atelier"
+        value={quartier}
+        onChange={(e) => setQuartier(e.target.value)}
+      />
+
+      <TextField label="Adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} />
 
       {error && <p role="alert" className="text-sm text-litige">{error}</p>}
       {saved && <p className="text-sm text-vert">Modifications enregistrées.</p>}

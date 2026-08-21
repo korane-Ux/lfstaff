@@ -21,6 +21,8 @@ export function MembreForm({
   nomInitial,
   telephoneInitial,
   villeInitial,
+  quartierInitial,
+  adresseInitial,
   role,
   actifInitial,
   villes,
@@ -29,6 +31,8 @@ export function MembreForm({
   nomInitial: string;
   telephoneInitial: string | null;
   villeInitial: string | null;
+  quartierInitial: string | null;
+  adresseInitial: string | null;
   role: AppRole;
   actifInitial: boolean;
   villes: string[];
@@ -37,6 +41,8 @@ export function MembreForm({
   const [nom, setNom] = useState(nomInitial);
   const [telephone, setTelephone] = useState(telephoneInitial ?? "");
   const [ville, setVille] = useState(villeInitial ?? villes[0] ?? "");
+  const [quartier, setQuartier] = useState(quartierInitial ?? "");
+  const [adresse, setAdresse] = useState(adresseInitial ?? "");
   const [actif, setActif] = useState(actifInitial);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,7 +58,13 @@ export function MembreForm({
     const supabase = createClient();
     const { error: updateError } = await supabase
       .from("users")
-      .update({ nom, telephone: telephone || null, ville: ville || null })
+      .update({
+        nom,
+        telephone: telephone || null,
+        ville: ville || null,
+        quartier: quartier || null,
+        adresse: adresse || null,
+      })
       .eq("id", userId);
 
     setLoading(false);
@@ -107,6 +119,18 @@ export function MembreForm({
           ))}
         </SelectField>
       )}
+
+      <TextField
+        label={role === "fournisseur" ? "Quartier de la boutique" : "Quartier"}
+        value={quartier}
+        onChange={(e) => setQuartier(e.target.value)}
+      />
+
+      <TextField
+        label={role === "fournisseur" ? "Adresse de la boutique" : "Adresse"}
+        value={adresse}
+        onChange={(e) => setAdresse(e.target.value)}
+      />
 
       {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 

@@ -61,6 +61,8 @@ export default async function ProfilPage() {
           nomInitial={profile.nom}
           telephoneInitial={profile.telephone}
           villeInitial={profile.ville}
+          quartierInitial={profile.quartier}
+          adresseInitial={profile.adresse}
           avatarUrlInitial={profile.avatar_url}
           villes={reglages?.villes_actives ?? []}
         />

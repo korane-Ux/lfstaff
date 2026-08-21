@@ -41,6 +41,8 @@ export type Database = {
           telephone: string | null;
           role: AppRole;
           ville: string | null;
+          quartier: string | null;
+          adresse: string | null;
           actif: boolean;
           avatar_url: string | null;
           created_at: string;
@@ -51,6 +53,8 @@ export type Database = {
           telephone?: string | null;
           role: AppRole;
           ville?: string | null;
+          quartier?: string | null;
+          adresse?: string | null;
           actif?: boolean;
           avatar_url?: string | null;
           created_at?: string;
@@ -61,6 +65,8 @@ export type Database = {
           telephone?: string | null;
           role?: AppRole;
           ville?: string | null;
+          quartier?: string | null;
+          adresse?: string | null;
           actif?: boolean;
           avatar_url?: string | null;
           created_at?: string;
