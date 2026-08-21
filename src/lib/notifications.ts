@@ -1,7 +1,7 @@
 import type { AppEtat } from "@/lib/supabase/types";
 import { formatFcfa } from "@/lib/etats";
 
-type ContexteEmail = {
+type ContexteNotification = {
   clientNom: string;
   produitNom: string;
   codeLivraison: string | null;
@@ -9,12 +9,12 @@ type ContexteEmail = {
   soldeMontant: number;
 };
 
-type Message = { objet: string; corps: string } | null;
+type MessageEmail = { objet: string; corps: string } | null;
 
-// Toutes les étapes ne méritent pas un email — "nouvelle" est l'instant de
-// la création elle-même (rien à annoncer), et le reste correspond à des
-// jalons que le client comprend sans jargon interne.
-export function messagePourEtat(etat: AppEtat, ctx: ContexteEmail): Message {
+// Toutes les étapes ne méritent pas une notification — "nouvelle" est
+// l'instant de la création elle-même (rien à annoncer), et le reste
+// correspond à des jalons que le client comprend sans jargon interne.
+export function messagePourEtat(etat: AppEtat, ctx: ContexteNotification): MessageEmail {
   const { clientNom, produitNom, codeLivraison, motif, soldeMontant } = ctx;
 
   switch (etat) {
@@ -64,6 +64,36 @@ export function messagePourEtat(etat: AppEtat, ctx: ContexteEmail): Message {
           motif ? ` : ${motif}` : ""
         }.\n\nLe Foyer`,
       };
+    default:
+      return null;
+  }
+}
+
+// Version courte pour SMS (facturé au segment de ~160 caractères chez la
+// plupart des opérateurs) : même contenu essentiel que l'email, sans les
+// formules de politesse.
+export function smsPourEtat(etat: AppEtat, ctx: ContexteNotification): string | null {
+  const { produitNom, codeLivraison, motif, soldeMontant } = ctx;
+
+  switch (etat) {
+    case "validee":
+      return `Le Foyer : acompte reçu, commande "${produitNom}" confirmée. Merci !`;
+    case "en_creation":
+      return `Le Foyer : votre commande "${produitNom}" est en fabrication.`;
+    case "expediee":
+      return `Le Foyer : votre commande "${produitNom}" a quitté l'atelier.`;
+    case "recue":
+      return `Le Foyer : votre commande "${produitNom}" est arrivée, bientôt livrée.`;
+    case "en_livraison":
+      return `Le Foyer : commande en route.${codeLivraison ? ` Code livraison : ${codeLivraison}.` : ""}${
+        soldeMontant > 0 ? ` Solde : ${formatFcfa(soldeMontant)}.` : ""
+      }`;
+    case "livree_validee":
+      return `Le Foyer : livraison confirmée, merci de votre confiance !`;
+    case "litige":
+      return `Le Foyer : un souci avec votre commande "${produitNom}"${motif ? ` (${motif})` : ""}, on vous recontacte vite.`;
+    case "annulee":
+      return `Le Foyer : commande "${produitNom}" annulée${motif ? ` (${motif})` : ""}.`;
     default:
       return null;
   }
