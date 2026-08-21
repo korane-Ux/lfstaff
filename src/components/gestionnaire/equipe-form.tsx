@@ -80,6 +80,8 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         type="tel"
         value={telephone}
         onChange={(e) => setTelephone(e.target.value)}
+        pattern="[0-9+ ]{6,20}"
+        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
       />
 
       <div className="flex flex-col gap-2">

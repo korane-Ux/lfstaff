@@ -90,6 +90,8 @@ export function MembreForm({
         type="tel"
         value={telephone}
         onChange={(e) => setTelephone(e.target.value)}
+        pattern="[0-9+ ]{6,20}"
+        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
       />
 
       {villes.length > 0 && (

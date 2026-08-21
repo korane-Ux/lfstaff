@@ -88,7 +88,14 @@ export function ClientForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
       <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <TextField label="Téléphone" value={telephone} onChange={(e) => setTelephone(e.target.value)} type="tel" />
+      <TextField
+        label="Téléphone"
+        value={telephone}
+        onChange={(e) => setTelephone(e.target.value)}
+        type="tel"
+        pattern="[0-9+ ]{6,20}"
+        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
+      />
 
       <TextField
         label="Email"
