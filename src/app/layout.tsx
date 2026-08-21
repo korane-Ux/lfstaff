@@ -26,6 +26,13 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "LFstaff",
   },
+  other: {
+    // Next.js n'émet plus que la balise non préfixée "mobile-web-app-capable" ;
+    // iOS Safari ignore celle-ci et a besoin de la balise préfixée "apple-"
+    // pour lancer l'app en plein écran (sans barre d'adresse) depuis l'écran
+    // d'accueil — sans elle, l'icône ajoutée rouvre un simple onglet Safari.
+    "apple-mobile-web-app-capable": "yes",
+  },
 };
 
 export const viewport: Viewport = {
