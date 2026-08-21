@@ -6,6 +6,12 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { TextField, SelectField, TextareaField } from "@/components/ui/field";
+import {
+  telephoneValide,
+  emailValide,
+  MESSAGE_TELEPHONE_INVALIDE,
+  MESSAGE_EMAIL_INVALIDE,
+} from "@/lib/validation";
 
 type ClientExistant = {
   id: string;
@@ -38,8 +44,12 @@ export function ClientForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const telephoneErreur = telephoneValide(telephone) ? undefined : MESSAGE_TELEPHONE_INVALIDE;
+  const emailErreur = emailValide(email) ? undefined : MESSAGE_EMAIL_INVALIDE;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (telephoneErreur || emailErreur) return;
     setLoading(true);
     setError(null);
 
@@ -94,7 +104,7 @@ export function ClientForm({
         onChange={(e) => setTelephone(e.target.value)}
         type="tel"
         pattern="[0-9+ ]{6,20}"
-        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
+        error={telephoneErreur}
       />
 
       <TextField
@@ -103,6 +113,7 @@ export function ClientForm({
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        error={emailErreur}
       />
 
       {villes.length > 0 && (
@@ -128,7 +139,7 @@ export function ClientForm({
 
       {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading || !!telephoneErreur || !!emailErreur}>
         {loading ? "Enregistrement..." : client ? "Enregistrer" : "Créer le client"}
       </Button>
 

@@ -5,6 +5,12 @@ import { useRouter } from "next/navigation";
 import type { AppRole } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { TextField, SelectField } from "@/components/ui/field";
+import {
+  telephoneValide,
+  emailValide,
+  MESSAGE_TELEPHONE_INVALIDE,
+  MESSAGE_EMAIL_INVALIDE,
+} from "@/lib/validation";
 
 const ROLES: { value: AppRole; label: string }[] = [
   { value: "gestionnaire", label: "Gestionnaire" },
@@ -23,8 +29,12 @@ export function EquipeForm({ villes }: { villes: string[] }) {
   const [loading, setLoading] = useState(false);
   const [cree, setCree] = useState<{ email: string; motDePasse: string } | null>(null);
 
+  const telephoneErreur = telephoneValide(telephone) ? undefined : MESSAGE_TELEPHONE_INVALIDE;
+  const emailErreur = emailValide(email) ? undefined : MESSAGE_EMAIL_INVALIDE;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (telephoneErreur || emailErreur) return;
     setLoading(true);
     setError(null);
 
@@ -73,6 +83,7 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        error={emailErreur}
       />
 
       <TextField
@@ -81,7 +92,7 @@ export function EquipeForm({ villes }: { villes: string[] }) {
         value={telephone}
         onChange={(e) => setTelephone(e.target.value)}
         pattern="[0-9+ ]{6,20}"
-        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
+        error={telephoneErreur}
       />
 
       <div className="flex flex-col gap-2">
@@ -113,7 +124,7 @@ export function EquipeForm({ villes }: { villes: string[] }) {
 
       {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading || !!telephoneErreur || !!emailErreur}>
         {loading ? "Création..." : "Créer le compte"}
       </Button>
     </form>

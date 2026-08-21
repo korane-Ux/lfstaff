@@ -7,6 +7,7 @@ import type { AppRole } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { TextField, SelectField } from "@/components/ui/field";
+import { telephoneValide, MESSAGE_TELEPHONE_INVALIDE } from "@/lib/validation";
 
 const ROLE_LABELS: Record<AppRole, string> = {
   super_admin: "Super-admin",
@@ -40,8 +41,11 @@ export function MembreForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const telephoneErreur = telephoneValide(telephone) ? undefined : MESSAGE_TELEPHONE_INVALIDE;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (telephoneErreur) return;
     setLoading(true);
     setError(null);
 
@@ -91,7 +95,7 @@ export function MembreForm({
         value={telephone}
         onChange={(e) => setTelephone(e.target.value)}
         pattern="[0-9+ ]{6,20}"
-        title="Chiffres uniquement (+ et espaces acceptés) — nécessaire pour WhatsApp/SMS/appel"
+        error={telephoneErreur}
       />
 
       {villes.length > 0 && (
@@ -106,7 +110,7 @@ export function MembreForm({
 
       {error && <p role="alert" className="text-sm text-litige">{error}</p>}
 
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading || !!telephoneErreur}>
         {loading ? "Enregistrement..." : "Enregistrer"}
       </Button>
 
