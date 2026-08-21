@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
 import { TextField, SelectField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 export function PretAction({
   commandeId,
@@ -60,6 +61,7 @@ export function PretAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.replace("/fournisseur");
     router.refresh();
   }

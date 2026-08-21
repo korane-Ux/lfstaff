@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { TextareaField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 export function AnnulerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -31,6 +32,7 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
       .eq("id", commandeId);
 
     if (updateError) throw updateError;
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

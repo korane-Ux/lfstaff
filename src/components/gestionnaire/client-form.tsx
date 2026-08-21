@@ -11,6 +11,7 @@ type ClientExistant = {
   id: string;
   nom: string;
   telephone: string | null;
+  email: string | null;
   ville: string | null;
   quartier: string | null;
   adresse: string | null;
@@ -29,6 +30,7 @@ export function ClientForm({
   const router = useRouter();
   const [nom, setNom] = useState(client?.nom ?? "");
   const [telephone, setTelephone] = useState(client?.telephone ?? "");
+  const [email, setEmail] = useState(client?.email ?? "");
   const [ville, setVille] = useState(client?.ville ?? villes[0] ?? "");
   const [quartier, setQuartier] = useState(client?.quartier ?? "");
   const [adresse, setAdresse] = useState(client?.adresse ?? "");
@@ -44,6 +46,7 @@ export function ClientForm({
     const payload = {
       nom,
       telephone: telephone || null,
+      email: email || null,
       ville: ville || null,
       quartier: quartier || null,
       adresse: adresse || null,
@@ -86,6 +89,14 @@ export function ClientForm({
       <TextField label="Nom" required value={nom} onChange={(e) => setNom(e.target.value)} />
 
       <TextField label="Téléphone" value={telephone} onChange={(e) => setTelephone(e.target.value)} type="tel" />
+
+      <TextField
+        label="Email"
+        hint="pour le suivi de commande"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
       {villes.length > 0 && (
         <SelectField label="Ville" value={ville} onChange={(e) => setVille(e.target.value)}>

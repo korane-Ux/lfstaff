@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextareaField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 type Livreur = { id: string; nom: string };
 
@@ -40,6 +41,7 @@ export function ControleQualiteAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 
@@ -61,6 +63,7 @@ export function ControleQualiteAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

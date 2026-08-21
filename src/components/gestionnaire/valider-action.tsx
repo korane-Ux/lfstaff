@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -45,6 +46,7 @@ export function ValiderAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

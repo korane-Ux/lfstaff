@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { TextField, SelectField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 type Fournisseur = { id: string; nom: string };
 
@@ -68,6 +69,7 @@ export function EnvoyerAvanceAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

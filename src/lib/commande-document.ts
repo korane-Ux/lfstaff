@@ -16,7 +16,7 @@ export async function fetchCommandePourDocument(
   const [{ data: client }, { data: produit }] = await Promise.all([
     supabase
       .from("clients")
-      .select("nom, telephone, ville, quartier, adresse")
+      .select("nom, telephone, email, ville, quartier, adresse")
       .eq("id", commande.client_id)
       .single(),
     supabase.from("produits").select("nom").eq("id", commande.produit_id).single(),

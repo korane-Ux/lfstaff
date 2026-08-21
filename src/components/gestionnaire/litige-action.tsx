@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 export function LitigeAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -27,6 +28,7 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 
@@ -53,6 +55,7 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

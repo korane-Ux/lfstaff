@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 type Ligne = {
   id: string;
@@ -61,6 +62,7 @@ export function GrouperLivreurForm({
       return;
     }
 
+    selection.forEach(notifierClientCommande);
     router.replace("/gestionnaire/commandes");
     router.refresh();
   }

@@ -15,7 +15,7 @@ export default async function ClientDetailPage({
   const [{ data: client }, { data: reglages }] = await Promise.all([
     supabase
       .from("clients")
-      .select("id, nom, telephone, ville, quartier, adresse, notes")
+      .select("id, nom, telephone, email, ville, quartier, adresse, notes")
       .eq("id", id)
       .single(),
     supabase.from("reglages").select("villes_actives").single(),

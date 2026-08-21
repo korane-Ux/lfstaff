@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 export function ReceptionAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
@@ -26,6 +27,7 @@ export function ReceptionAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

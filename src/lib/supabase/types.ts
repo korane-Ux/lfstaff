@@ -72,6 +72,7 @@ export type Database = {
           id: string;
           nom: string;
           telephone: string | null;
+          email: string | null;
           ville: string | null;
           quartier: string | null;
           adresse: string | null;
@@ -82,6 +83,7 @@ export type Database = {
           id?: string;
           nom: string;
           telephone?: string | null;
+          email?: string | null;
           ville?: string | null;
           quartier?: string | null;
           adresse?: string | null;
@@ -92,6 +94,7 @@ export type Database = {
           id?: string;
           nom?: string;
           telephone?: string | null;
+          email?: string | null;
           ville?: string | null;
           quartier?: string | null;
           adresse?: string | null;

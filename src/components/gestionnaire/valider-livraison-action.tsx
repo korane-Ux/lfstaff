@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
 import { Button } from "@/components/ui/button";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 export function ValiderLivraisonAction({
   commandeId,
@@ -40,6 +41,7 @@ export function ValiderLivraisonAction({
       return;
     }
 
+    notifierClientCommande(commandeId);
     router.refresh();
   }
 

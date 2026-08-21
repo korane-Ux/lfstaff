@@ -8,6 +8,7 @@ import { formatFcfa } from "@/lib/etats";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/field";
+import { notifierClientCommande } from "@/lib/notify-client";
 
 type Ligne = {
   id: string;
@@ -83,6 +84,7 @@ export function GrouperFournisseurForm({
       return;
     }
 
+    selection.forEach(notifierClientCommande);
     router.replace("/gestionnaire/commandes");
     router.refresh();
   }
