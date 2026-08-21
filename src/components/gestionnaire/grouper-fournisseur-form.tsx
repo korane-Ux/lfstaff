@@ -83,7 +83,7 @@ export function GrouperFournisseurForm({
       return;
     }
 
-    router.replace("/gestionnaire");
+    router.replace("/gestionnaire/commandes");
     router.refresh();
   }
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { ThemeQuickToggle } from "@/components/layout/theme-quick-toggle";
 import type { AppRole } from "@/lib/supabase/types";
 
 const ROLE_LABELS: Record<AppRole, string> = {
@@ -34,7 +35,10 @@ export function RoleHeader({
           <p className="text-xs text-encre/65">{ROLE_LABELS[role]}</p>
         </div>
       </Link>
-      <SignOutButton />
+      <div className="flex items-center gap-2">
+        <ThemeQuickToggle />
+        <SignOutButton />
+      </div>
     </header>
   );
 }

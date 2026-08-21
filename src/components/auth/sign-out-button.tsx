@@ -16,7 +16,7 @@ export function SignOutButton() {
   return (
     <button
       onClick={handleSignOut}
-      className="mt-2 text-sm text-encre/65 underline underline-offset-2"
+      className="text-sm text-encre/65 underline underline-offset-2"
     >
       Se déconnecter
     </button>

@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
-import { SelectField, TextareaField } from "@/components/ui/field";
+import { SelectField, TextField, TextareaField } from "@/components/ui/field";
 
 type Client = { id: string; nom: string };
 type Produit = {
@@ -34,6 +34,7 @@ export function CommandeForm({
   const [clientId, setClientId] = useState(clients[0]?.id ?? "");
   const [panier, setPanier] = useState<Record<string, number>>({});
   const [filtreCategorie, setFiltreCategorie] = useState<string | null>(null);
+  const [recherche, setRecherche] = useState("");
   const [villeLivraison, setVilleLivraison] = useState(villes[0] ?? "");
   const [specs, setSpecs] = useState("");
   const [photoRef, setPhotoRef] = useState<string | null>(null);
@@ -45,9 +46,10 @@ export function CommandeForm({
     [produits],
   );
 
-  const produitsAffiches = filtreCategorie
-    ? produits.filter((p) => p.categorie === filtreCategorie)
-    : produits;
+  const rechercheNormalisee = recherche.trim().toLowerCase();
+  const produitsAffiches = produits
+    .filter((p) => !filtreCategorie || p.categorie === filtreCategorie)
+    .filter((p) => !rechercheNormalisee || p.nom.toLowerCase().includes(rechercheNormalisee));
 
   const lignesPanier = Object.entries(panier)
     .filter(([, qte]) => qte > 0)
@@ -99,7 +101,7 @@ export function CommandeForm({
       return;
     }
 
-    router.replace("/gestionnaire");
+    router.replace("/gestionnaire/commandes");
     router.refresh();
   }
 
@@ -139,6 +141,13 @@ export function CommandeForm({
         </SelectField>
       </div>
 
+      <TextField
+        label="Rechercher"
+        value={recherche}
+        onChange={(e) => setRecherche(e.target.value)}
+        placeholder="Nom du produit..."
+      />
+
       {categories.length > 1 && (
         <div className="flex flex-wrap gap-2">
           <Button
@@ -161,6 +170,12 @@ export function CommandeForm({
             </Button>
           ))}
         </div>
+      )}
+
+      {!produitsAffiches.length && (
+        <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
+          Aucun produit ne correspond.
+        </p>
       )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

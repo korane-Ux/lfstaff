@@ -17,7 +17,13 @@ export default async function GestionnaireLayout({
           href="/gestionnaire"
           className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
         >
-          Tableau de bord
+          Catalogue
+        </Link>
+        <Link
+          href="/gestionnaire/commandes"
+          className="shrink-0 rounded-none px-3 py-1.5 text-encre/80 hover:bg-surface"
+        >
+          Commandes
         </Link>
         <Link
           href="/gestionnaire/produits"
@@ -63,12 +69,6 @@ export default async function GestionnaireLayout({
             Équipe
           </Link>
         )}
-        <Link
-          href="/gestionnaire/commandes/nouvelle"
-          className="shrink-0 rounded-none bg-braise px-3 py-1.5 font-medium text-accent-fg"
-        >
-          + Nouvelle commande
-        </Link>
       </nav>
       <div className="flex flex-1 flex-col">{children}</div>
     </div>

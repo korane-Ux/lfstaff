@@ -2,36 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
-
-type Theme = "light" | "dark" | "system";
-
-const STORAGE_KEY = "lfstaff-theme";
-const listeners = new Set<() => void>();
-
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-
-function getSnapshot(): Theme {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored === "light" || stored === "dark" ? stored : "system";
-}
-
-function getServerSnapshot(): Theme {
-  return "system";
-}
-
-function definirTheme(theme: Theme) {
-  if (theme === "system") {
-    localStorage.removeItem(STORAGE_KEY);
-    document.documentElement.removeAttribute("data-theme");
-  } else {
-    localStorage.setItem(STORAGE_KEY, theme);
-    document.documentElement.setAttribute("data-theme", theme);
-  }
-  listeners.forEach((listener) => listener());
-}
+import {
+  definirTheme,
+  getThemeServerSnapshot,
+  getThemeSnapshot,
+  subscribeTheme,
+  type Theme,
+} from "@/lib/theme-store";
 
 const OPTIONS: { value: Theme; label: string }[] = [
   { value: "light", label: "Clair" },
@@ -40,7 +17,7 @@ const OPTIONS: { value: Theme; label: string }[] = [
 ];
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const theme = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getThemeServerSnapshot);
 
   return (
     <div className="flex flex-col gap-2 rounded-3xl bg-surface p-5">
