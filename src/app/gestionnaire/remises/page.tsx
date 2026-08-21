@@ -1,15 +1,21 @@
 import { createClient } from "@/lib/supabase/server";
 import { formatFcfa } from "@/lib/etats";
+import { idsVisibles } from "@/lib/zone";
 import { RecevoirCashAction } from "@/components/gestionnaire/recevoir-cash-action";
 
 export default async function RemisesPage() {
   const supabase = await createClient();
 
-  const { data: soldes } = await supabase
-    .from("v_solde_livreur")
-    .select("livreur_id, net_a_remettre")
-    .gt("net_a_remettre", 0)
-    .order("net_a_remettre", { ascending: false });
+  const livreurIdsZone = await idsVisibles(supabase, "livreur");
+
+  const { data: soldes } = livreurIdsZone.length
+    ? await supabase
+        .from("v_solde_livreur")
+        .select("livreur_id, net_a_remettre")
+        .in("livreur_id", livreurIdsZone)
+        .gt("net_a_remettre", 0)
+        .order("net_a_remettre", { ascending: false })
+    : { data: [] };
 
   const livreurIds = (soldes ?? []).map((s) => s.livreur_id);
   const { data: livreurs } = livreurIds.length

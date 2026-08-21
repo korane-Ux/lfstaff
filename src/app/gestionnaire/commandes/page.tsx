@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/supabase/auth";
 import { ETAT_ORDER, ETAT_META, formatFcfa } from "@/lib/etats";
 import type { AppEtat } from "@/lib/supabase/types";
 import { LinkButton } from "@/components/ui/link-button";
 
 export default async function GestionnaireCommandesPage() {
+  const profile = await getCurrentProfile();
   const supabase = await createClient();
 
   const [{ data: commandes }, { data: clients }, { data: produits }] = await Promise.all([
@@ -34,7 +36,12 @@ export default async function GestionnaireCommandesPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
-      <h1 className="font-display text-2xl text-encre">Commandes</h1>
+      <div>
+        <h1 className="font-display text-2xl text-encre">Commandes</h1>
+        <p className="text-xs text-encre/65">
+          {profile.role === "super_admin" ? "Toutes zones" : profile.ville ?? "Ta zone"}
+        </p>
+      </div>
 
       {!!commandes?.length && (
         <div className="grid grid-cols-3 gap-2">

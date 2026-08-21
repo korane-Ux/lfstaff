@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/supabase/auth";
 import { formatFcfa } from "@/lib/etats";
 import { calculerBilanPeriode } from "@/lib/bilans";
+import { idsVisibles } from "@/lib/zone";
 import { PERIODE_LABELS, PERIODE_ORDER, type PeriodeKey } from "@/lib/periode";
 import { LinkButton } from "@/components/ui/link-button";
 
@@ -16,12 +18,22 @@ export default async function BilansPage({
   const { periode: periodeParam } = await searchParams;
   const periode: PeriodeKey = estPeriodeKey(periodeParam) ? periodeParam : "semaine";
 
+  const profile = await getCurrentProfile();
   const supabase = await createClient();
+
+  const [fournisseurIds, livreurIds] = await Promise.all([
+    idsVisibles(supabase, "fournisseur"),
+    idsVisibles(supabase, "livreur"),
+  ]);
 
   const [bilan, { data: soldesFournisseurs }, { data: soldesLivreurs }] = await Promise.all([
     calculerBilanPeriode(supabase, periode),
-    supabase.from("v_solde_fournisseur").select("fournisseur_id, total_recu"),
-    supabase.from("v_solde_livreur").select("livreur_id, net_a_remettre"),
+    fournisseurIds.length
+      ? supabase.from("v_solde_fournisseur").select("fournisseur_id, total_recu").in("fournisseur_id", fournisseurIds)
+      : Promise.resolve({ data: [] }),
+    livreurIds.length
+      ? supabase.from("v_solde_livreur").select("livreur_id, net_a_remettre").in("livreur_id", livreurIds)
+      : Promise.resolve({ data: [] }),
   ]);
 
   const fournisseursAvecSolde = (soldesFournisseurs ?? []).filter((s) => s.total_recu > 0);
@@ -41,7 +53,12 @@ export default async function BilansPage({
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl text-encre">Bilans</h1>
+        <div>
+          <h1 className="font-display text-2xl text-encre">Bilans</h1>
+          <p className="text-xs text-encre/65">
+            {profile.role === "super_admin" ? "Toutes zones" : profile.ville ?? "Ta zone"}
+          </p>
+        </div>
         <a
           href={`/gestionnaire/bilans/rapport?periode=${periode}`}
           className="rounded-none bg-braise px-4 py-2 text-sm font-medium text-accent-fg"

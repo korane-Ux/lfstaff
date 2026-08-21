@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/supabase/auth";
 import { LinkButton } from "@/components/ui/link-button";
 
 export default async function ClientsPage() {
+  const profile = await getCurrentProfile();
   const supabase = await createClient();
   const { data: clients } = await supabase
     .from("clients")
@@ -12,7 +14,12 @@ export default async function ClientsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 px-4 py-4">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl text-encre">Clients</h1>
+        <div>
+          <h1 className="font-display text-2xl text-encre">Clients</h1>
+          <p className="text-xs text-encre/65">
+            {profile.role === "super_admin" ? "Toutes zones" : profile.ville ?? "Ta zone"}
+          </p>
+        </div>
         <LinkButton href="/gestionnaire/clients/nouveau">+ Nouveau</LinkButton>
       </div>
 
