@@ -98,3 +98,17 @@ export function smsPourEtat(etat: AppEtat, ctx: ContexteNotification): string | 
       return null;
   }
 }
+
+// Le livreur n'a qu'un seul jalon qui le concerne : le moment où une
+// livraison lui est assignée (passage en_livraison + livreur_id posé). Pas
+// de fiche par état comme le client, juste ce déclenchement précis.
+export function smsPourLivreurAssigne(ctx: {
+  clientNom: string;
+  produitNom: string;
+  ville: string | null;
+}): string {
+  const { clientNom, produitNom, ville } = ctx;
+  return `Le Foyer : nouvelle livraison assignée — "${produitNom}" pour ${clientNom}${
+    ville ? ` à ${ville}` : ""
+  }. Détails dans l'appli.`;
+}

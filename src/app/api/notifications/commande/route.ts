@@ -4,15 +4,33 @@ import twilio from "twilio";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fetchCommandePourDocument } from "@/lib/commande-document";
-import { messagePourEtat, smsPourEtat } from "@/lib/notifications";
+import { messagePourEtat, smsPourEtat, smsPourLivreurAssigne } from "@/lib/notifications";
 import { numeroInternational } from "@/lib/contact";
 
+async function envoyerSms(telephone: string, texte: string): Promise<string> {
+  const sid = process.env.TWILIO_ACCOUNT_SID;
+  const token = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_FROM_NUMBER;
+  if (!sid || !token || !from) return "non configuré";
+
+  try {
+    await twilio(sid, token).messages.create({
+      from,
+      to: `+${numeroInternational(telephone)}`,
+      body: texte,
+    });
+    return "envoyé";
+  } catch (err) {
+    return `erreur : ${err instanceof Error ? err.message : "inconnue"}`;
+  }
+}
+
 // Appelé (sans bloquer l'action principale) juste après qu'une commande
-// change d'état, pour prévenir le client par email et/ou SMS. Les deux
-// canaux sont indépendants : chacun se tait silencieusement s'il n'est pas
-// configuré (pas d'erreur bruyante avant que l'utilisateur ait créé ses
-// comptes Resend/Twilio) ou si le client n'a pas l'information de contact
-// correspondante.
+// change d'état, pour prévenir le client (email + SMS) et, si elle vient
+// d'être assignée, le livreur (SMS). Chaque canal se tait silencieusement
+// s'il n'est pas configuré ou si la personne n'a pas l'info de contact
+// correspondante — jamais d'erreur bruyante avant que Resend/Twilio soient
+// branchés.
 export async function POST(request: Request) {
   await requireRole(["super_admin", "gestionnaire", "fournisseur"]);
 
@@ -58,28 +76,29 @@ export async function POST(request: Request) {
     }
   }
 
-  const twilioSid = process.env.TWILIO_ACCOUNT_SID;
-  const twilioToken = process.env.TWILIO_AUTH_TOKEN;
-  const twilioFrom = process.env.TWILIO_FROM_NUMBER;
-  if (!twilioSid || !twilioToken || !twilioFrom) {
-    resultats.sms = "non configuré";
-  } else if (!donnees.client?.telephone) {
+  if (!donnees.client?.telephone) {
     resultats.sms = "pas de téléphone client";
   } else {
     const texte = smsPourEtat(donnees.commande.etat, ctx);
-    if (!texte) {
-      resultats.sms = "pas de message pour cet état";
+    resultats.sms = texte ? await envoyerSms(donnees.client.telephone, texte) : "pas de message pour cet état";
+  }
+
+  if (donnees.commande.etat === "en_livraison" && donnees.commande.livreur_id) {
+    const { data: livreur } = await supabase
+      .from("users")
+      .select("nom, telephone")
+      .eq("id", donnees.commande.livreur_id)
+      .single();
+
+    if (!livreur?.telephone) {
+      resultats.smsLivreur = "pas de téléphone livreur";
     } else {
-      try {
-        await twilio(twilioSid, twilioToken).messages.create({
-          from: twilioFrom,
-          to: `+${numeroInternational(donnees.client.telephone)}`,
-          body: texte,
-        });
-        resultats.sms = "envoyé";
-      } catch (err) {
-        resultats.sms = `erreur : ${err instanceof Error ? err.message : "inconnue"}`;
-      }
+      const texte = smsPourLivreurAssigne({
+        clientNom: ctx.clientNom,
+        produitNom: ctx.produitNom,
+        ville: donnees.commande.ville_livraison,
+      });
+      resultats.smsLivreur = await envoyerSms(livreur.telephone, texte);
     }
   }
 
