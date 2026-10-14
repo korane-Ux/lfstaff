@@ -1,4 +1,5 @@
-const CACHE_NAME = "lfstaff-shell-v1";
+// v2 : purge les caches v1 qui ont pu stocker des réponses en erreur
+const CACHE_NAME = "lfstaff-shell-v2";
 const OFFLINE_URL = "/offline";
 const PRECACHE_URLS = ["/", OFFLINE_URL, "/manifest.webmanifest"];
 
@@ -39,8 +40,12 @@ self.addEventListener("fetch", (event) => {
       caches.match(request).then((cached) => {
         if (cached) return cached;
         return fetch(request).then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          // Ne jamais figer une erreur (404/500 pendant un déploiement ou une
+          // compilation) : elle serait resservie indéfiniment, page sans CSS.
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
           return response;
         });
       }),

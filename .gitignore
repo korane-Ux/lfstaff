@@ -43,3 +43,10 @@ supabase/.temp
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sauvegardes Supabase et migration (données clients, mots de passe chiffrés)
+*.backup.gz
+*.storage.zip
+migration-supabase/restore.sql
+migration-supabase/storage/
+migration-supabase/env.local.ancien
