@@ -40,8 +40,12 @@ export async function updateSession(request: NextRequest) {
   }
 
   const isLoginRoute = request.nextUrl.pathname.startsWith("/login");
+  // /auth/callback doit rester accessible sans session : c'est justement là
+  // qu'on échange le lien e-mail contre une session. Sans cette exemption,
+  // le proxy renverrait vers /login avant l'échange et perdrait le code.
+  const isPublicRoute = isLoginRoute || request.nextUrl.pathname.startsWith("/auth");
 
-  if (!user && !isLoginRoute) {
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
