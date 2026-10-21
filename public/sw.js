@@ -1,5 +1,6 @@
 // v2 : purge les caches v1 qui ont pu stocker des réponses en erreur
-const CACHE_NAME = "lfstaff-shell-v2";
+// v3 : purge les anciennes icônes (avec fond) mises en cache sous /icons/
+const CACHE_NAME = "lfstaff-shell-v3";
 const OFFLINE_URL = "/offline";
 const PRECACHE_URLS = ["/", OFFLINE_URL, "/manifest.webmanifest"];
 

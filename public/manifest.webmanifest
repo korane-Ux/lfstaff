@@ -10,11 +10,20 @@
   "theme_color": "#B23A1C",
   "lang": "fr",
   "dir": "ltr",
-  "categories": ["business", "productivity"],
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/icons/flamme-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/flamme-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
@@ -23,12 +32,6 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
     },
     {
       "src": "/icons/icon-512.png",

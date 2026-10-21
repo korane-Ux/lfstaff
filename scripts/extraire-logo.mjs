@@ -53,10 +53,43 @@ const zone = {
 const rgba = Buffer.alloc(l * h * 4, 255);
 for (let i = 0; i < l * h; i++) rgba[i * 4 + 3] = alpha[i];
 
-await sharp(rgba, { raw: { width: l, height: h, channels: 4 } })
-  .extract(zone)
-  .resize({ height: 256 })
-  .png()
-  .toFile(sortie);
+const masque = await sharp(rgba, { raw: { width: l, height: h, channels: 4 } }).extract(zone).png().toBuffer();
 
+await sharp(masque).resize({ height: 256 }).png().toFile(sortie);
 console.log(`logo-marque.png : zone ${zone.width}x${zone.height} depuis (${zone.left},${zone.top})`);
+
+// ─── Icônes d'application sans fond ──────────────────────────────────────
+// Barre des tâches, barre de titre de l'app installée, onglet du
+// navigateur : la flamme seule, en dégradé braise → orange (le dégradé du
+// fond d'origine). Une teinte unie braise serait trop sombre sur une barre
+// des tâches en mode sombre ; le bas orangé reste lisible sur les deux.
+const degrade = Buffer.from(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${zone.width}" height="${zone.height}">
+     <defs><linearGradient id="g" x1="0" y1="0" x2="0.35" y2="1">
+       <stop offset="0" stop-color="#b23a1c"/><stop offset="1" stop-color="#e07b2d"/>
+     </linearGradient></defs>
+     <rect width="100%" height="100%" fill="url(#g)"/>
+   </svg>`,
+);
+const flamme = await sharp(degrade).composite([{ input: masque, blend: "dest-in" }]).png().toBuffer();
+
+// La flamme occupe ~90 % de la hauteur, centrée sur un carré transparent.
+async function icone(taille, fichier) {
+  const hauteur = Math.round(taille * 0.9);
+  const dessin = await sharp(flamme).resize({ height: hauteur }).png().toBuffer();
+  const { width: largeur } = await sharp(dessin).metadata();
+  await sharp({ create: { width: taille, height: taille, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: dessin, left: Math.round((taille - largeur) / 2), top: Math.round((taille - hauteur) / 2) }])
+    .png()
+    .toFile(fichier);
+  console.log(path.relative(racine, fichier));
+}
+
+// Noms nouveaux (flamme-*) plutôt que d'écraser icon-* : navigateurs et
+// systèmes gardent les icônes en cache très longtemps, un nouveau nom force
+// le rechargement. Les icon-* (avec fond) restent pour l'usage « maskable »
+// d'Android, qui découpe l'icône en rond et exige un fond plein.
+await icone(192, path.join(racine, "public", "icons", "flamme-192.png"));
+await icone(512, path.join(racine, "public", "icons", "flamme-512.png"));
+// Onglet du navigateur (fichier repris automatiquement par Next.js).
+await icone(96, path.join(racine, "src", "app", "icon.png"));
