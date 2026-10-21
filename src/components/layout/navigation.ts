@@ -12,6 +12,7 @@ import {
   MopedIcon,
   PackageIcon,
   PlusCircleIcon,
+  QuestionIcon,
   UserCircleIcon,
   UsersThreeIcon,
   WalletIcon,
@@ -59,12 +60,14 @@ const GESTIONNAIRE: NavItem[] = [
     superAdminSeulement: true,
   },
   { href: "/gestionnaire/reglages", label: "Réglages", icone: GearSixIcon },
+  { href: "/aide", label: "Aide & FAQ", icone: QuestionIcon },
 ];
 
 const LIVREUR: NavItem[] = [
   { href: "/livreur", label: "À livrer", icone: MopedIcon, exact: true, barreMobile: true },
   { href: "/livreur/portefeuille", label: "Portefeuille", icone: WalletIcon, barreMobile: true },
   { href: "/profil", label: "Mon profil", labelCourt: "Profil", icone: UserCircleIcon, barreMobile: true },
+  { href: "/aide", label: "Aide & FAQ", labelCourt: "Aide", icone: QuestionIcon, barreMobile: true },
 ];
 
 const FOURNISSEUR: NavItem[] = [
@@ -83,6 +86,7 @@ const FOURNISSEUR: NavItem[] = [
     barreMobile: true,
   },
   { href: "/fournisseur/portefeuille", label: "Portefeuille", icone: WalletIcon, barreMobile: true },
+  { href: "/aide", label: "Aide & FAQ", labelCourt: "Aide", icone: QuestionIcon, barreMobile: true },
 ];
 
 export function navigationPour(role: AppRole): NavItem[] {
