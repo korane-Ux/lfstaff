@@ -7,6 +7,8 @@ import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { TextField, SelectField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { FireIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react";
 
 type Fournisseur = { id: string; nom: string };
 
@@ -30,6 +32,7 @@ export function EnvoyerAvanceAction({
   fournisseurAssigneId?: string | null;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const suggestion = useMemo(() => Math.round((prixTotal * pctAvance) / 100), [prixTotal, pctAvance]);
   const fournisseurParDefaut =
     fournisseurAssigneId && fournisseurs.some((f) => f.id === fournisseurAssigneId)
@@ -69,6 +72,14 @@ export function EnvoyerAvanceAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Avance envoyée",
+      message: "Le fournisseur peut lancer la fonte. Vous suivrez l'expédition dans la coulée.",
+      suite: [
+        { label: "Voir la coulée", href: "/gestionnaire", icone: FireIcon },
+        { label: "Autres avances à envoyer", href: "/gestionnaire/commandes#etat-validee", icone: PaperPlaneTiltIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

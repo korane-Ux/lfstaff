@@ -12,6 +12,8 @@ import {
   MESSAGE_TELEPHONE_INVALIDE,
   MESSAGE_EMAIL_INVALIDE,
 } from "@/lib/validation";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { PlusCircleIcon, UserIcon } from "@phosphor-icons/react";
 
 type ClientExistant = {
   id: string;
@@ -34,6 +36,7 @@ export function ClientForm({
   isSuperAdmin?: boolean;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [nom, setNom] = useState(client?.nom ?? "");
   const [telephone, setTelephone] = useState(client?.telephone ?? "");
   const [email, setEmail] = useState(client?.email ?? "");
@@ -64,9 +67,9 @@ export function ClientForm({
     };
 
     const supabase = createClient();
-    const { error: saveError } = client
-      ? await supabase.from("clients").update(payload).eq("id", client.id)
-      : await supabase.from("clients").insert(payload);
+    const { data: enregistre, error: saveError } = client
+      ? await supabase.from("clients").update(payload).eq("id", client.id).select("id").single()
+      : await supabase.from("clients").insert(payload).select("id").single();
 
     setLoading(false);
 
@@ -75,6 +78,20 @@ export function ClientForm({
       return;
     }
 
+    feedback.succes(
+      client
+        ? { titre: "Fiche client mise à jour" }
+        : {
+            titre: "Client ajouté",
+            message: "Vous pouvez lui faire une vente tout de suite.",
+            suite: enregistre
+              ? [
+                  { label: "Lui faire une vente", href: `/gestionnaire/nouvelle-commande?client=${enregistre.id}`, icone: PlusCircleIcon },
+                  { label: "Voir sa fiche", href: `/gestionnaire/clients/${enregistre.id}`, icone: UserIcon },
+                ]
+              : undefined,
+          },
+    );
     router.replace("/gestionnaire/clients");
     router.refresh();
   }
@@ -90,6 +107,9 @@ export function ClientForm({
           : deleteError.message,
       );
     }
+    feedback.succes({
+      titre: "Client supprimé",
+    });
     router.replace("/gestionnaire/clients");
     router.refresh();
   }

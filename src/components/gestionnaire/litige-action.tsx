@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function LitigeAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<"renvoyer" | "annuler" | null>(null);
 
@@ -28,6 +30,10 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    feedback.succes({
+      titre: "Renvoyée au fournisseur",
+      message: "La commande repart en fonte.",
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }
@@ -55,6 +61,9 @@ export function LitigeAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    feedback.succes({
+      titre: "Commande annulée",
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

@@ -1,19 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Fraunces } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { OfflineBanner } from "@/components/pwa/offline-banner";
 import { InstallBanner } from "@/components/pwa/install-banner";
+import { Providers } from "@/components/providers";
+import { PREFERENCES_INIT_SCRIPT } from "@/lib/preferences-store";
 import "./globals.css";
 
+// Titres : Fraunces, la voix de la marque (chaleureuse, artisanale).
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   axes: ["opsz", "SOFT", "WONK"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+// Texte courant : Atkinson Hyperlegible, dessinée par le Braille Institute
+// pour les personnes malvoyantes — chaque lettre se distingue des autres
+// (I/l/1, O/0, rn/m…), ce qui sert tout le monde, y compris en plein
+// soleil sur un écran de téléphone.
+const atkinson = Atkinson_Hyperlegible_Next({
+  variable: "--font-atkinson",
+  subsets: ["latin", "latin-ext"],
+  // Next.js ne connaît pas les métriques de cette police pour ajuster
+  // automatiquement la police de secours (avertissement au démarrage) :
+  // on désactive l'ajustement et on nomme un repli système explicite.
+  adjustFontFallback: false,
+  fallback: ["system-ui", "Segoe UI", "Roboto", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -71,16 +83,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${atkinson.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: PREFERENCES_INIT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: INSTALL_PROMPT_CAPTURE_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col">
-        <OfflineBanner />
-        <InstallBanner />
-        {children}
+        <Providers>
+          <OfflineBanner />
+          <InstallBanner />
+          {children}
+        </Providers>
         <ServiceWorkerRegister />
       </body>
     </html>

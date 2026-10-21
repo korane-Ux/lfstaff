@@ -7,6 +7,8 @@ import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
 import { TextField, SelectField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { ClockCounterClockwiseIcon, FireIcon } from "@phosphor-icons/react";
 
 export function PretAction({
   commandeId,
@@ -18,6 +20,7 @@ export function PretAction({
   villeLivraison: string | null;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [pret, setPret] = useState(false);
   const [agence, setAgence] = useState("");
   const [nBordereau, setNBordereau] = useState("");
@@ -61,6 +64,14 @@ export function PretAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Expédition déclarée",
+      message: "La gestionnaire est prévenue et suivra l'arrivée du colis.",
+      suite: [
+        { label: "Mes commandes à fondre", href: "/fournisseur", icone: FireIcon },
+        { label: "Mon historique", href: "/fournisseur/historique", icone: ClockCounterClockwiseIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.replace("/fournisseur");
     router.refresh();

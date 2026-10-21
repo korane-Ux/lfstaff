@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextareaField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { HouseIcon, MopedIcon } from "@phosphor-icons/react";
 
 type Livreur = { id: string; nom: string };
 
@@ -17,6 +19,7 @@ export function ControleQualiteAction({
   livreurs: Livreur[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [choix, setChoix] = useState<"conforme" | "non_conforme" | null>(null);
   const [livreurId, setLivreurId] = useState(livreurs[0]?.id ?? "");
   const [motif, setMotif] = useState("");
@@ -41,6 +44,14 @@ export function ControleQualiteAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Confiée au livreur",
+      message: "Le client va recevoir son code de livraison.",
+      suite: [
+        { label: "Suivre les livraisons", href: "/gestionnaire/commandes#etat-en_livraison", icone: MopedIcon },
+        { label: "Retour au tableau de bord", href: "/gestionnaire", icone: HouseIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }
@@ -63,6 +74,10 @@ export function ControleQualiteAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Litige enregistré",
+      message: "Contactez le fournisseur pour convenir d'une reprise.",
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

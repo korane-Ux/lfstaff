@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
 import { Button } from "@/components/ui/button";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function DemanderRetraitAction({ montant }: { montant: number }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [envoyee, setEnvoyee] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +29,10 @@ export function DemanderRetraitAction({ montant }: { montant: number }) {
     }
 
     setEnvoyee(true);
+    feedback.succes({
+      titre: "Demande envoyée",
+      message: "La gestionnaire va valider votre paiement.",
+    });
     router.refresh();
   }
 

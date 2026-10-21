@@ -8,6 +8,8 @@ import { formatFcfa } from "@/lib/etats";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { MopedIcon } from "@phosphor-icons/react";
 
 type Ligne = {
   id: string;
@@ -26,6 +28,7 @@ export function GrouperLivreurForm({
   livreurs: { id: string; nom: string }[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [selection, setSelection] = useState<Set<string>>(new Set());
   const [livreurId, setLivreurId] = useState(livreurs[0]?.id ?? "");
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +66,13 @@ export function GrouperLivreurForm({
     }
 
     selection.forEach(notifierClientCommande);
+    feedback.succes({
+      titre: "Tournée confiée",
+      message: "Le livreur a reçu toutes ses livraisons.",
+      suite: [
+        { label: "Suivre les livraisons", href: "/gestionnaire/commandes#etat-en_livraison", icone: MopedIcon },
+      ],
+    });
     router.replace("/gestionnaire/commandes");
     router.refresh();
   }

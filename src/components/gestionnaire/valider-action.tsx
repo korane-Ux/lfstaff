@@ -7,6 +7,8 @@ import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { HouseIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -22,6 +24,7 @@ export function ValiderAction({
   acompteSuggere: number;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [montant, setMontant] = useState(String(acompteSuggere));
   const [moyen, setMoyen] = useState<MoyenPaiement>("cash");
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +49,14 @@ export function ValiderAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Commande validée",
+      message: "Acompte encaissé. Prochaine étape : envoyer l'avance au fournisseur pour lancer la fonte.",
+      suite: [
+        { label: "Envoyer l'avance maintenant", href: `/gestionnaire/commandes/${commandeId}#prochaine-etape`, icone: PaperPlaneTiltIcon },
+        { label: "Retour au tableau de bord", href: "/gestionnaire", icone: HouseIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

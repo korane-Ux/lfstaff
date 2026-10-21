@@ -10,6 +10,8 @@ import { ProduitGalerie } from "@/components/gestionnaire/produit-galerie";
 import { AlerteDisponibilite } from "@/components/gestionnaire/alerte-disponibilite";
 import { supprimerPhoto } from "@/lib/supabase/storage";
 import { TextField, TextareaField, SelectField } from "@/components/ui/field";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { PlusCircleIcon } from "@phosphor-icons/react";
 
 type ProduitExistant = {
   id: string;
@@ -55,6 +57,7 @@ export function ProduitForm({
   historiqueAlertes?: AlerteHistorique[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [photoUrl, setPhotoUrl] = useState<string | null>(produit?.photo_url ?? null);
   const [nom, setNom] = useState(produit?.nom ?? "");
   const [categorie, setCategorie] = useState(produit?.categorie ?? "");
@@ -109,6 +112,15 @@ export function ProduitForm({
       return;
     }
 
+    feedback.succes(
+      produit
+        ? { titre: "Produit mis à jour" }
+        : {
+            titre: "Produit ajouté",
+            message: "Il apparaît maintenant dans le catalogue de vente.",
+            suite: [{ label: "Le vendre maintenant", href: "/gestionnaire/nouvelle-commande", icone: PlusCircleIcon }],
+          },
+    );
     router.replace("/gestionnaire/produits");
     router.refresh();
   }
@@ -137,6 +149,9 @@ export function ProduitForm({
       );
     }
 
+    feedback.succes({
+      titre: "Produit supprimé",
+    });
     router.replace("/gestionnaire/produits");
     router.refresh();
   }

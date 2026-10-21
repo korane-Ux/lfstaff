@@ -63,11 +63,163 @@
   --color-accent-fg: var(--color-accent-fg);
 
   --font-display: var(--font-fraunces);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-atkinson);
+
+  /* Échelle typographique agrandie : l'app est lue debout, en plein soleil,
+     parfois par des personnes peu à l'aise avec l'écrit. Le petit texte ne
+     descend plus sous ~14 px et les titres de page passent à ~32 px. */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 2.75rem;
+}
+
+/* Taille du texte réglable (Profil → Confort) : tout est en rem, donc
+   changer la taille de base agrandit l'interface entière, proportions
+   gardées. 17 px par défaut (au lieu de 16) pour un confort de base. */
+html {
+  font-size: 106.25%;
+}
+html[data-texte="grand"] {
+  font-size: 118.75%;
+}
+html[data-texte="tres-grand"] {
+  font-size: 131.25%;
 }
 
 body {
   background: var(--color-creme);
   color: var(--color-encre);
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Titres : la graisse « douce » de Fraunces, un brin d'interlettrage serré
+   pour que les grands titres restent compacts. */
+.font-display {
+  font-variation-settings: "SOFT" 60, "WONK" 0;
+  letter-spacing: -0.01em;
+}
+
+/* Focus clavier très visible (WCAG 2.4.7) : anneau braise épais, jamais
+   supprimé. :focus-visible = seulement au clavier, pas au toucher. */
+:focus-visible {
+  outline: 3px solid var(--color-braise);
+  outline-offset: 2px;
+}
+
+/* Icônes Phosphor « duotone » : le second ton (dessiné à 20 % d'opacité)
+   prend la couleur laiton — icônes bicolores aux couleurs de la marque. */
+.icone-duo path[opacity] {
+  fill: var(--color-laiton);
+  opacity: 0.55;
+}
+
+/* Micro-animation des boutons : léger enfoncement au toucher, qui confirme
+   physiquement l'appui. */
+button:not(:disabled),
+a {
+  transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+  transition-duration: 150ms;
+}
+button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* Animations réduites : réglage du système OU choix dans l'app. Les
+   animations CSS sont quasi coupées ; celles de framer-motion le sont par
+   MotionConfig (providers.tsx). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+html[data-animations="reduites"] *,
+html[data-animations="reduites"] *::before,
+html[data-animations="reduites"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* La « coulée » du tableau de bord : un dégradé de métal en fusion qui
+   s'écoule lentement le long du canal reliant les phases. */
+@keyframes coulee {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+.metal-en-fusion {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-laiton),
+    var(--color-creation),
+    var(--color-braise),
+    var(--color-creation),
+    var(--color-laiton)
+  );
+  background-size: 200% 100%;
+  animation: coulee 6s linear infinite;
+}
+
+/* Même coulée, verticale (téléphone : les phases sont empilées). */
+@keyframes coulee-verticale {
+  from {
+    background-position: 50% 0%;
+  }
+  to {
+    background-position: 50% 200%;
+  }
+}
+.metal-en-fusion-v {
+  background-image: linear-gradient(
+    180deg,
+    var(--color-laiton),
+    var(--color-creation),
+    var(--color-braise),
+    var(--color-creation),
+    var(--color-laiton)
+  );
+  background-size: 100% 200%;
+  animation: coulee-verticale 6s linear infinite;
+}
+
+/* Apparition en cascade des cartes (tableau de bord) : chaque élément
+   porte son délai dans --delai. Pur CSS, donc utilisable dans les
+   composants serveur. */
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.apparition {
+  animation: apparition 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--delai, 0ms);
+}
+
+/* Lueur douce qui « respire » sur ce qui demande une action. */
+@keyframes braise-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-braise) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-braise) 0%, transparent);
+  }
+}
+.pulse-braise {
+  animation: braise-pulse 2.4s ease-in-out infinite;
 }

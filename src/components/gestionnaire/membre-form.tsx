@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { TextField, SelectField } from "@/components/ui/field";
 import { telephoneValide, MESSAGE_TELEPHONE_INVALIDE } from "@/lib/validation";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 const ROLE_LABELS: Record<AppRole, string> = {
   super_admin: "Super-admin",
@@ -38,6 +39,7 @@ export function MembreForm({
   villes: string[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [nom, setNom] = useState(nomInitial);
   const [telephone, setTelephone] = useState(telephoneInitial ?? "");
   const [ville, setVille] = useState(villeInitial ?? villes[0] ?? "");
@@ -74,6 +76,9 @@ export function MembreForm({
       return;
     }
 
+    feedback.succes({
+      titre: "Modifications enregistrées",
+    });
     router.push("/gestionnaire/equipe");
     router.refresh();
   }
@@ -83,6 +88,9 @@ export function MembreForm({
     const { error: updateError } = await supabase.from("users").update({ actif: true }).eq("id", userId);
     if (!updateError) {
       setActif(true);
+      feedback.succes({
+        titre: "Compte réactivé",
+      });
       router.refresh();
     }
   }
@@ -92,6 +100,9 @@ export function MembreForm({
     const { error: updateError } = await supabase.from("users").update({ actif: false }).eq("id", userId);
     if (updateError) throw updateError;
     setActif(false);
+    feedback.succes({
+      titre: "Compte désactivé",
+    });
     router.refresh();
   }
 

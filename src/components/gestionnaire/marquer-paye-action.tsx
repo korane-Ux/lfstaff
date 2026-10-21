@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function MarquerPayeAction({ demandeId }: { demandeId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +28,10 @@ export function MarquerPayeAction({ demandeId }: { demandeId: string }) {
       return;
     }
 
+    feedback.succes({
+      titre: "Retrait payé",
+      message: "Le paiement est enregistré dans le portefeuille du livreur.",
+    });
     router.refresh();
   }
 

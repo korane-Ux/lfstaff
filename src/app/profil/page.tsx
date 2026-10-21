@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { getCurrentProfile, roleHome } from "@/lib/supabase/auth";
+import { getCurrentProfile } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { ETAT_META } from "@/lib/etats";
 import { ProfilForm } from "@/components/profil/profil-form";
 import { MotDePasseForm } from "@/components/profil/mot-de-passe-form";
 import { ThemeToggle } from "@/components/profil/theme-toggle";
-import { SignOutButton } from "@/components/auth/sign-out-button";
+import { ConfortReglages } from "@/components/profil/confort-reglages";
 
 const COMMANDE_HREF: Record<string, (id: string) => string> = {
   fournisseur: (id) => `/fournisseur/commandes/${id}`,
@@ -45,15 +45,7 @@ export default async function ProfilPage() {
   const hrefPourCommande = COMMANDE_HREF[profile.role] ?? ((id: string) => `/gestionnaire/commandes/${id}`);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-creme">
-      <header className="flex items-center justify-between px-4 py-3">
-        <Link href={roleHome(profile.role)} className="text-sm text-encre/65 underline underline-offset-2">
-          ← Retour
-        </Link>
-        <SignOutButton />
-      </header>
-
-      <main className="flex flex-1 flex-col gap-4 px-4 py-2">
+    <main className="flex flex-1 flex-col gap-4 px-4 py-4">
         <h1 className="font-display text-2xl text-encre">Mon profil</h1>
 
         <ProfilForm
@@ -68,6 +60,8 @@ export default async function ProfilPage() {
         />
 
         <MotDePasseForm />
+
+        <ConfortReglages />
 
         <ThemeToggle />
 
@@ -109,6 +103,5 @@ export default async function ProfilPage() {
           </div>
         </div>
       </main>
-    </div>
   );
 }

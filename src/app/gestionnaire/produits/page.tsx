@@ -47,7 +47,7 @@ export default async function ProduitsPage() {
                 </div>
               )}
               {!produit.actif && (
-                <span className="absolute left-2 top-2 rounded-none bg-encre/70 px-2 py-0.5 text-[10px] font-medium text-creme">
+                <span className="absolute left-2 top-2 rounded-none bg-encre/70 px-2 py-0.5 text-xs font-medium text-creme">
                   Inactif
                 </span>
               )}

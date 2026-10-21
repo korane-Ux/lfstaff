@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { formatFcfa } from "@/lib/etats";
 import { Button } from "@/components/ui/button";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { FireIcon, MopedIcon } from "@phosphor-icons/react";
 
 export function ValiderLivraisonAction({
   commandeId,
@@ -19,6 +21,7 @@ export function ValiderLivraisonAction({
   commissionMontant: number;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +44,14 @@ export function ValiderLivraisonAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Livraison validée",
+      message: `Commission de ${formatFcfa(commissionMontant)} créditée au livreur.`,
+      suite: [
+        { label: "Voir la coulée", href: "/gestionnaire", icone: FireIcon },
+        { label: "Livraisons restantes", href: "/gestionnaire/commandes#etat-en_livraison", icone: MopedIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

@@ -4,9 +4,12 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { MopedIcon, WalletIcon } from "@phosphor-icons/react";
 
 export function LivrerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -29,6 +32,14 @@ export function LivrerAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    feedback.succes({
+      titre: "Livraison confirmée !",
+      message: "Bravo ! Votre commission sera créditée après validation.",
+      suite: [
+        { label: "Livraison suivante", href: "/livreur", icone: MopedIcon },
+        { label: "Mon portefeuille", href: "/livreur/portefeuille", icone: WalletIcon },
+      ],
+    });
     router.replace("/livreur");
     router.refresh();
   }

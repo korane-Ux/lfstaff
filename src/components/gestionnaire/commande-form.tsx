@@ -9,6 +9,8 @@ import { formatFcfa } from "@/lib/etats";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { Button } from "@/components/ui/button";
 import { SelectField, TextField, TextareaField } from "@/components/ui/field";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { CoinsIcon, PackageIcon, PlusCircleIcon } from "@phosphor-icons/react";
 
 type Client = { id: string; nom: string };
 type Produit = {
@@ -24,14 +26,17 @@ export function CommandeForm({
   produits,
   pctAcompte,
   villes,
+  clientInitial,
 }: {
   clients: Client[];
   produits: Produit[];
   pctAcompte: number;
   villes: string[];
+  clientInitial?: string;
 }) {
   const router = useRouter();
-  const [clientId, setClientId] = useState(clients[0]?.id ?? "");
+  const feedback = useFeedback();
+  const [clientId, setClientId] = useState(clientInitial ?? clients[0]?.id ?? "");
   const [panier, setPanier] = useState<Record<string, number>>({});
   const [filtreCategorie, setFiltreCategorie] = useState<string | null>(null);
   const [recherche, setRecherche] = useState("");
@@ -76,7 +81,7 @@ export function CommandeForm({
     setError(null);
 
     const supabase = createClient();
-    const { error: insertError } = await supabase.from("commandes").insert(
+    const { data: creees, error: insertError } = await supabase.from("commandes").insert(
       lignesPanier.map((ligne) => {
         const prixTotal = ligne.sousTotal;
         const acompte = Math.round((prixTotal * pctAcompte) / 100);
@@ -92,7 +97,7 @@ export function CommandeForm({
           photo_ref: photoRef,
         };
       }),
-    );
+    ).select("id");
 
     setLoading(false);
 
@@ -101,6 +106,18 @@ export function CommandeForm({
       return;
     }
 
+    const nombre = creees?.length ?? lignesPanier.length;
+    const premiere = nombre === 1 ? creees?.[0]?.id : undefined;
+    feedback.succes({
+      titre: nombre > 1 ? `${nombre} commandes créées` : "Commande créée",
+      message: "Prochaine étape : encaisser l'acompte du client pour la valider.",
+      suite: [
+        premiere
+          ? { label: "Encaisser l'acompte", href: `/gestionnaire/commandes/${premiere}#prochaine-etape`, icone: CoinsIcon }
+          : { label: "Voir les nouvelles commandes", href: "/gestionnaire/commandes#etat-nouvelle", icone: PackageIcon },
+        { label: "Faire une autre vente", href: "/gestionnaire/nouvelle-commande", icone: PlusCircleIcon },
+      ],
+    });
     router.replace("/gestionnaire/commandes");
     router.refresh();
   }

@@ -9,6 +9,8 @@ import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { FireIcon } from "@phosphor-icons/react";
 
 type Ligne = {
   id: string;
@@ -35,6 +37,7 @@ export function GrouperFournisseurForm({
   pctAvance: number;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [selection, setSelection] = useState<Set<string>>(new Set());
   const [montants, setMontants] = useState<Record<string, string>>(() =>
     Object.fromEntries(lignes.map((l) => [l.id, String(Math.round((l.prixTotal * pctAvance) / 100))])),
@@ -85,6 +88,13 @@ export function GrouperFournisseurForm({
     }
 
     selection.forEach(notifierClientCommande);
+    feedback.succes({
+      titre: "Grande commande envoyée",
+      message: "Le fournisseur a reçu toutes les commandes et l'avance.",
+      suite: [
+        { label: "Voir la coulée", href: "/gestionnaire", icone: FireIcon },
+      ],
+    });
     router.replace("/gestionnaire/commandes");
     router.refresh();
   }

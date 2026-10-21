@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function RepondreDisponibiliteAction({ reponseId }: { reponseId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [saisieQuantite, setSaisieQuantite] = useState(false);
   const [quantite, setQuantite] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +31,10 @@ export function RepondreDisponibiliteAction({ reponseId }: { reponseId: string }
       return;
     }
 
+    feedback.succes({
+      titre: "Réponse envoyée",
+      message: "Merci ! La gestionnaire est prévenue.",
+    });
     router.refresh();
   }
 

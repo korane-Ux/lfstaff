@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDangerDialog } from "@/components/ui/confirm-danger-dialog";
 import { TextareaField } from "@/components/ui/field";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function AnnulerAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [ouvert, setOuvert] = useState(false);
   const [motif, setMotif] = useState("");
 
@@ -32,6 +34,9 @@ export function AnnulerAction({ commandeId }: { commandeId: string }) {
       .eq("id", commandeId);
 
     if (updateError) throw updateError;
+    feedback.succes({
+      titre: "Commande annulée",
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }

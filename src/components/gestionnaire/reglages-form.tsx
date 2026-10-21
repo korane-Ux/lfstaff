@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { TextField, controlClass } from "@/components/ui/field";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function ReglagesForm({
   tauxCommissionLivreur,
@@ -18,6 +19,7 @@ export function ReglagesForm({
   villesActives: string[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [taux, setTaux] = useState(String(tauxCommissionLivreur));
   const [pctAvance, setPctAvance] = useState(String(pctAvanceFournisseur));
   const [pctAcompte, setPctAcompte] = useState(String(pctAcompteClient));
@@ -63,6 +65,9 @@ export function ReglagesForm({
     }
 
     setSucces(true);
+    feedback.succes({
+      titre: "Réglages enregistrés",
+    });
     router.refresh();
   }
 

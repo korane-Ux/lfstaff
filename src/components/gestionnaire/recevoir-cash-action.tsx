@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import type { MoyenPaiement } from "@/lib/supabase/types";
 import { Button } from "@/components/ui/button";
 import { controlClass } from "@/components/ui/field";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { ChartLineUpIcon, MoneyIcon } from "@phosphor-icons/react";
 
 const MOYEN_LABELS: Record<MoyenPaiement, string> = {
   cash: "Cash",
@@ -21,6 +23,7 @@ export function RecevoirCashAction({
   montantSuggere: number;
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [ouvert, setOuvert] = useState(false);
   const [montant, setMontant] = useState(String(montantSuggere));
   const [moyen, setMoyen] = useState<MoyenPaiement>("cash");
@@ -56,6 +59,14 @@ export function RecevoirCashAction({
       return;
     }
 
+    feedback.succes({
+      titre: "Remise enregistrée",
+      message: "Le cash est bien reçu et tracé.",
+      suite: [
+        { label: "Autres remises", href: "/gestionnaire/remises", icone: MoneyIcon },
+        { label: "Voir les bilans", href: "/gestionnaire/bilans", icone: ChartLineUpIcon },
+      ],
+    });
     router.refresh();
   }
 

@@ -48,7 +48,7 @@ export default async function GestionnaireCommandesPage() {
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
             <p className="text-xs text-encre/65">En cours</p>
             <p className="font-display text-xl text-encre">{enCours.length}</p>
-            <p className="text-[11px] text-encre/65">{formatFcfa(valeurEnCours)}</p>
+            <p className="text-xs text-encre/65">{formatFcfa(valeurEnCours)}</p>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl bg-surface p-3">
             <p className="text-xs text-encre/65">En litige</p>
@@ -79,7 +79,7 @@ export default async function GestionnaireCommandesPage() {
       {!commandes?.length && (
         <p className="rounded-2xl bg-surface p-6 text-center text-sm text-encre/65">
           Aucune commande pour l&apos;instant.{" "}
-          <Link href="/gestionnaire" className="underline">
+          <Link href="/gestionnaire/nouvelle-commande" className="underline">
             Faire une vente
           </Link>
           .
@@ -92,7 +92,8 @@ export default async function GestionnaireCommandesPage() {
           return (
             <div
               key={etat}
-              className="flex w-[80vw] max-w-xs shrink-0 snap-start flex-col gap-2 rounded-2xl bg-surface p-3"
+              id={`etat-${etat}`}
+              className="flex w-[80vw] max-w-xs shrink-0 snap-start scroll-mt-20 flex-col gap-2 rounded-2xl bg-surface p-3 target:ring-2 target:ring-braise"
             >
               <div className="flex items-center gap-2">
                 <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${ETAT_META[etat].color}`} />

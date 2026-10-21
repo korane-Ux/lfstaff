@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { TextareaField } from "@/components/ui/field";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 type Reponse = {
   fournisseurId: string;
@@ -30,6 +31,7 @@ export function AlerteDisponibilite({
   historique?: Alerte[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [ouvert, setOuvert] = useState(false);
   const [selection, setSelection] = useState<Set<string>>(new Set(fournisseurs.map((f) => f.id)));
   const [message, setMessage] = useState("");
@@ -76,6 +78,10 @@ export function AlerteDisponibilite({
 
     setOuvert(false);
     setMessage("");
+    feedback.succes({
+      titre: "Alerte envoyée",
+      message: "Les fournisseurs sélectionnés vont répondre.",
+    });
     router.refresh();
   }
 

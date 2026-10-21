@@ -174,6 +174,10 @@ export default async function CommandeDetailPage({
         )}
       </div>
 
+      {/* Cible des suggestions « Et ensuite ? » : l'étape suivante du cycle
+          s'affiche juste en dessous. */}
+      <div id="prochaine-etape" className="scroll-mt-24" />
+
       {commande.etat === "nouvelle" && (
         <ValiderAction commandeId={commande.id} acompteSuggere={commande.acompte_montant} />
       )}

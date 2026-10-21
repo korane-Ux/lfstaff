@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { PhotoInput } from "@/components/ui/photo-input";
 import { TextField, SelectField } from "@/components/ui/field";
 import { telephoneValide, MESSAGE_TELEPHONE_INVALIDE } from "@/lib/validation";
+import { useFeedback } from "@/components/feedback/feedback-provider";
 
 export function ProfilForm({
   userId,
@@ -28,6 +29,7 @@ export function ProfilForm({
   villes: string[];
 }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [avatarUrl, setAvatarUrl] = useState(avatarUrlInitial);
   const [nom, setNom] = useState(nomInitial);
   const [telephone, setTelephone] = useState(telephoneInitial ?? "");
@@ -68,6 +70,9 @@ export function ProfilForm({
     }
 
     setSaved(true);
+    feedback.succes({
+      titre: "Profil mis à jour",
+    });
     router.refresh();
   }
 

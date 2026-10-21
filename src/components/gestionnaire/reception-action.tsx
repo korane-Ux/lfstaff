@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { notifierClientCommande } from "@/lib/notify-client";
+import { useFeedback } from "@/components/feedback/feedback-provider";
+import { HouseIcon, SealCheckIcon } from "@phosphor-icons/react";
 
 export function ReceptionAction({ commandeId }: { commandeId: string }) {
   const router = useRouter();
+  const feedback = useFeedback();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +30,14 @@ export function ReceptionAction({ commandeId }: { commandeId: string }) {
       return;
     }
 
+    feedback.succes({
+      titre: "Colis réceptionné",
+      message: "Vérifiez maintenant la qualité, puis confiez la marmite à un livreur.",
+      suite: [
+        { label: "Faire le contrôle qualité", href: `/gestionnaire/commandes/${commandeId}#prochaine-etape`, icone: SealCheckIcon },
+        { label: "Retour au tableau de bord", href: "/gestionnaire", icone: HouseIcon },
+      ],
+    });
     notifierClientCommande(commandeId);
     router.refresh();
   }
