@@ -3,17 +3,9 @@ import { requireRole } from "@/lib/supabase/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { AppRole } from "@/lib/supabase/types";
+import { genererMotDePasseProvisoire } from "@/lib/mot-de-passe";
 
 const ROLES_CREABLES: AppRole[] = ["gestionnaire", "fournisseur", "livreur"];
-
-function genererMotDePasse() {
-  const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-  let mdp = "";
-  for (let i = 0; i < 10; i++) {
-    mdp += alphabet[Math.floor(Math.random() * alphabet.length)];
-  }
-  return mdp;
-}
 
 export async function POST(request: Request) {
   await requireRole(["super_admin"]);
@@ -31,7 +23,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Champs manquants ou rôle invalide." }, { status: 400 });
   }
 
-  const motDePasse = genererMotDePasse();
+  const motDePasse = genererMotDePasseProvisoire();
   const admin = createAdminClient();
 
   const { data: authUser, error: authError } = await admin.auth.admin.createUser({

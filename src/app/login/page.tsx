@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { onboardingDejaVu } from "@/components/onboarding/onboarding-flow";
 import { Button } from "@/components/ui/button";
 import { LoginCarousel } from "@/components/auth/login-carousel";
+import { Logo } from "@/components/ui/logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -78,7 +78,7 @@ export default function LoginPage() {
 
       <div className="mx-auto flex w-full max-w-sm flex-col gap-8 md:w-1/2 md:max-w-sm">
         <div className="flex flex-col items-center gap-2 md:items-start">
-          <Image src="/icons/icon-192.png" alt="LFstaff" width={56} height={56} priority />
+          <Logo hauteur={64} />
           <h1 className="font-display text-3xl text-encre">LFstaff</h1>
           <p className="text-sm text-encre/65 md:text-left">Connecte-toi pour continuer.</p>
         </div>

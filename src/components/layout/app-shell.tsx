@@ -10,6 +10,7 @@ import type { AppRole } from "@/lib/supabase/types";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { ThemeQuickToggle } from "@/components/layout/theme-quick-toggle";
 import { ROLE_LABELS, estActif, navigationPour, type NavItem } from "@/components/layout/navigation";
+import { Logo } from "@/components/ui/logo";
 
 type Profil = { nom: string; role: AppRole; avatarUrl?: string | null };
 
@@ -34,7 +35,7 @@ function MenuLateral({ profil, items, pathname }: { profil: Profil; items: NavIt
   return (
     <aside className="sticky top-0 hidden h-dvh w-72 shrink-0 flex-col gap-6 border-r border-encre/10 bg-surface px-4 py-6 md:flex">
       <Link href={items[0].href} className="flex items-center gap-3 px-3">
-        <Image src="/icons/icon-192.png" alt="" width={40} height={40} />
+        <Logo hauteur={40} decoratif />
         <span className="font-display text-2xl text-encre">LFstaff</span>
       </Link>
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 // Atterrissage du lien « mot de passe oublié ». /auth/callback a déjà
 // échangé le code contre une session de récupération : l'utilisateur peut
@@ -45,7 +45,7 @@ export default function ResetMotDePassePage() {
     <main className="flex min-h-dvh flex-col items-center justify-center bg-creme px-6 py-8">
       <div className="flex w-full max-w-sm flex-col gap-8">
         <div className="flex flex-col items-center gap-2">
-          <Image src="/icons/icon-192.png" alt="LFstaff" width={56} height={56} priority />
+          <Logo hauteur={64} />
           <h1 className="font-display text-3xl text-encre">Nouveau mot de passe</h1>
           <p className="text-center text-sm text-encre/65">Choisis un mot de passe, puis valide.</p>
         </div>

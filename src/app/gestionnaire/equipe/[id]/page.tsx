@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MembreForm } from "@/components/gestionnaire/membre-form";
+import { ReinitialiserMotDePasse } from "@/components/gestionnaire/reinitialiser-mot-de-passe";
 
 export default async function MembreDetailPage({
   params,
@@ -38,6 +39,9 @@ export default async function MembreDetailPage({
         actifInitial={membre.actif}
         villes={reglages?.villes_actives ?? []}
       />
+      {membre.role !== "super_admin" && (
+        <ReinitialiserMotDePasse userId={membre.id} nom={membre.nom} telephone={membre.telephone} />
+      )}
     </main>
   );
 }
